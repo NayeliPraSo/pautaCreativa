@@ -24,7 +24,7 @@ Este proyecto tiene como objetivo renovar la presencia digital de la agencia med
 Clona el repositorio:
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/NayeliPraSo/pautaCreativa
 ```
 
 Instala las dependencias:
