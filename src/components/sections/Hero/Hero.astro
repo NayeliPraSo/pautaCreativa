@@ -1,20 +1,51 @@
 ---
 import "./hero.css";
 import Section from "../../ui/Section/Section.astro";
-import Heading from "../../ui/Heading/Heading.astro";
-import Button from "../../ui/Button/Button.astro";
+import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
+
+import somosTitle from "../../../assets/images/header_somos.png";
+import creadoresTitle from "../../../assets/images/head_creadores_de_soluciones.png";
 ---
 
 <Section id="hero" class="hero">
   <div class="hero-content">
-    <Heading as="h1" size="xl">Pauta Creativa</Heading>
-    <p class="hero-subtitle">
-      Renovamos la presencia digital de tu marca con diseño, estrategia y tecnología.
-    </p>
-    <div class="hero-actions">
-      <Button href="#contacto" variant="primary">Hablemos</Button>
-      <Button href="#soluciones" variant="ghost">Ver soluciones</Button>
+    <img src={somosTitle.src} alt="Somos" class="hero-title-small" />
+
+    <img
+      src={creadoresTitle.src}
+      alt="Creadores de soluciones"
+      class="hero-title-main"
+    />
+
+    <p class="hero-subtitle">TRANSFORMAMOS RETOS EN OPORTUNIDADES DE NEGOCIO</p>
+
+    <div class="hero-plus-group" aria-hidden="true">
+      <PlusIcon class="hero-plus hero-plus--white" />
+      <PlusIcon class="hero-plus hero-plus--teal" />
     </div>
+  </div>
+
+  <div class="hero-plus-group hero-plus-group--image" aria-hidden="true">
+    <PlusIcon class="hero-plus hero-plus--white" />
+    <PlusIcon class="hero-plus hero-plus--teal" />
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Scroll</span>
+    <svg
+      viewBox="0 0 16 16"
+      width="12"
+      height="12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8 1v13M8 14l5-5M8 14L3 9"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
   </div>
 </Section>
 

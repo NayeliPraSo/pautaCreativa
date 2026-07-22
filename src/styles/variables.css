@@ -6,10 +6,11 @@
 
 :root {
   /* Colores de marca */
-  --color-primary: #ff5a1f;
-  --color-primary-dark: #d94210;
+  --color-primary: #ea5b0c;
+  --color-primary-dark: #bf4715;
   --color-secondary: #111827;
   --color-accent: #f041ff;
+  --color-teal: #00b4ac;
 
   /* Neutrales */
   --color-bg: #ffffff;
@@ -27,6 +28,7 @@
   --fs-base: 1rem;
   --fs-lg: 1.25rem;
   --fs-xl: 1.75rem;
+  --fs-1xl: 2rem;
   --fs-2xl: 2.5rem;
   --fs-3xl: 3.5rem;
 
@@ -37,7 +39,10 @@
   --space-4: 1.5rem;
   --space-5: 2rem;
   --space-6: 3rem;
-  --space-7: 5rem;
+  --space-7: 3.5rem;
+  --space-8: 5rem;
+  --space-9: 8rem;
+  --space-10: 10rem;
 
   /* Layout */
   --container-max-width: 1200px;

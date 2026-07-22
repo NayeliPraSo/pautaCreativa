@@ -1,28 +1,94 @@
 .hero {
+  position: relative;
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding-top: calc(var(--space-7) * 2);
+  background-image: url("../../../assets/images/jumper-website.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-content {
-  max-width: 720px;
-  margin: 0 auto;
-  text-align: center;
+  position: relative;
+  width: 1150px;
+  margin-left: 9vw;
+  margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-bottom: var(--space-6);
+}
+
+.hero-title-small {
+  width: 255px;
+  max-width: 100%;
+  margin-left: -5px;
+}
+
+.hero-title-main {
+  width: 950px;
+  max-width: 100%;
+  margin-left: -38px;
+  margin-top: -39px;
 }
 
 .hero-subtitle {
-  font-size: var(--fs-lg);
-  color: var(--color-text-muted);
+  max-width: 950px;
+  max-width: 100%;
+  color: #fff;
+  font-size: var(--fs-1xl);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
-.hero-actions {
+/* Plus decorativos */
+.hero-plus-group {
   display: flex;
-  gap: var(--space-3);
-  justify-content: center;
+  gap: var(--space-4);
+}
+ 
+.hero-plus--white {
+  color: #fff;
+}
+ 
+.hero-plus--teal {
+  color: var(--color-teal);
+}
+ 
+/* Grupo debajo del subtítulo (dentro de hero-content) */
+.hero-plus-group--content {
+  margin-top: -0.5rem;
+}
+ 
+/* Grupo junto a las botas, a la derecha */
+.hero-plus-group--image {
+  position: absolute;
+  right: 8%;
+  bottom: 34%;
+}
+
+/* Indicador de scroll */
+.hero-scroll {
+  position: absolute;
+  left: 48%;
+  bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: #fff;
+}
+
+.hero-scroll span {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 768px) {
