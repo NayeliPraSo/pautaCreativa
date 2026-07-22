@@ -1,0 +1,8 @@
+.about {
+  /* Estilos exclusivos de la sección Nosotros */
+}
+
+.about-description {
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}

@@ -1,0 +1,20 @@
+.ui-heading {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.ui-heading--sm {
+  font-size: var(--fs-lg);
+}
+
+.ui-heading--md {
+  font-size: var(--fs-xl);
+}
+
+.ui-heading--lg {
+  font-size: var(--fs-2xl);
+}
+
+.ui-heading--xl {
+  font-size: var(--fs-3xl);
+}

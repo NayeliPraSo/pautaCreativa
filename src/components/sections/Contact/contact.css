@@ -1,0 +1,8 @@
+.contact {
+  /* Estilos exclusivos de la sección Contacto */
+}
+
+.contact-description {
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}

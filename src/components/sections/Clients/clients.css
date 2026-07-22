@@ -1,0 +1,8 @@
+.clients {
+  /* Estilos exclusivos de la sección Clientes */
+}
+
+.clients-description {
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}

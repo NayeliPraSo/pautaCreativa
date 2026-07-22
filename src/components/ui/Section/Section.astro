@@ -1,0 +1,15 @@
+---
+import "./section.css";
+
+interface Props {
+  id?: string;
+  class?: string;
+  as?: keyof HTMLElementTagNameMap;
+}
+
+const { id, class: className = "", as: Tag = "section" } = Astro.props;
+---
+
+<Tag id={id} class={`ui-section ${className}`}>
+  <slot />
+</Tag>

@@ -1,0 +1,15 @@
+---
+import "./heading.css";
+
+interface Props {
+  as?: "h1" | "h2" | "h3" | "h4";
+  size?: "sm" | "md" | "lg" | "xl";
+  class?: string;
+}
+
+const { as: Tag = "h2", size = "lg", class: className = "" } = Astro.props;
+---
+
+<Tag class={`ui-heading ui-heading--${size} ${className}`}>
+  <slot />
+</Tag>

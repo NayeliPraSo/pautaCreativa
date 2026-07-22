@@ -1,0 +1,8 @@
+.cases {
+  /* Estilos exclusivos de la sección Casos */
+}
+
+.cases-description {
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}

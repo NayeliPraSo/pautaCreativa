@@ -1,0 +1,8 @@
+.orange-mindset {
+  /* Estilos exclusivos de la sección Orange Mindset */
+}
+
+.orange-mindset-description {
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}

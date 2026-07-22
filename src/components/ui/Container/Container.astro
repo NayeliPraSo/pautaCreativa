@@ -1,0 +1,13 @@
+---
+import "./container.css";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class={`ui-container ${className}`}>
+  <slot />
+</div>

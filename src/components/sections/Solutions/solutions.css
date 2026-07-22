@@ -1,0 +1,8 @@
+.solutions {
+  /* Estilos exclusivos de la sección Soluciones */
+}
+
+.solutions-description {
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}
