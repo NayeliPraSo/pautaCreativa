@@ -1,5 +1,5 @@
 #site-header {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -24,7 +24,7 @@
 }
  
 .header-logo img {
-  height: 55px;
+  height: 60px;
   width: auto;
   display: block;
 }
@@ -32,7 +32,7 @@
 .header-menu {
   justify-content: flex-end;
   display: flex;
-  gap: var(--space-7);
+  gap: var(--space-5);
 }
  
 .header-menu a {
@@ -45,7 +45,7 @@
 }
  
 .header-menu a:hover {
-  color: var(--color-primary);
+  color: var(--color-bg);
 }
  
 @media (max-width: 768px) {

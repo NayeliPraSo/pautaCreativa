@@ -1,0 +1,27 @@
+---
+import "./scroll-indicator.css";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class={`ui-scroll-indicator ${className}`} aria-hidden="true">
+  <span>Scroll</span>
+  <svg
+    viewBox="0 0 16 16"
+    width="18"
+    height="18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 1v12M3 8l5 5 5-5"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+  </svg>
+</div>

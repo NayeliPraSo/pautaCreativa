@@ -1,14 +1,125 @@
 ---
 import "./about.css";
 import Section from "../../ui/Section/Section.astro";
-import Heading from "../../ui/Heading/Heading.astro";
+import ScrollIndicator from "../../ui/ScrollIndicator/ScrollIndicator.astro";
+
+const RADIUS = 255;
+const LEFT_X = 430;
+const RIGHT_X = 770;
+const CENTER_Y = 325;
 ---
 
 <Section id="somos" class="about">
-  <Heading as="h2" size="lg">Nosotros</Heading>
-  <p class="about-description">
-    Contenido de la sección Nosotros pendiente de definir.
-  </p>
+  <div class="about-container">
+    <div class="about-intro">
+      <span class="about-plus">+</span>
+
+      <p class="about-copy">
+        Somos una <strong>agencia integrada</strong> con un
+        <span class="teal"> enfoque phygital </span>
+        para un mundo omnicanal.
+      </p>
+    </div>
+
+    <div class="about-diagram">
+      <svg class="about-venn" viewBox="0 0 1200 650" aria-hidden="true">
+        <defs>
+          <filter id="vennGlow">
+            <feGaussianBlur stdDeviation="18" result="blur"></feGaussianBlur>
+
+            <feMerge>
+              <feMergeNode in="blur"></feMergeNode>
+
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- Glow (se utilizará con GSAP) -->
+        <g class="venn-glow"></g>
+
+        <!-- Círculo izquierdo -->
+        <g class="venn-left">
+          <circle
+            cx={LEFT_X}
+            cy={CENTER_Y}
+            r={RADIUS}
+            fill="none"
+            stroke="#FFF"
+            stroke-width="2"></circle>
+        </g>
+
+        <!-- Círculo derecho -->
+        <g class="venn-right">
+          <circle
+            cx={RIGHT_X}
+            cy={CENTER_Y}
+            r={RADIUS}
+            fill="none"
+            stroke="#FFF"
+            stroke-width="2"></circle>
+        </g>
+
+        <!-- Intersección -->
+        <g class="venn-overlap">
+          <path
+            d="
+            M600 135
+            C548 165 510 235 510 325
+            C510 415 548 485 600 515
+            C652 485 690 415 690 325
+            C690 235 652 165 600 135
+            Z
+            "
+            fill="#00B4AC"></path>
+        </g>
+
+        <!-- Flecha -->
+        <g
+          class="venn-pointer"
+          transform="translate(618.5 78) rotate(90) scale(0.0028)"
+        >
+          <path
+            d="M299 12786 c-120 -35 -207 -110 -263 -226 -28 -59 -31 -73 -30 -160
+        0 -79 5 -104 26 -150 13 -30 894 -1359 1956 -2953 l1932 -2897 -1932 -2897
+        c-1062 -1594 -1943 -2923 -1957 -2953 -21 -47 -25 -70 -25 -150 0 -86 3 -101
+        30 -160 17 -36 50 -86 72 -111 79 -88 223 -140 347 -124 51 6 811 383 6125
+        3040 5803 2901 6069 3036 6110 3082 56 63 98 154 106 229 13 121 -39 260 -125
+        336 -35 31 -1509 772 -6106 3070 l-6060 3030 -80 4 c-48 2 -98 -2 -126 -10z"
+            fill="#00B4AC"></path>
+        </g>
+
+        <!-- Punto -->
+        <g class="venn-dot">
+          <circle cx="933.9" cy="520.3" r="25" fill="#00B4AC"></circle>
+        </g>
+      </svg>
+
+      <!-- Texto izquierdo -->
+
+      <div class="circle-content left">
+        <p>
+          Hablamos con<br />
+          el consumidor
+        </p>
+
+        <h3>AWARENESS</h3>
+      </div>
+
+      <!-- Texto derecho -->
+
+      <div class="circle-content right">
+        <p>
+          Y persuadimos<br />
+          al shopper
+        </p>
+
+        <h3>SELL OUT</h3>
+      </div>
+    </div>
+
+    <ScrollIndicator class="hero-scroll" />
+  </div>
 </Section>
 
 <script>
