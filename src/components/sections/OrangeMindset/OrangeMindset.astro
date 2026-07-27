@@ -1,14 +1,85 @@
 ---
 import "./orange-mindset.css";
 import Section from "../../ui/Section/Section.astro";
-import Heading from "../../ui/Heading/Heading.astro";
+import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
+
+import naranja from "../../../assets/images/naranja_orange.png";
+const mindsetValues: string[] = [
+  "Colaborativa",
+  "Valiente",
+  "Humana",
+  "Confiable",
+  "Apasionada",
+  "Optimista",
+];
 ---
 
 <Section id="orange-mindset" class="orange-mindset">
-  <Heading as="h2" size="lg">Orange Mindset</Heading>
-  <p class="orange-mindset-description">
-    Contenido de la sección Orange Mindset pendiente de definir.
-  </p>
+  <div class="om-slider">
+    <!-- Panel 1 -->
+    <div class="om-panel om-panel-1">
+      <div class="om-index">
+        <span class="om-index-number">02 / 06</span>
+        <span class="om-index-label">Orange Mindset</span>
+      </div>
+
+      <div class="om-content">
+        <div class="om-circle">
+          <img src={naranja.src} alt="" class="om-circle-img" />
+        </div>
+
+        <p class="om-copy">
+          Es la actitud y la energía con la que asumimos cada proyecto: siempre
+          buscando el <strong>cómo sí.</strong>
+        </p>
+      </div>
+
+      <div class="om-divider" aria-hidden="true"></div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="om-panel om-panel-2">
+      <div class="om-index">
+        <span class="om-index-number">02 / 06</span>
+        <span class="om-index-label">Orange Mindset</span>
+      </div>
+
+      <div class="om-panel-2-content">
+        <p class="om-intro">
+          Por eso reunimos equipos multidisciplinarios con una forma particular
+          de pensar:
+        </p>
+
+        <div
+          class="om-timeline"
+          style={`--timeline-count: ${mindsetValues.length}`}
+        >
+          {
+            mindsetValues.map((value, index) => (
+              <div class="om-timeline-item">
+                <span class="om-timeline-label">{value}</span>
+                <span
+                  class:list={[
+                    "om-timeline-dot",
+                    { "om-timeline-dotactive": index === 1 },
+                  ]}
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="om-description-wrap">
+          <p class="om-description">
+            <PlusIcon class="om-description-icon" size={20} strokeWidth={3} />
+            Sumamos talento para crear experiencias <strong
+              >que conectan a las personas con las marcas</strong
+            > de manera orgánica, relevante y poderosa.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </Section>
 
 <script>

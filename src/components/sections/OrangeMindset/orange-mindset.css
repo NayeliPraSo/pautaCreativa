@@ -1,8 +1,227 @@
 .orange-mindset {
-  /* Estilos exclusivos de la sección Orange Mindset */
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--color-bg);
 }
 
-.orange-mindset-description {
-  color: var(--color-text-muted);
-  margin-top: var(--space-3);
+.om-slider {
+  display: flex;
+  height: 100%;
+  width: max-content;
+}
+
+.om-panel {
+  position: relative;
+  width: 100vw;
+  height: 100%;
+  flex: 0 0 100vw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-6);
+
+  color: var(--color-text);
+}
+.om-panel-1 {
+  background-image: url("../../../assets/images/cascara.avif");
+  background-size: 40%;
+  background-position: calc(100% - 140px) center;
+  background-repeat: no-repeat;
+}
+.om-panel-2 {
+  background-image: url("../../../assets/images/cascara.avif");
+  background-size: 65%;
+  background-position: -250px center;
+  background-repeat: no-repeat;
+}
+
+/* Contador "02 / 06 ORANGE MINDSET" */
+.om-index {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--space-10);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.om-index-number {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+}
+
+.om-index-label {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* Contenido central: círculo + copy */
+.om-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  /* max-width: var(--container-max-width); */
+  margin: 0 0 10px 55px;
+  width: 100%;
+}
+
+.om-circle {
+  position: relative;
+  width: 560px;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+
+.om-circle-img {
+  width: 100%;
+  height: auto;
+}
+
+.om-copy {
+  font-family: var(--font-primary);
+  font-size: 2.2rem;
+  line-height: 1.4;
+  color: var(--color-text);
+  max-width: 790px;
+  font-weight: 300;
+}
+
+.om-copy strong {
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* Separador inferior */
+.om-divider {
+  position: absolute;
+  left: var(--space-10);
+  right: var(--space-10);
+  bottom: var(--space-6);
+  height: 1px;
+  background-color: var(--color-divider);
+}
+
+/* **************************************
+  * PANEL 2: ORANGE MINDSET TIMELINE
+  ************************************** */
+.om-panel-2-content {
+  width: min(1500px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.om-intro,
+.om-timeline,
+.om-description-wrap {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.om-intro,
+.om-description {
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.om-description-row {
+  position: relative;
+  padding-left: calc(20px + var(--space-2));
+}
+
+.om-description-wrap {
+  text-align: right;
+}
+
+.om-description {
+  display: inline-block;
+  text-align: right;
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.om-description strong {
+  font-weight: 500;
+}
+
+.om-description-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: var(--space-2);
+  color: var(--color-primary);
+}
+
+.om-timeline {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.om-timeline::after {
+  content: "";
+  position: absolute;
+  left: calc(100% / (var(--timeline-count) * 2));
+  right: calc(100% / (var(--timeline-count) * 2));
+  bottom: 0.55rem;
+  height: 2px;
+  background: var(--color-black);
+}
+
+.om-timeline-item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1;
+}
+
+.om-timeline-label {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  letter-spacing: .08em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.om-timeline-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-black);
+}
+
+.om-timeline-dotactive {
+  background: var(--color-active);
+}
+
+@media (max-width: 900px) {
+  .om-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .om-copy {
+    max-width: 100%;
+  }
 }

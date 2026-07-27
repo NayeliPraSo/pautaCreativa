@@ -9,8 +9,10 @@
   --color-primary: #ea5b0c;
   --color-primary-dark: #bf4715;
   --color-secondary: #111827;
+  --color-black:#222222;
   --color-accent: #f041ff;
   --color-teal: #00b4ac;
+  --color-active:#00783a;
 
   /* Neutrales */
   --color-bg: #ffffff;
@@ -18,6 +20,7 @@
   --color-text: #111827;
   --color-text-muted: #4b5563;
   --color-border: #e5e7eb;
+  --color-divider: #c3c3c3;
 
   /* Tipografía */
   --font-primary: "Fira Sans", "Helvetica Neue", Arial, sans-serif;
