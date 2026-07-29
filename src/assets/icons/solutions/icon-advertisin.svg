@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 200">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linecap: round;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linejoin: round;
+        stroke-width: 5px;
+      }
+    </style>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.6.0, SVG Export Plug-In . SVG Version: 1.2.0 Build 709)  -->
+  <g>
+    <g id="Capa_1">
+      <g>
+        <g>
+          <polyline class="cls-1" points="158.8 70.1 158.8 18 72.3 55.2 72.3 131 158.8 168.2 158.8 116.2"/>
+          <polygon class="cls-1" points="19 182 72.3 182 72.3 131 19 108 19 182"/>
+          <polygon class="cls-1" points="19 78.2 19 108 72.3 131 72.3 55.2 19 78.2"/>
+        </g>
+        <path class="cls-2" d="M181,93.1c0-12.5-9.9-22.6-22.2-23.1v46.1c12.3-.5,22.2-10.6,22.2-23.1Z"/>
+      </g>
+    </g>
+  </g>
+</svg>

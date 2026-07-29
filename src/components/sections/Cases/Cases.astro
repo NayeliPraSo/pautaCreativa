@@ -1,14 +1,44 @@
 ---
 import "./cases.css";
 import Section from "../../ui/Section/Section.astro";
-import Heading from "../../ui/Heading/Heading.astro";
+import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
+
+import CaseCard from "./CaseCard.astro";
+import CaseDetail from "./CaseDetail.astro";
+
+import { cases } from "./cases.data";
+import titleImage from "../../../assets/images/tit_que_logramos.png";
 ---
 
 <Section id="casos" class="cases">
-  <Heading as="h2" size="lg">Casos</Heading>
-  <p class="cases-description">
-    Contenido de la sección Casos pendiente de definir.
-  </p>
+  <div class="cases-header">
+    <div class="cases-counter">
+      <span class="current">04</span>
+      <span class="separator">/</span>
+      <span class="total">06</span>
+
+      <span class="label">CASOS</span>
+    </div>
+
+    <p class="cases-intro">
+      <PlusIcon class="cases-plus" />
+
+      <span>
+        Con <strong>planeación, creatividad y ejecución</strong>, podemos llegar
+        más lejos de lo que imaginamos.
+      </span>
+    </p>
+
+    <img src={titleImage.src} alt="Qué logramos" class="cases-title" />
+  </div>
+
+  <!-- Grid -->
+  <div class="cases-grid">
+    {cases.map((item) => <CaseCard case={item} />)}
+  </div>
+
+  <!-- Temporal para probar el modal -->
+  <CaseDetail caseItem={cases[1]} />
 </Section>
 
 <script>

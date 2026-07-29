@@ -2,13 +2,62 @@
 import "./solutions.css";
 import Section from "../../ui/Section/Section.astro";
 import Heading from "../../ui/Heading/Heading.astro";
+import ScrollIndicator from "../../ui/ScrollIndicator/ScrollIndicator.astro";
+import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
+
+import SolutionsDiagram from "./SolutionsDiagram.astro";
 ---
 
 <Section id="soluciones" class="solutions">
-  <Heading as="h2" size="lg">Soluciones</Heading>
-  <p class="solutions-description">
-    Contenido de la sección Soluciones pendiente de definir.
-  </p>
+  <!-- Fondo dinámico -->
+  <div class="solutions-background" aria-hidden="true"></div>
+
+  <!-- Overlay -->
+  <div class="solutions-overlay" aria-hidden="true"></div>
+
+  <div class="solutions-container">
+    <!-- Header -->
+
+    <header class="solutions-header">
+      <div class="solutions-index">
+        <span class="solutions-index-number">02 / 06</span>
+        <span class="solutions-index-label">Orange Mindset</span>
+      </div>
+
+      <div class="solutions-intro">
+        <PlusIcon class="solutions-plus" />
+
+        <p>
+          Creemos que las grandes ideas no deberían quedarse en una
+          presentación. Deben convertirse en experiencias, campañas y
+          estrategias capaces de conectar marcas con personas y generar
+          resultados memorables.
+        </p>
+      </div>
+    </header>
+
+    <!-- Contenido -->
+
+    <div class="solutions-content">
+      <!-- Diagrama SVG -->
+
+      <SolutionsDiagram />
+
+      <!-- Tarjeta central -->
+
+      <div class="solution-card">
+        <div class="solution-card-content">
+          <h3 id="solution-title" class="solution-title">SOLUCIONES</h3>
+
+          <h4 id="solution-subtitle" class="solution-subtitle"></h4>
+
+          <p id="solution-description" class="solution-description"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ScrollIndicator class="solutions-scroll" />
 </Section>
 
 <script>

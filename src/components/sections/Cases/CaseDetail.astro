@@ -1,0 +1,109 @@
+---
+import "./case-detail.css";
+
+import { Image } from "astro:assets";
+
+import type { Case } from "./cases.data";
+import { solutionsById } from "../Solutions/solutions.data";
+
+interface Props {
+  caseItem: Case;
+}
+
+const { caseItem } = Astro.props;
+
+const caseSolutions = caseItem.solutionIds
+  .map((id) => solutionsById[id])
+  .filter(
+    (solution): solution is NonNullable<typeof solution> =>
+      solution !== undefined,
+  );
+---
+
+<section class="case-detail">
+  <!-- ========================================= -->
+  <!-- Header                                    -->
+  <!-- ========================================= -->
+
+  <header class="case-detail__header">
+    <div class="case-detail__info">
+      <span class="case-detail__label">
+        {caseItem.client}
+      </span>
+
+      <h2 class="case-detail__title">
+        {caseItem.title}
+      </h2>
+    </div>
+
+    <div class="case-detail__solutions">
+      {
+        caseSolutions.map((solution) => (
+          <div class="case-detail__solution">
+            <Image
+              src={solution.icon}
+              alt=""
+              aria-hidden="true"
+              class="case-detail__solution-icon"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </header>
+
+  <!-- ========================================= -->
+  <!-- Divider                                   -->
+  <!-- ========================================= -->
+
+  <div class="case-detail__divider"></div>
+
+  <!-- ========================================= -->
+  <!-- Media                                     -->
+  <!-- ========================================= -->
+
+  <div class="case-detail__media">
+    {
+      caseItem.video ? (
+        <button
+          class="case-detail__video"
+          type="button"
+          data-video={caseItem.video}
+          aria-label="Reproducir video"
+        >
+          <Image
+            src={caseItem.videoPoster!}
+            alt={caseItem.title}
+            class="case-detail__poster"
+          />
+
+          <span class="case-detail__play">▶</span>
+        </button>
+      ) : caseItem.detailImage ? (
+        <Image
+          src={caseItem.detailImage}
+          alt={caseItem.title}
+          class="case-detail__image"
+        />
+      ) : null
+    }
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Description                               -->
+  <!-- ========================================= -->
+
+  <div class="case-detail__body">
+    <p class="case-detail__description">
+      {caseItem.description}
+    </p>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Footer                                    -->
+  <!-- ========================================= -->
+
+  <footer class="case-detail__footer">
+    <button type="button" class="case-detail__close"> Cerrar </button>
+  </footer>
+</section>

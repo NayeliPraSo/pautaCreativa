@@ -1,0 +1,39 @@
+---
+import "./case-card.css";
+import { Image } from "astro:assets";
+import type { Case } from "./cases.data";
+
+interface Props {
+  case: Case;
+}
+
+const { case: caseItem } = Astro.props;
+---
+
+<button
+  type="button"
+  class="case-card"
+  data-case-id={caseItem.id}
+  aria-label={`Ver caso ${caseItem.title}`}
+>
+  <div class="case-card__inner">
+    <div class="case-card__header">
+      <p class="case-card__client">
+        {caseItem.client}
+      </p>
+
+      <h3 class="case-card__title">
+        {caseItem.title}
+      </h3>
+    </div>
+
+    <div class="case-card__media">
+      <img
+        src={caseItem.gridImage.src}
+        alt={caseItem.title}
+        class="case-card__image"
+        loading="lazy"
+      />
+    </div>
+  </div>
+</button>

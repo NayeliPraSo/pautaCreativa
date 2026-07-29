@@ -10,9 +10,11 @@
   --color-primary-dark: #bf4715;
   --color-secondary: #111827;
   --color-black:#222222;
+  --color-black-base:#000000;
   --color-accent: #f041ff;
   --color-teal: #00b4ac;
   --color-active:#00783a;
+  --color-case:#4a4a4a;
 
   /* Neutrales */
   --color-bg: #ffffff;
@@ -46,6 +48,8 @@
   --space-8: 5rem;
   --space-9: 8rem;
   --space-10: 10rem;
+  --space-11: 12rem;
+  --space-12: 15rem;
 
   /* Layout */
   --container-max-width: 1200px;

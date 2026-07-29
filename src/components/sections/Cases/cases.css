@@ -1,8 +1,82 @@
 .cases {
-  /* Estilos exclusivos de la sección Casos */
+  position: relative;
+  background: var(--color-black);
+  color: #fff;
 }
 
-.cases-description {
-  color: var(--color-text-muted);
-  margin-top: var(--space-3);
+.cases-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.cases-counter {
+  position: absolute;
+  align-items: center;
+  left: var(--space-10);
+
+  font-size: var(--fs-lg);
+  font-weight: 300;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.cases-counter .current {
+  color: var(--color-primary);
+}
+
+.cases-counter .separator,
+.cases-counter .total,
+.cases-counter .label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cases-counter .label {
+  margin-left: var(--space-3);
+}
+
+.cases-intro {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  margin-top: var(--space-7);
+  max-width: 1200px;
+  align-self: center;
+  justify-content: center;
+
+  font-size: var(--fs-xl);
+  line-height: 1.6;
+  font-weight: 300;
+
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cases-intro strong {
+  color: #fff;
+  font-weight: 500;
+}
+
+.cases-plus{
+  color: var(--color-primary);
+}
+
+.cases-title {
+  display: block;
+  width: min(100%, 1200px);
+  height: auto;
+  align-self: center;
+  justify-content: center;
+
+  margin-top: var(--space-8);
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: var(--space-8) auto 0;
+  overflow: visible;
+  margin-bottom: var(--space-8);
 }

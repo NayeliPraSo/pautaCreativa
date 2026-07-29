@@ -1,0 +1,211 @@
+/* ==========================================================================
+   Case Detail
+   ========================================================================== */
+
+.case-detail {
+  width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.case-detail__header {
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:start;
+  gap: var(--space-8);
+  padding: 3rem;
+}
+
+.case-detail__info {
+  flex: 1;
+}
+
+.case-detail__label {
+  display: block;
+  margin-bottom: .75rem;
+  font-family: var(--font-primary);
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+}
+
+.case-detail__client {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 100;
+  color: white;
+}
+
+.case-detail__title {
+  margin-top: 1rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  font-weight: 700;
+  line-height: .95;
+  text-transform: uppercase;
+  color: white;
+}
+
+/* ==========================================================================
+   Solutions
+   ========================================================================== */
+
+.case-detail__solutions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.case-detail__solution {
+  width: 84px;
+  height: 84px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(255,255,255,.08);
+  transition:
+    background .3s ease,
+    transform .3s ease;
+}
+
+.case-detail__solution:hover {
+  background: rgba(255,255,255,.14);
+  transform: translateY(-2px);
+}
+
+.case-detail__solution-icon {
+  width: 62px;
+  height: 62px;
+  display: block;
+  object-fit: contain;
+}
+
+/* ==========================================================================
+   Divider
+   ========================================================================== */
+
+.case-detail__divider {
+  height: 1px;
+  margin: 0 3rem;
+  background: rgba(255,255,255,.15);
+  max-width: 1200px;
+}
+
+.case-detail__divider::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid var(--color-bg);
+  transform: translateY(-50%);
+}
+
+/* ==========================================================================
+   Media
+   ========================================================================== */
+
+.case-detail__media {
+  padding: 3rem;
+}
+
+.case-detail__video {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.case-detail__poster,
+.case-detail__detail-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Play
+   ========================================================================== */
+
+.case-detail__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 116px;
+  height: 116px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  color: #000;
+  font-size: 2.4rem;
+  transition: transform .3s ease;
+}
+
+.case-detail__video:hover .case-detail__play {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* ==========================================================================
+   Body
+   ========================================================================== */
+
+.case-detail__body {
+  padding: 0 3rem;
+}
+
+.case-detail__description {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,.82);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.case-detail__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 3rem;
+}
+
+.case-detail__close {
+  padding: .9rem 2rem;
+  border: 2px solid white;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.case-detail__close:hover {
+  background: white;
+  color: var(--color-black);
+}
