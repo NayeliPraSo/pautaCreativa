@@ -1,14 +1,117 @@
 ---
 import "./clients.css";
 import Section from "../../ui/Section/Section.astro";
-import Heading from "../../ui/Heading/Heading.astro";
+import titleImage from "../../../assets/images/a_largo_plazo.png";
+
+// Importa TODOS los logos de la carpeta de una vez (eager: true los resuelve
+// en build time, no de forma async). Astro optimiza cada uno.
+const logoFiles = import.meta.glob("../../../assets/icons/clientes/*.png", {
+  eager: true,
+});
+
+// Helper para resolver un logo por nombre de archivo exacto
+function getLogo(filename: string) {
+  const entry = Object.entries(logoFiles).find(([path]) =>
+    path.endsWith(`/${filename}`),
+  );
+  if (!entry) {
+    console.warn(`[Clientes] Logo no encontrado: ${filename}`);
+    return null;
+  }
+  return (entry[1] as { default: ImageMetadata }).default;
+}
+
+// Fila 1: se mueve de derecha a izquierda
+const row1 = [
+  { file: "logos_amd.png", alt: "AMD" },
+  { file: "logos_alsea.png", alt: "Alsea" },
+  { file: "logos_banorte.png", alt: "Banorte" },
+  { file: "logos_capistrano.png", alt: "Capistrano" },
+  { file: "logos_carmela.png", alt: "Carmela" },
+  { file: "logos_cinepolis.png", alt: "Cinépolis" },
+  { file: "logos_cocacola.png", alt: "Coca-Cola" },
+  { file: "logos_colgate.png", alt: "Colgate" },
+  { file: "logos_gcc.png", alt: "GCC" },
+  { file: "logos_henkel.png", alt: "Henkel" },
+  { file: "logos_heinz.png", alt: "Heinz" },
+  { file: "logos_hisense.png", alt: "Hisense" },
+  { file: "logos_kellanova.png", alt: "Kellanova" },
+  { file: "logos_newell.png", alt: "Newell" },
+  { file: "logos_opella.png", alt: "Opella" },
+  { file: "logos_oxxo.png", alt: "Oxxo" },
+];
+
+// Fila 2: se mueve de izquierda a derecha
+const row2 = [
+  { file: "logos_dentalia.png", alt: "Dentalia" },
+  { file: "logos_eurofarma.png", alt: "Eurofarma" },
+  { file: "logos_ferrero.png", alt: "Ferrero" },
+  { file: "logos_mapfre.png", alt: "Mapfre" },
+  { file: "logos_galerias.png", alt: "Galerías" },
+  { file: "logos_gm.png", alt: "GM" },
+  { file: "logos_google.png", alt: "Google" },
+  { file: "logos_modelo.png", alt: "Modelo" },
+  { file: "logos_peras.png", alt: "Peras" },
+  { file: "logos_pringles.png", alt: "Pringles" },
+  { file: "logos_prosa.png", alt: "Prosa" },
+  { file: "logos_splenda.png", alt: "Splenda" },
+  { file: "logos_shell.png", alt: "Shell" },
+  { file: "logos_smuckers.png", alt: "Smuckers" },
+  { file: "logos_starbucks.png", alt: "Starbucks" },
+  { file: "logos_walmart.png", alt: "Walmart" },
+];
 ---
 
-<Section id="clientes" class="clients">
-  <Heading as="h2" size="lg">Clientes</Heading>
-  <p class="clients-description">
-    Contenido de la sección Clientes pendiente de definir.
-  </p>
+<Section class="clientes">
+  <div class="clientes-counter">
+    <span class="current">05</span>
+    <span class="separator">/</span>
+    <span class="total">06</span>
+
+    <span class="label">CLIENTES</span>
+  </div>
+
+  <img src={titleImage.src} alt="A largo plazo" class="clientes-title" />
+
+  <div class="clientes__marquees">
+    <div class="marquee marquee--to-left" aria-hidden="false">
+      <div class="marquee__track">
+        {
+          [...row1, ...row1].map(({ file, alt }, i) => {
+            const logo = getLogo(file);
+            return logo ? (
+              <div class="marquee__logo" aria-hidden={i >= row1.length}>
+                <img
+                  src={logo.src}
+                  alt={i < row1.length ? alt : ""}
+                  loading="lazy"
+                />
+              </div>
+            ) : null;
+          })
+        }
+      </div>
+    </div>
+
+    <div class="marquee marquee--to-right" aria-hidden="false">
+      <div class="marquee__track">
+        {
+          [...row2, ...row2].map(({ file, alt }, i) => {
+            const logo = getLogo(file);
+            return logo ? (
+              <div class="marquee__logo" aria-hidden={i >= row2.length}>
+                <img
+                  src={logo.src}
+                  alt={i < row2.length ? alt : ""}
+                  loading="lazy"
+                />
+              </div>
+            ) : null;
+          })
+        }
+      </div>
+    </div>
+  </div>
 </Section>
 
 <script>

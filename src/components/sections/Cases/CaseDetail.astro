@@ -20,90 +20,90 @@ const caseSolutions = caseItem.solutionIds
   );
 ---
 
-<section class="case-detail">
-  <!-- ========================================= -->
-  <!-- Header                                    -->
-  <!-- ========================================= -->
+<div class="case-detail-wrapper">
+  <section class="case-detail" data-case-id={caseItem.id}>
+    <!-- ========================================= -->
+    <!-- Header                                    -->
+    <!-- ========================================= -->
 
-  <header class="case-detail__header">
-    <div class="case-detail__info">
-      <span class="case-detail__label">
-        {caseItem.client}
-      </span>
+    <header class="case-detail__header">
+      <div class="case-detail__info">
+        <span class="case-detail__label">
+          {caseItem.client}
+        </span>
 
-      <h2 class="case-detail__title">
-        {caseItem.title}
-      </h2>
-    </div>
+        <h2 class="case-detail__title">
+          {caseItem.title}
+        </h2>
+      </div>
 
-    <div class="case-detail__solutions">
+      <div class="case-detail__solutions">
+        {
+          caseSolutions.map((solution) => (
+            <div class="case-detail__solution">
+              <Image
+                src={solution.icon}
+                alt=""
+                aria-hidden="true"
+                class="case-detail__solution-icon"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </header>
+
+    <!-- ========================================= -->
+    <!-- Divider                                   -->
+    <!-- ========================================= -->
+
+    <div class="case-detail__divider"></div>
+
+    <!-- ========================================= -->
+    <!-- Media                                     -->
+    <!-- ========================================= -->
+
+    <div class="case-detail__media">
       {
-        caseSolutions.map((solution) => (
-          <div class="case-detail__solution">
+        caseItem.video ? (
+          <div
+            class="case-detail__video"
+            data-video={caseItem.video}
+            role="button"
+            tabindex="0"
+            aria-label="Reproducir video"
+          >
             <Image
-              src={solution.icon}
-              alt=""
-              aria-hidden="true"
-              class="case-detail__solution-icon"
+              src={caseItem.videoPoster!}
+              alt={caseItem.title}
+              class="case-detail__poster"
             />
+
+            <span class="case-detail__play" aria-hidden="true">
+              ▶
+            </span>
           </div>
-        ))
+        ) : caseItem.detailImage ? (
+          <Image
+            src={caseItem.detailImage}
+            alt={caseItem.title}
+            class="case-detail__image"
+          />
+        ) : null
       }
     </div>
-  </header>
 
-  <!-- ========================================= -->
-  <!-- Divider                                   -->
-  <!-- ========================================= -->
+    <!-- ========================================= -->
+    <!-- Description                               -->
+    <!-- ========================================= -->
 
-  <div class="case-detail__divider"></div>
-
-  <!-- ========================================= -->
-  <!-- Media                                     -->
-  <!-- ========================================= -->
-
-  <div class="case-detail__media">
-    {
-      caseItem.video ? (
-        <button
-          class="case-detail__video"
-          type="button"
-          data-video={caseItem.video}
-          aria-label="Reproducir video"
-        >
-          <Image
-            src={caseItem.videoPoster!}
-            alt={caseItem.title}
-            class="case-detail__poster"
-          />
-
-          <span class="case-detail__play">▶</span>
-        </button>
-      ) : caseItem.detailImage ? (
-        <Image
-          src={caseItem.detailImage}
-          alt={caseItem.title}
-          class="case-detail__image"
-        />
-      ) : null
-    }
-  </div>
-
-  <!-- ========================================= -->
-  <!-- Description                               -->
-  <!-- ========================================= -->
-
-  <div class="case-detail__body">
-    <p class="case-detail__description">
-      {caseItem.description}
-    </p>
-  </div>
-
-  <!-- ========================================= -->
-  <!-- Footer                                    -->
-  <!-- ========================================= -->
-
-  <footer class="case-detail__footer">
-    <button type="button" class="case-detail__close"> Cerrar </button>
-  </footer>
-</section>
+    <div class="case-detail__body">
+      <p class="case-detail__description">
+        {caseItem.description}
+      </p>
+    </div>
+  </section>
+  <button type="button" class="case-detail__close" aria-label="Cerrar caso">
+    <span aria-hidden="true">X</span>
+  </button>
+</div>

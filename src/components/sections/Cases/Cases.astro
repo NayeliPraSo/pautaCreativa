@@ -37,8 +37,10 @@ import titleImage from "../../../assets/images/tit_que_logramos.png";
     {cases.map((item) => <CaseCard case={item} />)}
   </div>
 
-  <!-- Temporal para probar el modal -->
-  <CaseDetail caseItem={cases[1]} />
+  <!-- CaseDetail -->
+  <div class="cases-details">
+    {cases.map((item) => <CaseDetail caseItem={item} />)}
+  </div>
 </Section>
 
 <script>

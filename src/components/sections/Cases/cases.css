@@ -80,3 +80,7 @@
   overflow: visible;
   margin-bottom: var(--space-8);
 }
+
+.cases-details {
+  display: none;
+}

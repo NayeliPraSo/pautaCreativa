@@ -1,8 +1,133 @@
-.clients {
-  /* Estilos exclusivos de la sección Clientes */
+.clientes {
+  position: relative;
+  overflow: hidden;
+  background-color: #1a1a1a; /* fallback mientras carga el avif */
+  background-image: url("../../../assets/images/bg_clientes.avif");
+  background-size: cover;
+  background-position: 95% 75%; /* ajusta el % hasta alinear el rostro */
+  background-repeat: no-repeat;
 }
 
-.clients-description {
-  color: var(--color-text-muted);
-  margin-top: var(--space-3);
+.clientes-counter {
+  position: absolute;
+  left: var(--space-10);
+  align-items: center;
+  font-size: var(--fs-lg);
+  font-weight: 300;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.clientes-counter .current,
+.clientes-counter .separator,
+.clientes-counter .total,
+.clientes-counter .label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.clientes-counter .label {
+  margin-left: var(--space-3);
+}
+
+.clientes-title {
+  display: block;
+  width: min(100%, 1350px);
+  height: auto;
+  margin-inline: auto;
+  margin-top: var(--space-8);
+}
+
+/* --- Marquesinas --- */
+
+.clientes__marquees {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+  max-width: 1450px;
+  margin-inline: auto;
+  margin-bottom: 85px;
+}
+
+.marquee {
+  /* La máscara difumina los extremos para que los logos no aparezcan/
+     desaparezcan de golpe en el borde del viewport */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: max-content;
+}
+
+.marquee--to-left .marquee__track {
+  animation: marquee-to-left 40s linear infinite;
+}
+
+.marquee--to-right .marquee__track {
+  animation: marquee-to-right 40s linear infinite;
+}
+
+@keyframes marquee-to-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-to-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee__logo {
+  flex: 0 0 auto;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.marquee__logo img {
+  height: 100%;
+  width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* Pausa cuando la sección sale del viewport (vía JS/IntersectionObserver) */
+.marquee__track.is-out-of-view {
+  animation-play-state: paused;
+}
+
+/* Pausa al hacer hover */
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
 }
