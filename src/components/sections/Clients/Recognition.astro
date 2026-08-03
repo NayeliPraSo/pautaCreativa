@@ -1,0 +1,206 @@
+---
+import "./recognition.css";
+
+import { Image } from "astro:assets";
+
+// Imagen "Lo dicen nuestros clientes"
+import logoQueOpinan from "../../../assets/images/logo_que_opinan.png";
+
+// Imagen del #1
+import numeroUno from "../../../assets/images/numero_uno.png";
+
+// Reconocimientos de la industria
+import logoEffie from "../../../assets/images/reconocimientos/logo_effie.svg";
+import logoIab from "../../../assets/images/reconocimientos/IAB_premio.svg";
+import logoPremios from "../../../assets/images/reconocimientos/logo_premios.svg";
+import logoVictorias from "../../../assets/images/reconocimientos/logo_victorias.svg";
+---
+
+<section class="recognition" id="recognition">
+  <!-- =========================================================
+       LO DICEN NUESTROS CLIENTES
+  ========================================================== -->
+
+  <div class="recognition__clients">
+    <div class="recognition__clients-content">
+      <!-- Burbuja -->
+      <div class="recognition__clients-badge">
+        <Image src={logoQueOpinan} alt="Lo dicen nuestros clientes" />
+      </div>
+
+      <!-- Ranking -->
+      <div class="recognition__ranking">
+        <div class="recognition__line recognition__line--top"></div>
+        <div class="recognition__ranking-main">
+          <!-- #1 -->
+          <div class="recognition__ranking-number">
+            <Image src={numeroUno} alt="#1" />
+          </div>
+
+          <!-- Línea vertical -->
+          <div class="recognition__line recognition__line--vertical"></div>
+
+          <!-- Categorías -->
+          <div class="recognition__ranking-categories">
+            <p>
+              en <strong>Shopper Marketing</strong>
+            </p>
+
+            <p>
+              en <strong>Marketing Promocional</strong>
+            </p>
+
+            <p>
+              en <strong>Experiencial</strong>
+            </p>
+
+            <p>
+              en <strong>Eventos</strong>
+            </p>
+          </div>
+        </div>
+        <!-- Segunda línea -->
+        <div class="recognition__line recognition__line--ranking"></div>
+
+        <!-- Opiniones / posicionamiento -->
+        <div class="recognition__statements">
+          <p>
+            <strong>›</strong> Una de las agencias
+            <strong>más avanzadas en Retail Media</strong>
+          </p>
+
+          <p>
+            <strong>› </strong>
+            <strong>Entre las 5 mejores</strong> agencias en
+            <strong>cumplimiento y resolución</strong> de problemas
+          </p>
+
+          <p>
+            <strong>› </strong>
+            <strong>Top 10 agencias</strong> que
+            <strong>aportan valor añadido</strong> a mi empresa
+          </p>
+        </div>
+
+        <!-- Tercera línea -->
+        <div class="recognition__line recognition__line--statements"></div>
+
+        <!-- Servicios integrados -->
+        <div class="recognition__integrated">
+          <p>
+            <strong>› </strong>
+            <strong class="integrated">Top 10</strong> agencias con
+            <strong> Servicios Integrados</strong>
+          </p>
+        </div>
+      </div>
+      <!-- Cuarta línea: separación de la sección -->
+      <div class="recognition__line recognition__line--section"></div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       RECONOCIMIENTOS DE LA INDUSTRIA
+  ========================================================== -->
+
+  <div class="recognition__industry">
+    <h2 class="recognition__industry-title">RECONOCIMIENTOS DE LA INDUSTRIA</h2>
+
+    <!-- Reconocimientos -->
+    <div class="recognition__awards">
+      <!-- 1 Effie -->
+      <div class="recognition__award">
+        <Image src={logoEffie} alt="1 Effie" class="recognition__award-icon" />
+        <span class="recognition__award-label"> 1 EFFIE </span>
+      </div>
+
+      <!-- 1 IAB Mixx -->
+      <div class="recognition__award">
+        <Image src={logoIab} alt="1 IAB Mixx" class="recognition__award-icon" />
+        <span class="recognition__award-label"> 1 IAB MIXX </span>
+      </div>
+
+      <!-- 10 FIP -->
+      <div class="recognition__award">
+        <Image src={logoPremios} alt="10 FIP" class="recognition__award-icon" />
+        <span class="recognition__award-label"> 10 FIP </span>
+      </div>
+
+      <!-- 58 Victorias AMAPRO -->
+      <div class="recognition__award">
+        <Image
+          src={logoVictorias}
+          alt="58 Victorias AMAPRO"
+          class="recognition__award-icon"
+        />
+        <span class="recognition__award-label"> 58 VICTORIAS<br />AMAPRO </span>
+      </div>
+    </div>
+
+    <!-- =======================================================
+         RANKINGS
+    ======================================================== -->
+
+    <div class="recognition__timeline">
+      <!-- #20 -->
+      <div class="recognition__timeline-item">
+        <span class="recognition__timeline-number"> #20 </span>
+
+        <span class="recognition__timeline-label">
+          Agencia<br />
+          <strong>de publicidad</strong> ***
+        </span>
+      </div>
+
+      <!-- #3 -->
+      <div class="recognition__timeline-item">
+        <span class="recognition__timeline-number"> #3 </span>
+
+        <span class="recognition__timeline-label">
+          Agencia<br />
+          <strong>de promoción</strong> ***
+        </span>
+      </div>
+
+      <!-- #6 -->
+      <div class="recognition__timeline-item">
+        <span class="recognition__timeline-number"> #6 </span>
+
+        <span class="recognition__timeline-label">
+          Agencia<br />
+          <strong>BTL</strong> **
+        </span>
+      </div>
+
+      <!-- #14 -->
+      <div class="recognition__timeline-item">
+        <span class="recognition__timeline-number"> #14 </span>
+
+        <span class="recognition__timeline-label">
+          Agencia<br />
+          <strong>de Marketing Digital</strong> ***
+        </span>
+      </div>
+
+      <!-- #17 -->
+      <div class="recognition__timeline-item">
+        <span class="recognition__timeline-number"> #17 </span>
+
+        <span class="recognition__timeline-label">
+          Agencia de publicidad<br />
+          <strong>integrales</strong> ****
+        </span>
+      </div>
+
+      <!-- #18 -->
+      <div class="recognition__timeline-item">
+        <span class="recognition__timeline-number"> #18 </span>
+
+        <span class="recognition__timeline-label">
+          Agencia<br />
+          <strong>de eventos</strong> **
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,14 +1,251 @@
 ---
 import "./contact.css";
 import Section from "../../ui/Section/Section.astro";
-import Heading from "../../ui/Heading/Heading.astro";
+import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
+import contactTitle from "../../../assets/images/tit_cuentanos_tu_reto.png";
+
+const tabs = [
+  { id: "clientes", label: "Clientes" },
+  { id: "bolsa", label: "Bolsa de trabajo" },
+  { id: "proveedores", label: "Proveedores" },
+];
 ---
 
 <Section id="contacto" class="contact">
-  <Heading as="h2" size="lg">Contacto</Heading>
-  <p class="contact-description">
-    Contenido de la sección Contacto pendiente de definir.
-  </p>
+  <div class="contact-index">
+    <span class="contact-index-number">06 / 06</span>
+    <span class="contact-index-label">Contacto</span>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Vista 1: inicial — sin formulario          -->
+  <!-- ========================================= -->
+  <div class="contact-view contact-view--default" data-view="default">
+    <img
+      src={contactTitle.src}
+      alt="Cuéntanos tu reto"
+      class="contact-title-img contact-title-img--large"
+    />
+
+    <div class="contact-intro">
+      <p class="contact-subtitle">
+        Nuestro equipo estratégico te contactará para definir los siguientes
+        pasos.
+      </p>
+
+      <div class="contact-tabs">
+        {
+          tabs.map((tab) => (
+            <button type="button" class="contact-tab" data-tab-target={tab.id}>
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- Vista 2: activa — con formulario           -->
+  <!-- ========================================= -->
+  <div class="contact-view contact-view--active" data-view="active" hidden>
+    <div class="contact-title-box">
+      <img
+        src={contactTitle.src}
+        alt="Cuéntanos tu reto"
+        class="contact-title-img contact-title-img--vertical"
+      />
+    </div>
+
+    <div class="contact-main">
+      <p class="contact-subtitle">
+        Nuestro equipo estratégico te contactará para definir los siguientes
+        pasos.
+      </p>
+
+      <div class="contact-tabs" role="tablist">
+        {
+          tabs.map((tab, index) => (
+            <>
+              <button
+                type="button"
+                class="contact-tab"
+                data-tab-target={tab.id}
+                role="tab"
+                aria-selected="false"
+                aria-controls={`panel-${tab.id}`}
+                id={`tab-${tab.id}`}
+              >
+                {tab.label}
+              </button>
+
+              {index < tabs.length - 1 && (
+                <span class="contact-tabs__connector" aria-hidden="true" />
+              )}
+            </>
+          ))
+        }
+      </div>
+
+      <!-- Panel: Clientes -->
+      <form
+        class="contact-panel"
+        id="panel-clientes"
+        data-panel="clientes"
+        role="tabpanel"
+        aria-labelledby="tab-clientes"
+        hidden
+      >
+        <div class="contact-field">
+          <label for="clientes-nombre">Tu nombre completo</label>
+          <input type="text" id="clientes-nombre" name="nombre" required />
+        </div>
+
+        <div class="contact-field">
+          <label for="clientes-empresa">Tu empresa y cargo</label>
+          <input type="text" id="clientes-empresa" name="empresa" />
+        </div>
+
+        <div class="contact-field">
+          <label for="clientes-email">Tu correo corporativo</label>
+          <input type="email" id="clientes-email" name="email" required />
+        </div>
+
+        <div class="contact-field">
+          <label for="clientes-telefono">Tu número telefónico</label>
+          <input type="tel" id="clientes-telefono" name="telefono" />
+        </div>
+
+        <div class="contact-field">
+          <label for="clientes-mensaje">Describe brevemente el reto</label>
+          <textarea id="clientes-mensaje" name="mensaje" required></textarea>
+        </div>
+
+        <div class="contact-consent">
+          <input
+            type="checkbox"
+            id="clientes-consent"
+            name="consent"
+            required
+          />
+          <label for="clientes-consent">
+            He leído y acepto el <strong>Aviso de Privacidad</strong>
+          </label>
+        </div>
+
+        <button type="submit" class="contact-submit">
+          Enviar reto al squad
+        </button>
+      </form>
+
+      <!-- Panel: Bolsa de trabajo -->
+      <form
+        class="contact-panel"
+        id="panel-bolsa"
+        data-panel="bolsa"
+        role="tabpanel"
+        aria-labelledby="tab-bolsa"
+        hidden
+      >
+        <div class="contact-field">
+          <label for="bolsa-nombre">Tu nombre completo</label>
+          <input type="text" id="bolsa-nombre" name="nombre" required />
+        </div>
+
+        <div class="contact-field">
+          <label for="bolsa-email">Tu correo electrónico</label>
+          <input type="email" id="bolsa-email" name="email" required />
+        </div>
+
+        <div class="contact-field">
+          <label for="bolsa-telefono">Tu número telefónico</label>
+          <input type="tel" id="bolsa-telefono" name="telefono" />
+        </div>
+
+        <div class="contact-field">
+          <label for="bolsa-puesto">Puesto de interés</label>
+          <input type="text" id="bolsa-puesto" name="puesto" />
+        </div>
+
+        <div class="contact-field">
+          <label for="bolsa-cv">Adjunta tu CV (PDF o Word)</label>
+          <input type="file" id="bolsa-cv" name="cv" accept=".pdf,.doc,.docx" />
+        </div>
+
+        <div class="contact-consent">
+          <input type="checkbox" id="bolsa-consent" name="consent" required />
+          <label for="bolsa-consent">
+            He leído y acepto el <strong>Aviso de Privacidad</strong>
+          </label>
+        </div>
+
+        <button type="submit" class="contact-submit">
+          Enviar postulación
+        </button>
+      </form>
+
+      <!-- Panel: Proveedores -->
+      <form
+        class="contact-panel"
+        id="panel-proveedores"
+        data-panel="proveedores"
+        role="tabpanel"
+        aria-labelledby="tab-proveedores"
+        hidden
+      >
+        <div class="contact-field">
+          <label for="proveedores-empresa">Nombre de la empresa</label>
+          <input type="text" id="proveedores-empresa" name="empresa" required />
+        </div>
+
+        <div class="contact-field">
+          <label for="proveedores-contacto">Nombre de contacto</label>
+          <input
+            type="text"
+            id="proveedores-contacto"
+            name="contacto"
+            required
+          />
+        </div>
+
+        <div class="contact-field">
+          <label for="proveedores-categoria">
+            Categoría de producto o servicio
+          </label>
+          <input type="text" id="proveedores-categoria" name="categoria" />
+        </div>
+
+        <div class="contact-field">
+          <label for="proveedores-email">Correo electrónico</label>
+          <input type="email" id="proveedores-email" name="email" required />
+        </div>
+
+        <div class="contact-field">
+          <label for="proveedores-telefono">Número telefónico</label>
+          <input type="tel" id="proveedores-telefono" name="telefono" />
+        </div>
+
+        <div class="contact-consent">
+          <input
+            type="checkbox"
+            id="proveedores-consent"
+            name="consent"
+            required
+          />
+          <label for="proveedores-consent">
+            He leído y acepto el <strong>Aviso de Privacidad</strong>
+          </label>
+        </div>
+
+        <button type="submit" class="contact-submit">Enviar información</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="contact-plus-group" aria-hidden="true">
+    <PlusIcon class="contact-plus" />
+    <PlusIcon class="contact-plus" />
+  </div>
 </Section>
 
 <script>
