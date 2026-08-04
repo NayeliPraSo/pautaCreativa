@@ -1,0 +1,81 @@
+---
+import "./contactForm.css";
+
+import { contactForms, type ContactFormType } from "./contact.data";
+
+interface Props {
+  formType: ContactFormType;
+}
+
+const { formType } = Astro.props;
+
+const form = contactForms[formType];
+---
+
+<form class="contact-form" data-form-type={formType}>
+  <div class="contact-form-fields">
+    {
+      form.fields.map((field) => (
+        <div class={`contact-field contact-field--${field.type}`}>
+          <label for={`${formType}-${field.name}`} class="contact-field-label">
+            {field.label}
+          </label>
+
+          {field.type === "textarea" ? (
+            <textarea
+              id={`${formType}-${field.name}`}
+              name={field.name}
+              class="contact-field-input contact-field-textarea"
+              required={field.required}
+              placeholder={field.placeholder}
+            />
+          ) : field.type === "file" ? (
+            <div class="contact-file">
+              <input
+                id={`${formType}-${field.name}`}
+                name={field.name}
+                type="file"
+                class="contact-file-input"
+                required={field.required}
+                accept={field.accept}
+              />
+
+              <label
+                for={`${formType}-${field.name}`}
+                class="contact-file-button"
+              >
+                Seleccionar archivo
+              </label>
+
+              <span class="contact-file-name">Ningún archivo seleccionado</span>
+            </div>
+          ) : (
+            <input
+              id={`${formType}-${field.name}`}
+              name={field.name}
+              type={field.type}
+              class="contact-field-input"
+              required={field.required}
+              placeholder={field.placeholder}
+            />
+          )}
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="contact-form-footer">
+    <label class="contact-privacy">
+      <input type="checkbox" name="privacy" required />
+
+      <span>
+        He leído y acepto el
+        <a href="/aviso-de-privacidad" target="_blank"> Aviso de Privacidad</a>.
+      </span>
+    </label>
+
+    <button type="submit" class="contact-submit">
+      {form.submitLabel}
+    </button>
+  </div>
+</form>

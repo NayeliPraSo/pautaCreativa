@@ -4,40 +4,81 @@
  * Vista "active": título angosto/rotado + tabs + el panel del servicio elegido.
  */
 
-const defaultView = document.querySelector<HTMLElement>(
-  '.contact-view[data-view="default"]',
-);
-const activeView = document.querySelector<HTMLElement>(
-  '.contact-view[data-view="active"]',
-);
+const contact = document.querySelector<HTMLElement>("#contact");
 
-const triggers = document.querySelectorAll<HTMLButtonElement>(
-  "[data-tab-target]",
-);
-const panels = document.querySelectorAll<HTMLFormElement>(".contact-panel");
+if (!contact) {
+  throw new Error("Contact section not found");
+}
 
-function openService(targetId: string) {
-  defaultView?.setAttribute("hidden", "");
-  activeView?.removeAttribute("hidden");
+const buttons =
+  contact.querySelectorAll<HTMLButtonElement>("[data-form]");
 
-  triggers.forEach((trigger) => {
-    const isActive = trigger.dataset.tabTarget === targetId;
-    trigger.classList.toggle("is-active", isActive);
-    trigger.setAttribute("aria-selected", String(isActive));
+const panels =
+  contact.querySelectorAll<HTMLElement>("[data-form-panel]");
+
+const closeForms = () => {
+  contact.classList.remove("is-form-open");
+
+  buttons.forEach((button) => {
+    button.classList.remove("is-active");
   });
 
   panels.forEach((panel) => {
-    const isTarget = panel.dataset.panel === targetId;
-    panel.classList.toggle("is-active", isTarget);
-    panel.hidden = !isTarget;
+    panel.hidden = true;
   });
-}
+};
 
-triggers.forEach((trigger) => {
-  trigger.addEventListener("click", () => {
-    const target = trigger.dataset.tabTarget;
-    if (target) openService(target);
+const openForm = (formType: string, activeButton: HTMLButtonElement) => {
+  contact.classList.add("is-form-open");
+
+  buttons.forEach((button) => {
+    button.classList.toggle("is-active", button === activeButton);
+  });
+
+  panels.forEach((panel) => {
+    panel.hidden = panel.dataset.formPanel !== formType;
+  });
+};
+
+buttons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const formType = button.dataset.form;
+
+    if (!formType) return;
+
+    const isActive = button.classList.contains("is-active");
+
+    if (isActive) {
+      closeForms();
+      return;
+    }
+
+    openForm(formType, button);
   });
 });
 
-export {};
+/* =========================
+   Input de archivos
+========================= */
+
+const fileInputs =
+  contact.querySelectorAll<HTMLInputElement>('input[type="file"]');
+
+fileInputs.forEach((input) => {
+  const fileName = input
+    .closest(".contact-file")
+    ?.querySelector<HTMLElement>(".contact-file-name");
+
+  if (!fileName) return;
+
+  input.addEventListener("change", () => {
+    const file = input.files?.[0];
+
+    fileName.textContent = file
+      ? file.name
+      : "Ningún archivo seleccionado";
+  });
+});
+
+
+closeForms();

@@ -1,23 +1,174 @@
 #site-footer {
-  background-color: var(--color-secondary);
-  color: var(--color-bg);
-  padding: var(--space-6) var(--container-padding);
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-primary);
+  color: var(--color-black-base);
+  padding: var(--space-9) var(--space-10) var(--space-6);
+  border-top: 3px solid var(--color-teal);
+}
+
+/* Punto decorativo asomando por el borde superior */
+.footer-dot {
+  position: absolute;
+  top: -30px;
+  left: 60px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-teal);
 }
 
 .footer-inner {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  max-width: 1500px;
+  margin: 0 auto;
 }
 
-.footer-brand {
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.footer-wordmark {
+  display: block;
+  width: 420px;
+  max-width: 100%;
+  height: auto; /* respeta el aspect ratio real: 820 x 101 */
+}
+
+.footer-contact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  font-family: var(--font-primary);
+  font-size: var(--fs-base);
+}
+
+.footer-address {
+  margin: 0;
+}
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-primary);
+  font-size: var(--fs-base);
+}
+
+.footer-link {
+  color: inherit;
+  text-decoration: underline;
+  transition: opacity var(--transition-fast);
+}
+
+.footer-link:hover {
+  opacity: 0.7;
+}
+
+.footer-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-top: var(--space-2);
+}
+
+.footer-badges-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.footer-badges-label {
+  font-family: var(--font-primary);
   font-weight: 700;
-  font-size: var(--fs-lg);
+  font-size: var(--fs-base);
+  white-space: nowrap;
+}
+
+.footer-badges-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.footer-badges-logos {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.footer-badges-logos img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .footer-copy {
+  font-family: var(--font-primary);
   font-size: var(--fs-sm);
-  color: rgba(255, 255, 255, 0.7);
+  margin-top: var(--space-2);
+}
+
+.footer-copy strong {
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Insignia circular "pauta"
+   ========================================================================== */
+
+.footer-brand-badge {
+  flex-shrink: 0;
+  width: 190px;
+}
+
+.footer-brand-badge svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.footer-brand-badge__circle {
+  fill: var(--color-secondary);
+}
+
+.footer-brand-badge__mark path {
+  fill: #fff;
+}
+
+@media (max-width: 900px) {
+  #site-footer {
+    padding: var(--space-8) var(--space-5) var(--space-6);
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-6);
+  }
+
+  .footer-brand-badge {
+    width: 130px;
+    align-self: center;
+  }
+
+  .footer-contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .footer-badges {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
 }
