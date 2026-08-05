@@ -2,7 +2,7 @@
   position: relative;
   overflow: hidden;
   background-color: var(--color-primary);
-  color: var(--color-black-base);
+  color: var(--color-black);
   padding: var(--space-9) var(--space-10) var(--space-6);
   border-top: 3px solid var(--color-teal);
 }
@@ -15,7 +15,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: var(--color-teal);
+  background: var(--color-teal2);
 }
 
 .footer-inner {
@@ -23,7 +23,7 @@
   z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--space-8);
   max-width: 1500px;
   margin: 0 auto;
@@ -33,11 +33,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  align-items: flex-end;
 }
 
 .footer-wordmark {
   display: block;
-  width: 420px;
+  width: 620px;
   max-width: 100%;
   height: auto; /* respeta el aspect ratio real: 820 x 101 */
 }
@@ -47,7 +48,8 @@
   align-items: center;
   gap: var(--space-5);
   font-family: var(--font-primary);
-  font-size: var(--fs-base);
+  font-size: var(--fs-xl);
+  font-weight: 300;
 }
 
 .footer-address {
@@ -59,13 +61,21 @@
   align-items: center;
   gap: var(--space-3);
   font-family: var(--font-primary);
-  font-size: var(--fs-base);
+  font-size: var(--fs-xl);
+}
+
+.footer-social span{
+  color: var(--color-bg);
+  font-weight: 300;
 }
 
 .footer-link {
-  color: inherit;
+  color: var(--color-bg);
   text-decoration: underline;
+  text-decoration-thickness: 0.5px; /* Ajusta el grosor de la línea de subrayado */
+  text-underline-offset: 3px; /* Ajusta la distancia entre el texto y la línea de subrayado */
   transition: opacity var(--transition-fast);
+  font-weight: 100;
 }
 
 .footer-link:hover {
@@ -88,8 +98,8 @@
 
 .footer-badges-label {
   font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--fs-base);
+  font-weight: 400;
+  font-size: var(--fs-xl);
   white-space: nowrap;
 }
 
@@ -113,12 +123,24 @@
 
 .footer-copy {
   font-family: var(--font-primary);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-lg);
   margin-top: var(--space-2);
 }
 
 .footer-copy strong {
   font-weight: 700;
+}
+
+.footer-aviso {
+  color: var(--color-black);
+  text-decoration: underline;
+  text-decoration-thickness: 0.8px; /* Ajusta el grosor de la línea de subrayado */
+  text-underline-offset: 3px; /* Ajusta la distancia entre el texto y la línea de subrayado */
+  font-weight: 400;
+}
+
+.footer-aviso:hover {
+  opacity: 0.7;
 }
 
 /* ==========================================================================
@@ -127,7 +149,9 @@
 
 .footer-brand-badge {
   flex-shrink: 0;
-  width: 190px;
+  width: 230px;
+  align-self: flex-start;
+
 }
 
 .footer-brand-badge svg {
@@ -137,7 +161,7 @@
 }
 
 .footer-brand-badge__circle {
-  fill: var(--color-secondary);
+  fill: var(--color-black);
 }
 
 .footer-brand-badge__mark path {

@@ -2,30 +2,8 @@
 import "./footer.css";
 import creadoresLogo from "../../../assets/images/footer_creadores.png";
 
-// Se cargan dinámicamente todos los logos de cada carpeta —
-// no hace falta declarar nombres de archivo específicos.
-const asociacionesFiles = import.meta.glob<{ default: ImageMetadata }>(
-  "../../../assets/images/footer/asociaciones/*.{png,svg,jpg,jpeg,webp}",
-  { eager: true },
-);
-const certificacionesFiles = import.meta.glob<{ default: ImageMetadata }>(
-  "../../../assets/images/footer/certificaciones/*.{png,svg,jpg,jpeg,webp}",
-  { eager: true },
-);
-
-const asociaciones = Object.entries(asociacionesFiles)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([path, mod]) => ({
-    src: mod.default.src,
-    name: path.split("/").pop() ?? "",
-  }));
-
-const certificaciones = Object.entries(certificacionesFiles)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([path, mod]) => ({
-    src: mod.default.src,
-    name: path.split("/").pop() ?? "",
-  }));
+import asociaciones from "../../../assets/images/footer/asociaciones/icon_asociaciones.png";
+import certificaciones from "../../../assets/images/footer/certificaciones/icon_certificaciones.png";
 ---
 
 <footer id="site-footer" data-footer>
@@ -77,33 +55,17 @@ const certificaciones = Object.entries(certificacionesFiles)
 
       <div class="footer-badges">
         <div class="footer-badges-group">
-          <span class="footer-badges-label">Asociaciones</span>
-          <span class="footer-badges-divider" aria-hidden="true"></span>
-          <div class="footer-badges-logos">
-            {
-              asociaciones.map((logo) => (
-                <img src={logo.src} alt={logo.name} loading="lazy" />
-              ))
-            }
-          </div>
+          <img src={asociaciones.src} alt="Asociaciones" loading="lazy" />
         </div>
 
         <div class="footer-badges-group">
-          <span class="footer-badges-label">Certificaciones</span>
-          <span class="footer-badges-divider" aria-hidden="true"></span>
-          <div class="footer-badges-logos">
-            {
-              certificaciones.map((logo) => (
-                <img src={logo.src} alt={logo.name} loading="lazy" />
-              ))
-            }
-          </div>
+          <img src={certificaciones.src} alt="Certificaciones" loading="lazy" />
         </div>
       </div>
 
       <p class="footer-copy">
         <strong>©Grupo Pauta Creativa, S.A. de C.V.</strong> Todos los derechos reservados.
-        <a href="#" class="footer-link">Aviso de privacidad</a>.
+        <a href="#" class="footer-aviso"> Aviso de privacidad</a>.
       </p>
     </div>
 
