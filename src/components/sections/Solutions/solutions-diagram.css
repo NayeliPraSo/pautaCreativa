@@ -1,0 +1,342 @@
+.solutions-diagram {
+  position: relative;
+  width: min(68vw, 800px);
+  aspect-ratio: 900 / 941;
+  margin: 0 auto;
+}
+
+/* ================================
+   DIAGRAMA BASE
+   ================================ */
+
+.solutions-diagram-circle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+
+  transition: filter 0.4s ease;
+}
+
+.solutions-diagram-title {
+  position: absolute;
+
+  top: 42%;
+  left: 42%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  color: var(--color-primary);
+  font-family: var(--font-primary);
+  font-size: 85px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ================================
+   NARANJA
+   ================================ */
+
+.solutions-diagram-orange {
+  position: absolute;
+  width: 75%;
+  height: auto;
+  top: 0;
+  left: 1%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+
+}
+
+.solution-card {
+  position: absolute;
+  top: 45%;
+  left: 42%;
+  z-index: 4;
+  width: 360px;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+
+/* ================================
+   NODOS
+   ================================ */
+
+.solution-node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+  z-index: 5;
+}
+
+
+/* Punto */
+
+.solution-dot {
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+
+/* Texto */
+
+.solution-label {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.solution-label strong {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.solution-label span {
+  font-size: 26px;
+  font-weight: 400;
+}
+
+
+/* Hover */
+
+.solution-node:hover .solution-dot {
+  transform: scale(1.15);
+}
+
+
+/* ================================
+   POSICIONES
+   ================================ */
+
+/*
+ * Las posiciones están expresadas en %
+ * respecto al diagrama completo.
+ */
+
+
+/* Influencer */
+
+.solution-node-influencer {
+  top: 1%;
+  left: 51%;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+}
+
+.solution-node-influencer .solution-label {
+  align-items: center;
+  order: -1;
+  margin-bottom: 10px;
+}
+
+
+/* Total Promotion */
+
+.solution-node-total-promotion {
+  top: 24%;
+  left: 85%;
+}
+
+.solution-node-total-promotion .solution-label {
+  margin-left: 14px;
+}
+
+
+/* Shopper Connections */
+
+.solution-node-shopper-connections {
+  top: 60%;
+  left: 94%;
+}
+
+.solution-node-shopper-connections .solution-label {
+  margin-left: 14px;
+}
+
+
+/* Innovation Lab */
+
+.solution-node-innovation-lab {
+  top: 65%;
+  left: 54%;
+}
+
+.solution-node-innovation-lab .solution-label {
+  margin-left: 14px;
+  margin-top: 22px;
+}
+
+
+/* Advertising */
+
+.solution-node-advertising {
+  top: 95%;
+  left: 59%;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+}
+
+.solution-node-advertising .solution-label {
+  align-items: center;
+  order: 1;
+  margin-top: 10px;
+}
+
+
+/* Experience Marketing */
+
+.solution-node-experience-marketing {
+  top: 91.2%;
+  left: 21.7%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.solution-node-experience-marketing .solution-label {
+  align-items: center;
+  order: 1;
+  margin-top: 10px;
+}
+
+
+/* Diseño Estratégico */
+
+.solution-node-strategic-design {
+  top: 63%;
+  left: -12%;
+  flex-direction: row-reverse;
+}
+
+.solution-node-strategic-design .solution-label {
+  align-items: flex-end;
+  margin-right: 14px;
+}
+
+/* =========================================
+   SEGUNDA VISTA - SOLUCIÓN ACTIVA
+   ========================================= */
+
+/* Tarjeta */
+
+.solution-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.solution-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-1xl);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.solution-subtitle {
+  margin: 6px 0 26px;
+  color: var(--color-text);
+  font-size: var(--fs-xl);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.solution-description {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-lg);
+  line-height: 1.35;
+}
+
+/* Diagrama */
+
+.solutions-diagram.is-active .solutions-diagram-circle {
+  filter: brightness(0) invert(1);
+}
+
+.solutions-diagram.is-active .solutions-diagram-title {
+  opacity: 0;
+}
+
+.solutions-diagram.is-active .solutions-diagram-orange {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Tarjeta */
+
+.solutions-diagram.is-active .solution-card {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Nodos */
+
+.solutions-diagram.is-active .solution-node {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.solutions-diagram.is-active .solution-node.is-selected {
+  color: var(--color-bg);
+}
+
+/* Puntos */
+
+.solutions-diagram.is-active .solution-dot {
+  background: var(--color-bg);
+}
+
+.solutions-diagram.is-active .solution-node.is-selected .solution-dot {
+  transform: scale(1.45);
+}
+
+/* Fondo */
+
+.solutions.is-active .solutions-background {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Header */
+
+.solutions.is-active .solutions-index,
+.solutions.is-active .solutions-index-number,
+.solutions.is-active .solutions-index-label {
+  color: var(--color-bg);
+}
+
+.solutions.is-active .solutions-intro,
+.solutions.is-active .solutions-intro p,
+.solutions.is-active .solutions-intro strong,
+.solutions.is-active .solutions-plus {
+  color: var(--color-bg);
+}

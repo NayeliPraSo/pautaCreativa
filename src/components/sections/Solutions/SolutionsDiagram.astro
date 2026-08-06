@@ -1,3 +1,58 @@
 ---
+import "./solutions-diagram.css";
 
+/*import circle from "../../../assets/images/solutions/circulo.svg";*/
+import orange from "../../../assets/images/solutions/naranja_blanca.svg";
+import circle from "../../../assets/images/solutions/circulo2.svg";
+
+import { solutions } from "./solutions.data";
 ---
+
+<div class="solutions-diagram">
+  <!-- Diagrama base -->
+  <img
+    src={circle.src}
+    alt=""
+    class="solutions-diagram-circle"
+    aria-hidden="true"
+  />
+
+  <!-- Título central -->
+  <div class="solutions-diagram-title">SOLUCIONES</div>
+
+  <div class="solution-card">
+    <div class="solution-card-content">
+      <h3 id="solution-title" class="solution-title"></h3>
+      <h4 id="solution-subtitle" class="solution-subtitle"></h4>
+      <p id="solution-description" class="solution-description"></p>
+    </div>
+  </div>
+
+  <!-- Naranja decorativa -->
+  <img
+    src={orange.src}
+    alt=""
+    class="solutions-diagram-orange"
+    aria-hidden="true"
+  />
+
+  <!-- Soluciones -->
+  {
+    solutions.map((solution) => (
+      <button
+        type="button"
+        class:list={["solution-node", `solution-node-${solution.id}`]}
+        data-solution={solution.id}
+        aria-label={`${solution.title} ${solution.subtitle}`}
+      >
+        <span class="solution-dot" aria-hidden="true" />
+
+        <span class="solution-label">
+          <strong>{solution.title}</strong>
+
+          {solution.subtitle && <span>{solution.subtitle}</span>}
+        </span>
+      </button>
+    ))
+  }
+</div>
