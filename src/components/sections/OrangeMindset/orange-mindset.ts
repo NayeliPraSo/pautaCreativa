@@ -14,8 +14,6 @@ const initHorizontalScroll = () => {
 
   if (!section || !slider) return;
 
-  const panels = slider.querySelectorAll<HTMLElement>(".om-panel");
-
   const totalScroll = slider.scrollWidth - window.innerWidth;
 
   gsap.to(slider, {
