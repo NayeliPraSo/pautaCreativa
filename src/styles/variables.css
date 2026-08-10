@@ -74,3 +74,12 @@
   --z-header: 100;
   --z-overlay: 200;
 }
+
+/* Referencia de breakpoints — Pauta Creativa
+   Desktop grande:  > 1440px (default)
+   Desktop:         ≤ 1440px
+   Tablet landscape:≤ 1200px
+   Tablet:          ≤ 992px
+   Mobile landscape:≤ 768px
+   Mobile:          ≤ 480px
+*/

@@ -47,9 +47,322 @@
 .header-menu a:hover {
   color: var(--color-bg);
 }
+
+/* =========================================================
+   ELEMENTOS MÓVILES
+   Ocultos en desktop
+   ========================================================= */
+
+.header-mobile-brand,
+.header-menu-toggle,
+.header-menu-splash {
+  display: none;
+}
  
+/* =========================================================
+   MENÚ MÓVIL
+   ========================================================= */
+
 @media (max-width: 768px) {
-  .header-menu {
+
+  /* -------------------------------------------------------
+     HEADER
+     ------------------------------------------------------- */
+
+  #site-header {
+    z-index: 1000;
+  }
+
+  .header-nav {
+    position: relative;
+    min-height: 100px;
+    padding: 18px 28px;
+  }
+
+
+  /* -------------------------------------------------------
+     LOGO DESKTOP
+     ------------------------------------------------------- */
+
+  .header-logo {
     display: none;
+  }
+
+
+  /* -------------------------------------------------------
+     PAUTA BADGE
+     Visible únicamente cuando el menú está cerrado
+     ------------------------------------------------------- */
+
+  .header-mobile-brand {
+    display: block;
+    position: relative;
+    z-index: 1003;
+
+    width: 105px;
+    height: 105px;
+
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .header-mobile-brand a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .header-mobile-brand.is-hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+  }
+
+
+  /* -------------------------------------------------------
+     BOTÓN HAMBURGUESA
+     ------------------------------------------------------- */
+
+  .header-menu-toggle {
+    position: relative;
+    z-index: 1004;
+
+    display: flex;
+
+    width: 64px;
+    height: 64px;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    outline: none;
+    background: transparent;
+
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+
+    cursor: pointer;
+  }
+
+  .header-menu-toggle span {
+    display: block;
+
+    width: 58px;
+    height: 8px;
+
+    background-color: var(--color-bg);
+
+    transform-origin: center;
+
+    transition:
+      transform 0.3s ease,
+      opacity 0.2s ease,
+      width 0.3s ease;
+  }
+
+
+  /* -------------------------------------------------------
+     HAMBURGUESA → X
+     ------------------------------------------------------- */
+
+  .header-menu-toggle.is-open span:nth-child(1) {
+    transform: translateY(18px) rotate(45deg);
+  }
+
+  .header-menu-toggle.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .header-menu-toggle.is-open span:nth-child(3) {
+    transform: translateY(-18px) rotate(-45deg);
+  }
+
+
+  /* -------------------------------------------------------
+     CÍRCULO EXPANSIVO
+     ------------------------------------------------------- */
+
+  .header-menu-splash {
+    display: block;
+
+    position: fixed;
+
+    top: 0;
+    right: 0;
+
+    width: 80px;
+    height: 80px;
+
+    border-radius: 50%;
+
+    background-color: var(--color-primary);
+
+    z-index: 1001;
+
+    transform: scale(0);
+    transform-origin: center;
+
+    pointer-events: none;
+
+    transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  .header-menu-splash.is-open {
+    transform: scale(30);
+  }
+
+
+  /* -------------------------------------------------------
+     MENÚ
+     ------------------------------------------------------- */
+
+  .header-menu {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1002;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 22px;
+
+    margin: 0;
+    padding: 100px 30px 40px;
+
+    list-style: none;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: translateY(20px);
+
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease,
+      visibility 0s linear 0.7s;
+  }
+
+  .header-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    transform: translateY(0);
+
+    transition:
+      opacity 0.35s ease 0.35s,
+      transform 0.35s ease 0.35s,
+      visibility 0s linear 0s;
+  }
+
+  .header-menu li {
+    opacity: 0;
+    transform: translateY(20px);
+
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .header-menu.is-open li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Aparición escalonada de los enlaces */
+
+  .header-menu.is-open li:nth-child(1) {
+    transition-delay: 0.40s;
+  }
+
+  .header-menu.is-open li:nth-child(2) {
+    transition-delay: 0.46s;
+  }
+
+  .header-menu.is-open li:nth-child(3) {
+    transition-delay: 0.52s;
+  }
+
+  .header-menu.is-open li:nth-child(4) {
+    transition-delay: 0.58s;
+  }
+
+  .header-menu.is-open li:nth-child(5) {
+    transition-delay: 0.64s;
+  }
+
+  .header-menu.is-open li:nth-child(6) {
+    transition-delay: 0.70s;
+  }
+
+  .header-menu a {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--color-bg);
+
+    white-space: nowrap;
+
+    transition: opacity 0.2s ease;
+  }
+
+  .header-menu a:hover {
+    color: var(--color-bg);
+    opacity: 0.75;
+  }
+}
+
+
+/* =========================================================
+   MÓVIL PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .header-nav {
+    padding: 16px 20px;
+  }
+
+  .header-mobile-brand {
+    width: 88px;
+    height: 88px;
+  }
+
+  .header-menu-toggle {
+    width: 58px;
+    height: 58px;
+    gap: 8px;
+  }
+
+  .header-menu-toggle span {
+    width: 52px;
+    height: 7px;
+  }
+
+  .header-menu-toggle.is-open span:nth-child(1) {
+    transform: translateY(15px) rotate(45deg);
+  }
+
+  .header-menu-toggle.is-open span:nth-child(3) {
+    transform: translateY(-15px) rotate(-45deg);
+  }
+
+  .header-menu a {
+    font-size: 24px;
+  }
+
+  .header-menu {
+    gap: 18px;
   }
 }

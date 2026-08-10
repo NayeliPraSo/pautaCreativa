@@ -1,22 +1,61 @@
 ---
 import "./header.css";
 import logo from "../../../assets/images/LOGO-PAUTACREATIVA.png";
+import PautaBadge from "../../ui/PautaBadge/PautaBadge.astro";
 ---
 
 <header id="site-header" data-header>
   <nav class="header-nav">
+    <!-- Logo principal: desktop -->
     <a href="#hero" class="header-logo">
       <img src={logo.src} alt="Pauta Creativa" />
     </a>
 
-    <ul class="header-menu">
-      <li><a href="#somos">SOMOS</a></li>
-      <li><a href="#orange-mindset">ORANGE MINDSET</a></li>
-      <li><a href="#soluciones">SOLUCIONES</a></li>
-      <li><a href="#casos">CASOS</a></li>
-      <li><a href="#clientes">CLIENTES</a></li>
-      <li><a href="#contact">CONTACTO</a></li>
+    <!-- Logo circular: solo móvil y estado cerrado -->
+    <div class="header-mobile-brand" data-mobile-brand>
+      <a href="#hero" aria-label="Pauta Creativa">
+        <PautaBadge />
+      </a>
+    </div>
+
+    <!-- Navegación -->
+    <ul class="header-menu" id="header-menu">
+      <li>
+        <a href="#somos">SOMOS</a>
+      </li>
+      <li>
+        <a href="#orange-mindset">ORANGE MINDSET</a>
+      </li>
+      <li>
+        <a href="#soluciones">SOLUCIONES</a>
+      </li>
+      <li>
+        <a href="#casos">CASOS</a>
+      </li>
+      <li>
+        <a href="#clientes">CLIENTES</a>
+      </li>
+      <li>
+        <a href="#contact">CONTACTO</a>
+      </li>
     </ul>
+
+    <!-- Botón hamburguesa: solo móvil -->
+    <button
+      class="header-menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="header-menu"
+      aria-label="Abrir menú"
+      data-menu-toggle
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Círculo expansivo del menú móvil -->
+    <div class="header-menu-splash" data-menu-splash aria-hidden="true"></div>
   </nav>
 </header>
 

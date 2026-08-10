@@ -5,7 +5,8 @@
   align-items: flex-end;
   padding-top: calc(var(--space-5) * 2);
   background-image: url("../../../assets/images/BG_GRIS.avif");
-  background-size: 108%;
+  background-color:#383838;
+  background-size: auto 108%;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -118,4 +119,223 @@
   position: absolute;
   left: 48%;
   bottom: var(--space-5);
+}
+
+/* ≤ 1440px — Desktop */
+@media (max-width: 1440px) {
+  .about-container {
+    margin-left: auto;
+    width: 90%;
+  }
+
+  .about-copy {
+    font-size: 2rem;
+    max-width: 700px;
+  }
+
+  .about-diagram {
+    max-width: 950px;
+  }
+}
+
+/* ≤ 1200px — Tablet landscape */
+@media (max-width: 1200px) {
+  .about {
+    min-height: auto;
+    padding-top: var(--space-7);
+    padding-bottom: var(--space-6);
+  }
+
+  .about-copy {
+    font-size: 1.8rem;
+  }
+
+  .circle-content p {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .circle-content h3 {
+    font-size: 2.4rem;
+  }
+
+  .left,
+  .right {
+    width: 240px;
+  }
+}
+
+/* ≤ 992px — Tablet */
+@media (max-width: 992px) {
+  .about-container {
+    width: 94%;
+    gap: var(--space-6);
+  }
+
+  .about-intro {
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+
+  .about-plus {
+    font-size: 3rem;
+  }
+
+  .about-copy {
+    font-size: 1.6rem;
+  }
+
+  .about-diagram {
+    max-width: 700px;
+  }
+
+  .circle-content p {
+    font-size: 1.5rem;
+  }
+
+  .circle-content h3 {
+    font-size: 2rem;
+  }
+
+  .left {
+    left: 10%;
+    width: 200px;
+  }
+
+  .right {
+    right: 10%;
+    width: 200px;
+  }
+}
+
+/* ≤ 768px — Mobile landscape: cambia a círculos apilados */
+@media (max-width: 768px) {
+  .about {
+    min-height: 100svh;
+    padding: var(--space-8) 0 var(--space-6);
+    background-size: auto 110%;
+    background-position: 100% center;
+  }
+
+  .about-container {
+    width: 94%;
+    max-width: 620px;
+    gap: 28px;
+  }
+
+  .about-intro {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .about-plus {
+    font-size: 2.5rem;
+  }
+
+  .about-copy {
+    width: 100%;
+    max-width: 560px;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .about-diagram {
+    width: 100%;
+    max-width: 580px;
+    aspect-ratio: 1200 / 650;
+    margin: 0 auto;
+  }
+
+  .about-venn {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .circle-content {
+    top: 50%;
+  }
+
+  .left {
+    left: 9%;
+    width: 34%;
+  }
+
+  .right {
+    right: 9%;
+    width: 34%;
+  }
+
+  .circle-content p {
+    font-size: 1.15rem;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .circle-content h3 {
+    font-size: 1.7rem;
+  }
+
+  .hero-scroll {
+    display: none;
+  }
+}
+
+/* ≤ 480px — Mobile */
+@media (max-width: 480px) {
+  .about {
+    min-height: 100svh;
+    padding-top: var(--space-7);
+    padding-bottom: var(--space-5);
+    background-size: auto 110%;
+    background-position: 100% center;
+  }
+
+  .about-container {
+    width: 96%;
+    gap: var(--space-4);
+  }
+
+  .about-plus {
+    font-size: 2rem;
+  }
+
+  .about-copy {
+    max-width: 340px;
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .about-diagram {
+    width: 100%;
+    max-width: 390px;
+    aspect-ratio: 1200 / 650;
+  }
+
+  .left {
+    left: 7%;
+    width: 45%;
+  }
+
+  .right {
+    right: 7%;
+    width: 45%;
+  }
+
+  .circle-content p {
+    font-size: 0.9rem;
+    line-height: 1.15;
+
+    margin-bottom: 0.7rem;
+  }
+
+  .circle-content h3 {
+    font-size: 1.1rem;
+  }
 }
