@@ -22,7 +22,6 @@
   justify-content: center;
   gap: var(--space-8);
   padding: var(--space-8) var(--space-6);
-
   color: var(--color-text);
 }
 .om-panel-1 {
@@ -107,7 +106,7 @@
   left: var(--space-10);
   right: var(--space-10);
   bottom: var(--space-6);
-  height: 1px;
+  height: 2px;
   background-color: var(--color-divider);
 }
 
@@ -215,13 +214,475 @@
   background: var(--color-active);
 }
 
-@media (max-width: 900px) {
+/* ≤ 1440px — Desktop */
+@media (max-width: 1440px) {
   .om-content {
-    flex-direction: column;
-    text-align: center;
+    gap: var(--space-4);
+    margin-left: 30px;
+  }
+
+  .om-circle {
+    width: 460px;
   }
 
   .om-copy {
+    font-size: 1.9rem;
+    max-width: 650px;
+  }
+
+  .om-timeline-label {
+    font-size: 1.5rem;
+  }
+}
+
+/* ≤ 1200px — Tablet landscape */
+@media (max-width: 1200px) {
+  .om-panel {
+    padding: var(--space-7) var(--space-5);
+  }
+
+  .om-panel-1 {
+    background-size: 48%;
+  }
+
+  .om-panel-2 {
+    background-size: 55%;
+  }
+
+  .om-circle {
+    width: 380px;
+  }
+
+  .om-copy {
+    font-size: 1.7rem;
+  }
+
+  .om-intro,
+  .om-description {
+    font-size: 1.6rem;
+  }
+
+  .om-timeline-label {
+    font-size: 1.3rem;
+  }
+}
+
+/* ≤ 992px — Tablet */
+@media (max-width: 992px) {
+  .om-panel-1 {
+    background-size: 42%;
+    background-position: calc(100% - 60px) center;
+  }
+
+  .om-panel-2 {
+    background-size: 48%;
+    background-position: -180px center;
+  }
+
+  .om-content {
+    margin-left: 0;
+    gap: var(--space-3);
+  }
+
+  .om-circle {
+    width: 300px;
+  }
+
+  .om-copy {
+    font-size: 1.5rem;
+  }
+
+  .om-index {
+    left: var(--space-5);
+  }
+
+  .om-intro,
+  .om-description {
+    font-size: 1.35rem;
+  }
+
+  .om-timeline-label {
+    font-size: 1.1rem;
+  }
+
+  .om-panel-2-content {
+    gap: var(--space-5);
+  }
+}
+
+/* =========================================
+   MOBILE — UNA SOLA VISTA VERTICAL
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  /* =====================================
+     SECCIÓN
+     ===================================== */
+  .orange-mindset {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  /* =====================================
+     EL SLIDER DEJA DE SER SLIDER
+     ===================================== */
+  .om-slider {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* =====================================
+     LOS PANELES DEJAN DE SER PANTALLAS
+     ===================================== */
+  .om-panel {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 0;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+
+  /* =====================================
+     CONTADOR
+     Solo necesitamos uno
+     ===================================== */
+  .om-index {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0;
+  }
+
+  .om-panel-2 .om-index {
+    display: none;
+  }
+
+
+  /* =====================================
+     PANEL 1
+     ===================================== */
+  .om-panel-1 {
+  padding: 80px 24px 30px;
+  background-image: url("../../../assets/images/cascara.avif");
+  background-repeat: no-repeat;
+  background-size: 420px auto;
+  background-position: calc(100% + 240px) 100%;
+}
+
+  .om-panel-1 .om-index {
+    width: 100%;
+    margin-bottom: 35px;
+  }
+
+  .om-index-number,
+  .om-index-label {
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* =====================================
+     NARANJA + TEXTO
+     En móvil van lado a lado
+     ===================================== */
+  .om-content {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .om-circle {
+    width: 45%;
+    max-width: 300px;
+    flex-shrink: 0;
+  }
+
+  .om-copy {
+    width: auto;
+    max-width: none;
+    flex: 1;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  /* El divider de desktop NO separa
+     las dos partes en móvil */
+  .om-panel-1 .om-divider {
+    display: none;
+  }
+
+  /* =====================================
+     PANEL 2
+     Se convierte en continuación directa
+     ===================================== */
+  .om-panel-2 {
+    padding: 25px 24px 60px;
+    background-image: none;
+    background-color: transparent;
+    justify-content: center;
+  }
+
+  .om-panel-2-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    gap: 35px;
+  }
+
+  /* =====================================
+     INTRO
+     ===================================== */
+  .om-intro {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  /* =====================================
+     TIMELINE
+     ESTE ES EL ÚNICO SCROLL HORIZONTAL
+     ===================================== */
+  .om-timeline {
+    position: relative;
+    --timeline-item-width: 180px;
+    width: calc(100% + 48px);
+    max-width: none;
+    margin-left: -24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 24px 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .om-timeline::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Cada elemento conserva su espacio */
+  .om-timeline-item {
+    position: relative;
+    flex: 0 0 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1;
+  }
+
+
+  .om-timeline-label {
+    font-size: 1.05rem;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  .om-timeline-dot {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+  }
+
+  .om-timeline::after {
+    content: "";
+    position: absolute;
+    left: calc(24px + (var(--timeline-item-width) / 2));
+    width: calc(
+      (var(--timeline-item-width) * var(--timeline-count))
+      - var(--timeline-item-width)
+    );
+    bottom: calc(8px + 0.55rem);
+    height: 2px;
+    background: var(--color-black);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* =====================================
+     DESCRIPCIÓN
+     ===================================== */
+
+  .om-description-wrap {
+    width: 100%;
+    max-width: none;
+    text-align: left;
+  }
+
+  .om-description {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  .om-description-icon {
+    margin-right: 8px;
+  }
+
+  .om-panel-2::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    margin-top: 45px;
+    background-color: var(--color-divider);
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* =====================================
+     PANEL 1
+     ===================================== */
+  .om-panel-1 {
+    padding: 65px 18px 25px;
+    background-size: 330px auto;
+    background-position:
+      calc(100% + 150px)
+      100%;
+  }
+
+  /* =====================================
+     CONTADOR
+     ===================================== */
+  .om-panel-1 .om-index {
+    margin-bottom: 28px;
+  }
+
+  .om-index {
+    gap: 8px;
+  }
+
+  .om-index-number,
+  .om-index-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* =====================================
+     NARANJA + COPY
+     ===================================== */
+  .om-content {
+    gap: 12px;
+  }
+
+  .om-circle {
+    width: 160px;
+    max-width: 45%;
+  }
+
+  .om-copy {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+
+  /* =====================================
+     PANEL 2
+     ===================================== */
+  .om-panel-2 {
+    padding: 25px 18px 45px;
+  }
+
+  .om-panel-2-content {
+    gap: 30px;
+  }
+
+
+  /* =====================================
+     INTRO
+     ===================================== */
+  .om-intro {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
+  /* =====================================
+     TIMELINE
+     ===================================== */
+  .om-timeline {
+    --timeline-item-width: 145px;
+    width: calc(100% + 36px);
+    margin-left: -18px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .om-timeline-item {
+    flex-basis: var(--timeline-item-width);
+    gap: 0.75rem;
+  }
+
+  .om-timeline-label {
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+
+  .om-timeline-dot {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+  }
+
+  /* =====================================
+     LÍNEA
+     ===================================== */
+  .om-timeline::after {
+    left: calc(
+      18px + (var(--timeline-item-width) / 2)
+    );
+    width: calc(
+      var(--timeline-item-width) *
+      (var(--timeline-count) - 1)
+    );
+    bottom: calc(8px + 0.55rem);
+    height: 2px;
+  }
+
+  /* =====================================
+     DESCRIPCIÓN
+     ===================================== */
+  .om-description-wrap {
+    text-align: center;
+  }
+
+  .om-description {
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+
+  .om-description-icon {
+    margin-right: 5px;
+  }
+
+  /* =====================================
+     DIVIDER FINAL
+     ===================================== */
+
+  .om-panel-2::after {
+    margin-top: 35px;
   }
 }
