@@ -153,3 +153,87 @@
   color:var(--color-black);
 }
 
+@media (max-width: 1440px) {
+  .solutions-intro p {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .solutions-container {
+    width: calc(100% - 80px);
+  }
+
+  .solutions-intro {
+    margin-left: 40px;
+    padding-left: 24px;
+  }
+
+  .solutions-intro p {
+    font-size: 1.35rem;
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 992px) {
+  .solutions-container {
+    width: calc(100% - 48px);
+  }
+
+  .solutions-intro {
+    margin-left: 24px;
+    margin-top: 24px;
+  }
+
+  .solutions-intro p {
+    font-size: 1.15rem;
+  }
+
+  .solutions-content {
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .solutions-container {
+    width: calc(100% - 32px);
+  }
+
+  .solutions-header {
+    padding-top: 24px;
+  }
+
+  .solutions-intro {
+    margin-left: 0;
+    padding-left: 32px;
+  }
+
+  .solutions-intro p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .solutions-content {
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+
+  .solutions-content {
+    flex-direction: column;
+  }
+  .solutions-scroll{
+    display: none; 
+  }
+}
+
+@media (max-width: 480px) {
+  .solutions-intro p {
+    font-size: 0.9rem;
+  }
+
+  .solutions-scroll {
+    display: none; /* el indicador de scroll no aporta valor en móvil */
+  }
+}
+

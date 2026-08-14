@@ -186,13 +186,16 @@
 /* Innovation Lab */
 
 .solution-node-innovation-lab {
-  top: 65%;
-  left: 54%;
+  top: 68%;
+  left: 47%;
+  flex-direction: column;
+  align-items: center;
 }
 
 .solution-node-innovation-lab .solution-label {
   margin-left: 14px;
   margin-top: 22px;
+  order: 1;
 }
 
 
@@ -277,6 +280,15 @@
   line-height: 1.35;
 }
 
+.solution-icon {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 12px;
+  filter: brightness(0);
+}
+
 /* Diagrama */
 
 .solutions-diagram.is-active .solutions-diagram-circle {
@@ -339,4 +351,300 @@
 .solutions.is-active .solutions-intro strong,
 .solutions.is-active .solutions-plus {
   color: var(--color-bg);
+}
+
+.solutions-dots {
+  display: none; /* visible solo en mobile, ver breakpoint 768px */
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 74px;
+  padding: 0;
+}
+
+.solutions-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.solutions-dot.is-active {
+  background: var(--color-primary);
+}
+
+@media (max-width: 1440px) {
+  .solutions-diagram-title {
+    font-size: 68px;
+  }
+
+  .solution-label strong {
+    font-size: 26px;
+  }
+
+  .solution-label span {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .solutions-diagram {
+    width: min(78vw, 700px);
+  }
+
+  .solutions-diagram-title {
+    font-size: 56px;
+  }
+
+  .solution-dot {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+  }
+
+  .solution-label strong {
+    font-size: 22px;
+  }
+
+  .solution-label span {
+    font-size: 19px;
+  }
+
+  .solution-title {
+    font-size: var(--fs-2xl);
+  }
+
+  .solution-subtitle {
+    font-size: var(--fs-xl);
+  }
+
+  .solution-description {
+    font-size: var(--fs-base);
+  }
+
+  .solution-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 992px) {
+  .solutions-diagram {
+    width: min(85vw, 560px);
+  }
+
+  .solutions-diagram-title {
+    font-size: 44px;
+  }
+
+  .solution-dot {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+  }
+
+  .solution-label strong {
+    font-size: 18px;
+  }
+
+  .solution-label span {
+    font-size: 15px;
+  }
+
+  .solution-card {
+    width: 280px;
+  }
+
+  .solution-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 9px;
+  }
+}
+
+@media (max-width: 768px) {
+  .solutions-diagram {
+    width: min(92vw, 460px);
+    /* El navegador sigue gestionando el scroll vertical de la
+       página; solutions.ts detecta el swipe horizontal por encima. */
+    touch-action: pan-y;
+  }
+
+  .solutions-diagram-title {
+    font-size: 34px;
+  }
+
+  .solution-dot {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+  }
+
+  .solution-label strong {
+    font-size: 14px;
+  }
+
+  .solution-label span {
+    font-size: 12px;
+  }
+
+  .solution-card {
+    width: 230px;
+  }
+
+  .solution-title {
+    font-size: var(--fs-xl);
+  }
+
+  .solution-subtitle {
+    margin: 4px 0 14px;
+    font-size: var(--fs-lg);
+  }
+
+  .solution-description {
+    font-size: var(--fs-base);
+    line-height: 1.4;
+  }
+
+  .solution-icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 8px;
+  }
+
+  .solution-node-strategic-design {
+    left: 1.4%;
+    top: 65%;
+    flex-direction: column;
+  }
+
+  .solution-node-strategic-design .solution-label {
+    align-items: center;
+    margin-right: 0;
+    margin-top: 8px;
+    white-space: normal;
+    max-width: 90px;
+    text-align: center;
+  }
+
+  .solution-node-experience-marketing {
+    top: 91.5%;
+    left: 23%;
+  }
+
+  .solution-node-experience-marketing .solution-label {
+    white-space: normal;
+    max-width: 90px;
+    text-align: center;
+  }
+
+  .solutions-dots {
+    display: flex;
+  }
+
+  /* =========================================================
+     ESTADO "SOLUCIÓN ACTIVA" — reemplaza el diagrama completo
+     por la foto de fondo + naranja blanca con la card
+     ========================================================= */
+
+  .solutions.is-active .solutions-diagram-circle,
+  .solutions.is-active .solutions-diagram-title,
+  .solutions.is-active .solution-node {
+    display: none;
+  }
+
+  .solutions.is-active .solutions-diagram {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: auto;
+    min-height: 75vh;
+  }
+
+  .solutions.is-active .solutions-diagram-orange {
+    left: 50%;
+    top: auto;
+    bottom: 6%;
+    transform: translateX(-50%);
+    width: min(88vw, 420px);
+  }
+
+  .solutions.is-active .solution-card {
+    left: 53%;
+    top: auto;
+    bottom: 23%;
+    transform: translateX(-50%);
+    width: min(78vw, 300px);
+    text-align: center;
+  }
+
+  .solutions.is-active .solution-title,
+  .solutions.is-active .solution-subtitle,
+  .solutions.is-active .solution-description {
+    color: var(--color-black);
+  }
+
+  .solutions.is-active .solutions-scroll {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .solutions-diagram {
+    width: min(96vw, 340px);
+  }
+
+  .solutions-diagram-title {
+    font-size: 26px;
+  }
+
+  .solution-label strong {
+    font-size: 11px;
+  }
+
+  .solution-label span {
+    font-size: 10px;
+  }
+
+  .solution-dot {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 12px;
+  }
+
+  .solution-card {
+    width: 190px;
+  }
+
+  .solution-title {
+    font-size: var(--fs-base);
+  }
+
+  .solution-subtitle {
+    font-size: var(--fs-sm);
+  }
+
+  .solution-description {
+    font-size: var(--fs-xs);
+  }
+
+  .solution-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 5px;
+  }
+
+  .solutions-dots {
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .solutions-dot {
+    width: 8px;
+    height: 8px;
+  }
 }

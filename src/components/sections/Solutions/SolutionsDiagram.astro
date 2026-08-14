@@ -22,6 +22,13 @@ import { solutions } from "./solutions.data";
 
   <div class="solution-card">
     <div class="solution-card-content">
+      <img
+        id="solution-icon"
+        class="solution-icon"
+        src=""
+        alt=""
+        aria-hidden="true"
+      />
       <h3 id="solution-title" class="solution-title"></h3>
       <h4 id="solution-subtitle" class="solution-subtitle"></h4>
       <p id="solution-description" class="solution-description"></p>
@@ -53,6 +60,26 @@ import { solutions } from "./solutions.data";
           {solution.subtitle && <span>{solution.subtitle}</span>}
         </span>
       </button>
+    ))
+  }
+</div>
+<div class="solutions-dots" role="tablist" aria-label="Selecciona una solución">
+  <button
+    type="button"
+    class="solutions-dot is-active"
+    data-dot=""
+    role="tab"
+    aria-label="Ver todas las soluciones"></button>
+
+  {
+    solutions.map((solution) => (
+      <button
+        type="button"
+        class="solutions-dot"
+        data-dot={solution.id}
+        role="tab"
+        aria-label={`Ver ${solution.title} ${solution.subtitle}`}
+      />
     ))
   }
 </div>
