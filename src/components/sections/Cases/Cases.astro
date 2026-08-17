@@ -37,6 +37,20 @@ import titleImage from "../../../assets/images/tit_que_logramos.png";
     {cases.map((item) => <CaseCard case={item} />)}
   </div>
 
+  <div class="cases-dots" role="tablist" aria-label="Selecciona un caso">
+    {
+      cases.map((item, index) => (
+        <button
+          type="button"
+          class:list={["cases-dot", { "is-active": index === 0 }]}
+          data-case-dot={item.id}
+          role="tab"
+          aria-label={`Ver caso ${item.title}`}
+        />
+      ))
+    }
+  </div>
+
   <!-- CaseDetail -->
   <div class="cases-details">
     {cases.map((item) => <CaseDetail caseItem={item} />)}

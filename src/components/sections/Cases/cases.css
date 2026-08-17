@@ -84,3 +84,117 @@
 .cases-details {
   display: none;
 }
+
+.cases.is-detail-open .cases-grid,
+.cases.is-detail-open .cases-dots {
+  display: none;
+}
+
+.cases.is-detail-open .cases-details {
+  display: block;
+}
+
+.cases-dots {
+  display: none; /* visible solo en mobile, ver breakpoint 768px */
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto var(--space-8);
+}
+
+.cases-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.cases-dot.is-active {
+  background: var(--color-primary);
+}
+
+@media (max-width: 1440px) {
+  .cases-intro {
+    font-size: var(--fs-lg);
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cases-grid {
+    gap: 2rem;
+    max-width: 1100px;
+  }
+
+  .cases-intro {
+    font-size: var(--fs-base);
+    max-width: 820px;
+  }
+}
+
+@media (max-width: 992px) {
+  .cases-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .cases-counter {
+    left: var(--space-5);
+  }
+
+  .cases-intro {
+    margin-top: var(--space-6);
+    padding: 0 var(--space-5);
+  }
+}
+
+@media (max-width: 768px) {
+  .cases-counter {
+    left: var(--space-4);
+  }
+
+  .cases-intro {
+    padding: 0 var(--space-4);
+    font-size: var(--fs-base);
+  }
+
+  /* El grid de columnas se convierte en un carrusel de una sola
+     tarjeta con scroll-snap nativo — el swipe lo maneja el
+     navegador, no hace falta JS para el gesto en sí. */
+  .cases-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-4);
+  }
+
+  .cases-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cases-dots {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .cases-dots {
+    gap: 8px;
+    margin-bottom: var(--space-6);
+  }
+
+  .cases-dot {
+    width: 8px;
+    height: 8px;
+  }
+}

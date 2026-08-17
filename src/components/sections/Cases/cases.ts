@@ -3,6 +3,7 @@
  * Toda la interacción/animación de esta sección vive aquí.
  */
 
+const casesSection = document.querySelector<HTMLElement>(".cases");
 const grid = document.querySelector<HTMLElement>(".cases-grid");
 const detailsContainer =
   document.querySelector<HTMLElement>(".cases-details");
@@ -11,17 +12,16 @@ const cards = document.querySelectorAll<HTMLButtonElement>(".case-card");
 const detailWrappers =
   document.querySelectorAll<HTMLElement>(".case-detail-wrapper");
 
-if (grid && detailsContainer) {
+if (casesSection && grid && detailsContainer) {
   cards.forEach((card) => {
     card.addEventListener("click", () => {
       const caseId = card.dataset.caseId;
 
       if (!caseId) return;
 
-      const selectedDetail =
-        document.querySelector<HTMLElement>(
-          `.case-detail[data-case-id="${caseId}"]`,
-        );
+      const selectedDetail = document.querySelector<HTMLElement>(
+        `.case-detail[data-case-id="${caseId}"]`,
+      );
 
       if (!selectedDetail) return;
 
@@ -30,44 +30,38 @@ if (grid && detailsContainer) {
 
       if (!selectedWrapper) return;
 
-      // Ocultar grid
-      grid.style.display = "none";
+      // El grid/carrusel y los dots se ocultan vía CSS (.is-detail-open).
+      // El JS solo marca el estado; el CSS decide el layout según
+      // el breakpoint (grid en desktop, flex+scroll-snap en mobile).
+      casesSection.classList.add("is-detail-open");
 
-      // Mostrar contenedor de detalles
-      detailsContainer.style.display = "block";
-
-      // Ocultar todos los detalles + sus botones
       detailWrappers.forEach((wrapper) => {
         wrapper.style.display = "none";
       });
 
-      // Mostrar solamente el caso seleccionado
       selectedWrapper.style.display = "block";
     });
   });
 
   detailWrappers.forEach((wrapper) => {
-    const closeButton =
-      wrapper.querySelector<HTMLButtonElement>(
-        ".case-detail__close",
-      );
+    const closeButton = wrapper.querySelector<HTMLButtonElement>(
+      ".case-detail__close",
+    );
 
     closeButton?.addEventListener("click", () => {
-    const videoContainer =
+      const videoContainer =
         wrapper.querySelector<HTMLElement>(".case-detail__video");
 
-    if (videoContainer) {
-        const originalContent =
-        videoContainer.dataset.originalContent;
+      if (videoContainer) {
+        const originalContent = videoContainer.dataset.originalContent;
 
         if (originalContent) {
-        videoContainer.innerHTML = originalContent;
+          videoContainer.innerHTML = originalContent;
         }
-    }
+      }
 
-    wrapper.style.display = "none";
-    detailsContainer.style.display = "none";
-    grid.style.display = "grid";
+      wrapper.style.display = "none";
+      casesSection.classList.remove("is-detail-open");
     });
   });
 }
@@ -148,4 +142,53 @@ function getYouTubeVideoId(url: string): string | null {
     console.error("URL de YouTube inválida:", url, error);
     return null;
   }
+}
+
+/* ============================================================
+   MOBILE — Dots del carrusel
+   El scroll horizontal lo maneja el navegador de forma nativa
+   (scroll-snap-type en .cases-grid); aquí solo:
+   1) saltamos a una tarjeta al tocar su dot
+   2) sincronizamos qué dot está activo según lo que se ve
+   ============================================================ */
+
+const dots = Array.from(
+  document.querySelectorAll<HTMLButtonElement>("[data-case-dot]")
+);
+
+if (grid && dots.length) {
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      const caseId = dot.dataset.caseDot;
+      const targetCard = grid.querySelector<HTMLElement>(
+        `.case-card[data-case-id="${caseId}"]`
+      );
+
+      targetCard?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    });
+  });
+
+  const activeCardObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        const caseId = (entry.target as HTMLElement).dataset.caseId;
+
+        dots.forEach((dot) => {
+          dot.classList.toggle("is-active", dot.dataset.caseDot === caseId);
+        });
+      });
+    },
+    {
+      root: grid,
+      threshold: 0.6, // la tarjeta debe estar mayormente visible para contar como "activa"
+    }
+  );
+
+  cards.forEach((card) => activeCardObserver.observe(card));
 }

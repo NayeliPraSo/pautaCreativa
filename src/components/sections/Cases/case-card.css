@@ -95,3 +95,83 @@
   outline: 2px solid var(--color-primary);
   outline-offset: 6px;
 }
+
+@media (max-width: 1440px) {
+  .case-card__title {
+    font-size: var(--fs-lg);
+  }
+}
+
+@media (max-width: 1200px) {
+  .case-card__header {
+    padding: var(--space-3);
+  }
+}
+
+@media (max-width: 992px) {
+  .case-card__client {
+    font-size: var(--fs-base);
+  }
+
+  .case-card__title {
+    font-size: var(--fs-base);
+  }
+}
+
+@media (max-width: 768px) {
+  .case-card {
+    flex: 0 0 100%;
+    max-width: 100%;
+    scroll-snap-align: center;
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+
+  .case-card__header {
+    padding: var(--space-4);
+  }
+
+  .case-card__client {
+    font-size: var(--fs-sm);
+  }
+
+  .case-card__title {
+    font-size: var(--fs-lg);
+  }
+
+  /* El :hover de desktop (translateY + scale + cambio de color) se
+     dispara con el tap en touch y se queda "pegado" hasta el
+     siguiente toque — lo neutralizamos para que no se vea la
+     tarjeta rota justo cuando se abre el detalle sobre ella. */
+  .case-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .case-card:hover .case-card__header {
+    background: var(--color-case);
+  }
+
+  .case-card:hover .case-card__title,
+  .case-card:hover .case-card__client {
+    color: var(--color-bg);
+  }
+
+  .case-card:hover .case-card__image {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .case-card {
+    padding: 0 20px;
+  }
+
+  .case-card__header {
+    padding: var(--space-3);
+  }
+
+  .case-card__title {
+    font-size: var(--fs-base);
+  }
+}
