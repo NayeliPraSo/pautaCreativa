@@ -4,6 +4,7 @@ import Section from "../../ui/Section/Section.astro";
 import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
 import contactTitle from "../../../assets/images/tit_cuentanos_tu_reto.png";
 
+import { contactForms } from "./contact.data";
 import ContactForm from "./ContactForm.astro";
 ---
 
@@ -25,6 +26,7 @@ import ContactForm from "./ContactForm.astro";
           src={contactTitle.src}
           alt="Cuéntanos tu reto"
           class="contact-title"
+          data-contact-title
         />
         <div class="contact-description-row">
           <p class="contact-description">
@@ -54,7 +56,14 @@ import ContactForm from "./ContactForm.astro";
       </div>
 
       <!-- Aquí aparecerá el formulario -->
-      <div class="contact-form-wrapper" data-contact-form>
+      <div
+        class="contact-form-wrapper"
+        data-contact-form
+        data-default-title={contactTitle.src}
+        data-title-clientes={contactForms.clientes.titleImage}
+        data-title-trabajo={contactForms.trabajo.titleImage}
+        data-title-proveedores={contactForms.proveedores.titleImage}
+      >
         <div data-form-panel="clientes">
           <ContactForm formType="clientes" />
         </div>

@@ -26,6 +26,17 @@ const closeForms = () => {
   panels.forEach((panel) => {
     panel.hidden = true;
   });
+
+  const titleImage =
+    contact.querySelector<HTMLImageElement>("[data-contact-title]");
+
+  const formWrapper =
+    contact.querySelector<HTMLElement>("[data-contact-form]");
+
+  if (titleImage && formWrapper) {
+    titleImage.src = formWrapper.dataset.defaultTitle ?? "";
+    titleImage.alt = "Cuéntanos tu reto";
+  }
 };
 
 const openForm = (formType: string, activeButton: HTMLButtonElement) => {
@@ -38,6 +49,26 @@ const openForm = (formType: string, activeButton: HTMLButtonElement) => {
   panels.forEach((panel) => {
     panel.hidden = panel.dataset.formPanel !== formType;
   });
+
+  const titleImage =
+    contact.querySelector<HTMLImageElement>("[data-contact-title]");
+
+  const formWrapper =
+    contact.querySelector<HTMLElement>("[data-contact-form]");
+
+  if (!titleImage || !formWrapper) return;
+
+  const titleImages: Record<string, string | undefined> = {
+    clientes: formWrapper.dataset.titleClientes,
+    trabajo: formWrapper.dataset.titleTrabajo,
+    proveedores: formWrapper.dataset.titleProveedores,
+  };
+
+  const imageSrc = titleImages[formType];
+
+  if (imageSrc) {
+    titleImage.src = imageSrc;
+  }
 };
 
 buttons.forEach((button) => {

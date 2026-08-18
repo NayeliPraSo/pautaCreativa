@@ -1,3 +1,6 @@
+import titleClientes from "../../../assets/images/contact/titulo_clientes.png"
+import titleBolsa from "../../../assets/images/contact/titulo_bolsa.png"
+import titleProveedor from "../../../assets/images/contact/titulo_proveedores.png"
 export type ContactFormType =
   | "clientes"
   | "trabajo"
@@ -21,6 +24,7 @@ export interface ContactField {
 
 export interface ContactFormConfig {
   title: string;
+  titleImage: string;
   submitLabel: string;
   fields: ContactField[];
 }
@@ -28,6 +32,7 @@ export interface ContactFormConfig {
 export const contactForms: Record<ContactFormType, ContactFormConfig> = {
   clientes: {
     title: "Clientes",
+    titleImage: titleClientes.src,
     submitLabel: "ENVIAR RETO AL SQUAD",
 
     fields: [
@@ -66,6 +71,7 @@ export const contactForms: Record<ContactFormType, ContactFormConfig> = {
 
   trabajo: {
     title: "Bolsa de trabajo",
+    titleImage: titleBolsa.src,
     submitLabel: "ENVIAR PARA SER PARTE DE USTEDES",
 
     fields: [
@@ -111,6 +117,7 @@ export const contactForms: Record<ContactFormType, ContactFormConfig> = {
 
   proveedores: {
     title: "Proveedores",
+    titleImage: titleProveedor.src,
     submitLabel: "ENVIAR PARA COLABORAR CON USTEDES",
 
     fields: [

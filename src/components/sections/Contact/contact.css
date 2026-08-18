@@ -6,7 +6,7 @@
   align-items: center;
   background-image: url("../../../assets/images/bg_tsuru.avif");
   background-repeat: no-repeat;
-  background-size: 140%;
+  background-size: 140% auto;
   background-position: center 30%;
 }
 
@@ -162,12 +162,13 @@
 
 .contact.is-form-open .contact-title {
   position: absolute;
-  left: -15%;
-  top: 100%;
-  width: 715px;
+  left: 0;
+  top: 10%;
+  width: auto;
+  height: 700px;
+  max-width: none;
   margin: 0;
-  transform-origin: left top;
-  transform: rotate(-90deg);
+  transform: none;
   z-index: 2;
 }
 
@@ -237,4 +238,590 @@
 
 .contact.is-form-open .contact-container {
   padding-top: 3rem;
+}
+
+@media (max-width: 1440px) {
+
+  .contact-container {
+    padding: 3rem 4rem;
+  }
+
+  .contact-label {
+    left: 4rem;
+    font-size: 1rem;
+  }
+
+  .contact-title {
+    width: 760px;
+    margin-left: -40px;
+  }
+
+  .contact-description {
+    font-size: 1.35rem;
+  }
+
+  .contact-description-row {
+    gap: 7rem;
+  }
+
+  .contact-selector {
+    max-width: 900px;
+    column-gap: 2.5rem;
+  }
+
+  /* =========================
+     Vista formulario
+  ========================= */
+
+  .contact.is-form-open .contact-title {
+    left: 0;
+    top: 8%;
+    height: 650px;
+  }
+
+  .contact.is-form-open .contact-description-row {
+    left: 270px;
+    width: 850px;
+  }
+
+  .contact.is-form-open .contact-description {
+    width: 850px;
+  }
+
+  .contact.is-form-open .contact-selector {
+    left: 300px;
+    width: 760px;
+  }
+
+  .contact.is-form-open .contact-form-wrapper {
+    left: 300px;
+    width: 700px;
+  }
+
+  .contact.is-form-open .contact-decoration {
+    left: 800px;
+  }
+}
+
+
+/* ==========================================================================
+   Tablet landscape — ≤ 1200px
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+
+  .contact-container {
+    padding: 3rem;
+  }
+
+  .contact-label {
+    left: 3rem;
+    font-size: 0.95rem;
+  }
+
+  .contact-title {
+    width: 680px;
+    margin-left: -30px;
+  }
+
+  .contact-intro {
+    gap: 2.5rem;
+  }
+
+  .contact-description-row {
+    gap: 4rem;
+  }
+
+  .contact-description {
+    font-size: 1.2rem;
+  }
+
+  .contact-selector {
+    max-width: 820px;
+    column-gap: 2rem;
+  }
+
+  .contact-option {
+    height: 50px;
+    padding: 0 1rem;
+    font-size: 0.85rem;
+  }
+
+  .contact-option:not(:last-child)::after {
+    width: 2rem;
+  }
+
+  /* =========================
+     Vista formulario
+  ========================= */
+
+  .contact.is-form-open .contact-layout {
+    height: 760px;
+  }
+
+  .contact.is-form-open .contact-title {
+    left: 0;
+    top: 8%;
+    height: 600px;
+  }
+
+  .contact.is-form-open .contact-description-row {
+    left: 230px;
+    width: 740px;
+  }
+
+  .contact.is-form-open .contact-description {
+    width: 740px;
+  }
+
+  .contact.is-form-open .contact-selector {
+    left: 250px;
+    top: 70px;
+    width: 680px;
+  }
+
+  .contact.is-form-open .contact-form-wrapper {
+    left: 250px;
+    top: 145px;
+    width: 650px;
+  }
+
+  .contact.is-form-open .contact-decoration {
+    left: 730px;
+    top: 580px;
+  }
+}
+
+
+/* ==========================================================================
+   Tablet — ≤ 992px
+   ========================================================================== */
+
+@media (max-width: 992px) {
+
+  .contact {
+    background-size: auto 110%;
+    background-position: center top;
+  }
+
+  .contact-container {
+    padding: 3rem 2.5rem;
+  }
+
+  .contact-label {
+    left: 2.5rem;
+    font-size: 0.85rem;
+  }
+
+  .contact-title {
+    width: 600px;
+    margin-left: -20px;
+  }
+
+  .contact-intro {
+    gap: 2rem;
+  }
+
+  .contact-description-row {
+    gap: 2rem;
+  }
+
+  .contact-description {
+    max-width: 650px;
+    font-size: 1.1rem;
+  }
+
+  .contact-decoration {
+    gap: 0.5rem;
+  }
+
+  .contact-selector {
+    max-width: 720px;
+    column-gap: 1.5rem;
+  }
+
+  .contact-option {
+    height: 48px;
+    font-size: 0.8rem;
+  }
+
+  .contact-option:not(:last-child)::after {
+    width: 1.5rem;
+  }
+
+  /* =========================
+     Vista formulario
+  ========================= */
+
+  .contact.is-form-open .contact-layout {
+    height: 720px;
+  }
+
+  .contact.is-form-open .contact-title {
+    left: 0;
+    top: 10%;
+    height: 540px;
+  }
+
+  .contact.is-form-open .contact-description-row {
+    left: 190px;
+    top: 0;
+    width: 650px;
+  }
+
+  .contact.is-form-open .contact-description {
+    width: 650px;
+    font-size: 1rem;
+  }
+
+  .contact.is-form-open .contact-selector {
+    left: 210px;
+    top: 65px;
+    width: 600px;
+  }
+
+  .contact.is-form-open .contact-form-wrapper {
+    left: 210px;
+    top: 135px;
+    width: 570px;
+  }
+
+  .contact.is-form-open .contact-decoration {
+    left: 650px;
+    top: 540px;
+  }
+}
+
+/* ==========================================================================
+   Mobile landscape — ≤ 768px
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  .contact {
+    min-height: 100vh;
+    height: auto;
+
+    align-items: flex-start;
+
+    background-size: auto 100%;
+    background-position: center top;
+  }
+
+  .contact-container {
+    max-width: none;
+
+    padding: 4rem 2.5rem 5rem;
+
+    gap: 3rem;
+  }
+
+  /* =========================
+     Header
+  ========================= */
+
+  .contact-header {
+    position: relative;
+    width: 100%;
+  }
+
+  .contact-label {
+    position: static;
+
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    font-size: 0.8rem;
+    letter-spacing: 0.32em;
+  }
+
+  /* =========================
+     Layout
+  ========================= */
+
+  .contact-layout {
+    width: 100%;
+
+    display: block;
+  }
+
+  .contact-intro {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2rem;
+    margin: 0;
+  }
+
+  /* =========================
+     Título inicial
+  ========================= */
+
+  .contact-title {
+    display: block;
+
+    width: 100%;
+    max-width: 620px;
+    height: auto;
+
+    margin: 6rem auto 0;
+  }
+
+  /* =========================
+     Descripción
+  ========================= */
+
+  .contact-description-row {
+    width: 100%;
+
+    display: block;
+  }
+
+  .contact-description {
+    width: 100%;
+    max-width: 620px;
+
+    margin: 0 auto;
+
+    font-size: 1.35rem;
+    line-height: 1.4;
+  }
+
+  .contact-decoration {
+    display: none;
+  }
+
+  /* =========================
+     Selector
+  ========================= */
+
+  .contact-selector {
+    width: 100%;
+    max-width: 460px;
+
+    margin: 3rem auto 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2.25rem;
+  }
+
+  .contact-option {
+    width: 100%;
+    height: 58px;
+
+    padding: 0 1.5rem;
+
+    font-size: 1.15rem;
+    font-weight: 300;
+
+    text-transform: none;
+  }
+
+  .contact-option:not(:last-child)::after {
+    display: none;
+  }
+
+  /* =========================
+     Formulario abierto
+  ========================= */
+
+  .contact.is-form-open {
+    min-height: 100vh;
+    height: auto;
+
+    align-items: flex-start;
+  }
+
+  .contact.is-form-open .contact-container {
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+  }
+
+  .contact.is-form-open .contact-layout {
+    width: 100%;
+    height: auto;
+
+    display: block;
+  }
+
+  .contact.is-form-open .contact-intro {
+    width: 100%;
+  }
+
+  /* Título horizontal en movil */
+  .contact.is-form-open .contact-title {
+    position: static;
+
+    display: block;
+
+    width: auto;
+    height: 520px;
+    max-width: 100%;
+
+    margin: -150px auto;
+    transform: rotate(90deg);
+    transform-origin: center;
+  }
+
+  .contact.is-form-open .contact-description-row {
+    position: static;
+
+    width: 100%;
+
+    margin-top: 2rem;
+
+    display: block;
+  }
+
+  .contact.is-form-open .contact-description {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contact.is-form-open .contact-selector {
+    position: static;
+
+    width: 100%;
+    max-width: 460px;
+
+    margin: 3rem auto 0;
+
+    transform: none;
+  }
+
+  .contact.is-form-open .contact-form-wrapper {
+    position: static;
+
+    width: 100%;
+    max-width: 620px;
+
+    margin: 3rem auto 0;
+
+    z-index: auto;
+  }
+
+  .contact.is-form-open .contact-decoration {
+    display: none;
+  }
+
+  .contact-option:hover {
+    background: transparent;
+    color: var(--color-bg);
+  }
+
+  /* Solo se pinta cuando realmente está seleccionado */
+  .contact-option.is-active {
+    background: var(--color-bg);
+    color: var(--color-black);
+  }
+}
+
+
+/* ==========================================================================
+   Mobile — ≤ 480px
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  .contact-container {
+    padding: 2.5rem 1.5rem 4rem;
+    gap: 2rem;
+  }
+
+  /* =========================
+     Header
+  ========================= */
+
+  .contact-label {
+    gap: 1rem;
+
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+  }
+
+  /* =========================
+     Título inicial
+  ========================= */
+
+  .contact-title {
+    width: 100%;
+    max-width: 360px;
+
+    margin: 4rem auto 0;
+  }
+
+  /* =========================
+     Descripción
+  ========================= */
+
+  .contact-description {
+    max-width: 360px;
+
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  /* =========================
+     Selector
+  ========================= */
+
+  .contact-selector {
+    max-width: 320px;
+
+    margin-top: 2.5rem;
+
+    gap: 1.75rem;
+  }
+
+  .contact-option {
+    height: 52px;
+
+    padding: 0 1rem;
+
+    font-size: 1rem;
+  }
+
+  /* =========================
+     Formulario abierto
+  ========================= */
+
+  .contact.is-form-open .contact-container {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .contact.is-form-open .contact-title {
+    height: 400px;
+
+    margin-top: 2rem;
+  }
+
+  .contact.is-form-open .contact-description-row {
+    margin-top: 1.5rem;
+  }
+
+  .contact.is-form-open .contact-description {
+    max-width: 360px;
+
+    font-size: 0.95rem;
+  }
+
+  .contact.is-form-open .contact-selector {
+    max-width: 320px;
+
+    margin-top: 2rem;
+  }
+
+  .contact.is-form-open .contact-form-wrapper {
+    max-width: 100%;
+
+    margin-top: 2.5rem;
+  }
 }
