@@ -351,3 +351,528 @@
   background: var(--color-teal);
   transform: translateY(-50%);
 }
+
+@media (max-width: 1440px) {
+  .recognition__clients-content {
+    max-width: 1200px;
+    padding: 6rem 0 3.5rem;
+    column-gap: 4rem;
+  }
+
+  .recognition__clients-badge {
+    width: 320px;
+  }
+
+  .recognition__ranking-categories p {
+    font-size: var(--fs-xl);
+  }
+
+  .recognition__industry {
+    max-width: 1200px;
+  }
+
+  .recognition__industry-title {
+    font-size: var(--fs-2xl);
+  }
+
+  .recognition__award-icon {
+    max-width: 90px;
+    max-height: 100px;
+  }
+
+  .recognition__award-label {
+    font-size: var(--fs-xl);
+  }
+
+  .recognition__timeline-number {
+    font-size: 3.2rem;
+  }
+
+  .recognition__timeline-label,
+  .recognition__timeline-label strong {
+    font-size: var(--fs-base);
+  }
+}
+
+@media (max-width: 1200px) {
+  .recognition__clients-content {
+    grid-template-columns: 240px 1fr;
+    column-gap: 3rem;
+    padding: 5rem var(--space-5) 3rem;
+  }
+
+  .recognition__clients-badge {
+    width: 260px;
+  }
+
+  .recognition__ranking-number {
+    width: 130px;
+  }
+
+  .recognition__ranking-categories p {
+    font-size: var(--fs-lg);
+    line-height: 1.8;
+  }
+
+  .recognition__statements,
+  .recognition__integrated {
+    padding-left: 3rem;
+  }
+
+  .recognition__statements p,
+  .recognition__integrated p {
+    font-size: var(--fs-base);
+  }
+
+  .recognition__industry {
+    padding: 1.5rem var(--space-5) 5rem;
+  }
+
+  .recognition__industry-title {
+    margin-bottom: 3rem;
+  }
+
+  .recognition__awards {
+    column-gap: var(--space-4);
+  }
+
+  .recognition__timeline-item {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .recognition__clients-content {
+    grid-template-columns: 200px 1fr;
+    column-gap: var(--space-5);
+    padding: 4rem var(--space-4) 2.5rem;
+  }
+
+  .recognition__clients-badge {
+    width: 200px;
+  }
+
+  .recognition__ranking {
+    gap: 0.75rem;
+  }
+
+  .recognition__ranking-main {
+    gap: 1.25rem;
+  }
+
+  .recognition__ranking-number {
+    width: 100px;
+  }
+
+  .recognition__ranking-categories p {
+    font-size: var(--fs-base);
+    line-height: 1.7;
+  }
+
+  .recognition__statements,
+  .recognition__integrated {
+    padding-left: 2rem;
+  }
+
+  .recognition__statements p{
+    font-size: var(--fs-lg);
+  }
+
+  .recognition__integrated p{
+    font-size:var(--fs-1xl);
+  }
+
+  .recognition__industry {
+    padding: 1rem var(--space-4) 4rem;
+  }
+
+  .recognition__industry-title {
+    font-size: var(--fs-xl);
+    margin-bottom: 2.5rem;
+  }
+
+  .recognition__awards {
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: var(--space-3);
+  }
+
+  .recognition__award-icon {
+    max-width: 70px;
+    max-height: 80px;
+  }
+
+  .recognition__award-label {
+    font-size: var(--fs-lg);
+  }
+
+  .recognition__timeline-number {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Contenedor: de grid 2 columnas a stack vertical */
+  .recognition__clients-content {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem var(--space-4) 2.5rem;
+    gap: 2rem;
+  }
+
+  .recognition__industry-title {
+    text-align: center;
+  }
+
+  .recognition__clients-badge {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .recognition__clients-badge img {
+    display: block;
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* #1 + categorías: sigue en fila, solo se escala */
+  .recognition__ranking {
+    width: 100%;
+    gap: 0;
+  }
+  .recognition__line--top {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 2rem;
+  }
+
+  .recognition__ranking-main {
+    width: fit-content;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 0 auto;
+  }
+
+
+  .recognition__ranking-number {
+    width: 150px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .recognition__ranking-number img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Línea vertical */
+
+  .recognition__line--vertical {
+    width: 1px;
+    height: auto;
+    min-height: 150px;
+    flex-shrink: 0;
+    background: var(--color-black);
+  }
+
+
+  /* Categorías */
+
+  .recognition__ranking-categories {
+    flex: 1;
+    padding-top: 0;
+  }
+
+  .recognition__ranking-categories p {
+    margin: 0;
+    font-size: 1.8rem;
+    line-height: 1.8;
+    letter-spacing: 0.04rem;
+    word-spacing: 0.2rem;
+  }
+
+  /* Reconocimientos de la industria */
+  .recognition__industry {
+    padding: 1rem var(--space-4) 3.5rem;
+  }
+
+  .recognition__industry-title {
+    font-size: var(--fs-2xl);
+    margin-bottom: 2.5rem;
+    letter-spacing: 0;
+  }
+
+  /* =========================================================
+     RECONOCIMIENTOS
+     ========================================================= */
+
+  .recognition__awards {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--space-5);
+    row-gap: 3rem;
+    margin-bottom: var(--space-6);
+  }
+
+
+  /* =========================================================
+     LÍNEA
+     ========================================================= */
+
+  .recognition__awards::before {
+    content: "";
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    top: 50%;
+    height: 1px;
+    background: var(--color-black);
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+
+  /* =========================================================
+     4 PUNTOS
+     ========================================================= */
+
+  .recognition__awards::after {
+    content: "";
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    top: 50%;
+    height: 16px;
+    transform: translateY(-50%);
+    background:
+      radial-gradient(
+        circle,
+        var(--color-black) 0,
+        var(--color-black) 8px,
+        transparent 8px
+      ) 0% 50% / 16px 16px no-repeat,
+      radial-gradient(
+        circle,
+        var(--color-black) 0,
+        var(--color-black) 8px,
+        transparent 8px
+      ) 33.33% 50% / 16px 16px no-repeat,
+      radial-gradient(
+        circle,
+        var(--color-black) 0,
+        var(--color-black) 8px,
+        transparent 8px
+      ) 66.66% 50% / 16px 16px no-repeat,
+      radial-gradient(
+        circle,
+        var(--color-black) 0,
+        var(--color-black) 8px,
+        transparent 8px
+      ) 100% 50% / 16px 16px no-repeat;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+
+  /* =========================================================
+     PREMIOS
+     ========================================================= */
+
+  .recognition__award {
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    position: relative;
+    z-index: 2;
+  }
+
+
+  .recognition__award-icon {
+    max-width: 74px;
+    max-height: 74px;
+  }
+
+
+  .recognition__award-label {
+    font-size: var(--fs-xl);
+    text-align: center;
+  }
+
+  .recognition__timeline {
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 1.3rem;
+    row-gap: 2rem;
+    padding-top: 0;
+  }
+
+  .recognition__timeline::before,
+  .recognition__timeline-item::before {
+    display: none;
+  }
+
+  .recognition__timeline-item {
+    min-height: 0;
+    padding: 0;
+    text-align: left;
+    justify-self: center; 
+    width: fit-content;
+  }
+
+  .recognition__timeline-number {
+    font-size: var(--fs-3xl);
+    margin-bottom: 0.5rem;
+  }
+
+  .recognition__timeline-label,
+  .recognition__timeline-label strong {
+    font-size: var(--fs-xl);
+    line-height: 1.25;
+  }
+
+  /* Líneas de separación: mismo margen que el resto del
+     contenido en vez del ancho completo edge-to-edge */
+  .recognition__line--top,
+  .recognition__line--ranking,
+  .recognition__line--statements {
+    margin: 0.75rem 0;
+  }
+
+  .recognition__line--section, 
+  .recognition__line--section::before {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* =========================================================
+     CLIENTES
+     ========================================================= */
+  .recognition__clients-content {
+    padding: 2.5rem var(--space-3) 2rem;
+    gap: 1.5rem;
+  }
+
+  .recognition__clients-badge {
+    width: min(65%, 200px);
+    margin: 0 auto 1.5rem;
+  }
+
+  .recognition__clients-badge img {
+    width: 150px;
+  }
+
+  .recognition__ranking-number {
+    width: 54px;
+  }
+
+  .recognition__ranking-categories p {
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+
+  .recognition__statements p {
+    font-size: var(--fs-xs);
+  }
+
+  .recognition__integrated p {
+    font-size: var(--fs-sm);
+  }
+
+  /* =========================================================
+     INDUSTRIA
+     ========================================================= */
+  .recognition__industry {
+    padding: 0.75rem var(--space-3) 3rem;
+  }
+
+  .recognition__industry-title {
+    font-size: var(--fs-xl);
+    margin-bottom: 2rem;
+  }
+
+  /* =========================================================
+     RECONOCIMIENTOS
+     ========================================================= */
+  .recognition__awards {
+    column-gap: var(--space-3);
+    row-gap: 2rem;
+  }
+
+  .recognition__award {
+    gap: var(--space-2);
+  }
+
+  .recognition__award-icon {
+    max-width: 46px;
+    max-height: 54px;
+  }
+
+  .recognition__award-label {
+    font-size: var(--fs-base);
+    text-align: center;
+  }
+
+  /* =========================================================
+     TIMELINE
+     ========================================================= */
+  .recognition__timeline {
+    width: 80%;
+    margin: 0 auto;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    column-gap: var(--space-2);
+    row-gap: 1.5rem;
+
+    padding-top: 0;
+  }
+
+  .recognition__timeline-item {
+    width: auto;
+    justify-self: stretch;
+
+    padding: 0;
+    text-align: left;
+  }
+
+  .recognition__timeline-number {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .recognition__timeline-label,
+  .recognition__timeline-label strong {
+    font-size: var(--fs-xs);
+    line-height: 1.25;
+  }
+
+  /* =========================================================
+     LÍNEAS DE SEPARACIÓN
+     ========================================================= */
+  .recognition__line--top,
+  .recognition__line--ranking,
+  .recognition__line--statements {
+    margin: 0.75rem 0;
+  }
+
+  .recognition__line--section,
+  .recognition__line--section::before {
+    display: none;
+  }
+}
