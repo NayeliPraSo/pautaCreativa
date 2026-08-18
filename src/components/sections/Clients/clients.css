@@ -104,7 +104,7 @@
 
 .marquee__logo {
   flex: 0 0 auto;
-  height: 56px;
+  height: 86px;
   display: flex;
   align-items: center;
 }
@@ -129,5 +129,250 @@
 @media (prefers-reduced-motion: reduce) {
   .marquee__track {
     animation: none;
+  }
+}
+
+@media (max-width: 1440px) {
+  .clientes-counter {
+    left: var(--space-8);
+    font-size: var(--fs-md);
+  }
+
+  .clientes-title {
+    width: min(100%, 1180px);
+    margin-top: var(--space-7);
+  }
+
+  .clientes__marquees {
+    max-width: 1250px;
+    gap: var(--space-5);
+    padding-block: var(--space-7);
+    margin-bottom: 70px;
+  }
+
+  .marquee__track {
+    gap: var(--space-5);
+  }
+
+  .marquee__logo {
+    height: 76px;
+  }
+
+  .clientes {
+    background-position: 90% 75%;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   Tablet landscape — hasta 1200px
+   --------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .clientes-counter {
+    left: var(--space-7);
+    font-size: var(--fs-sm);
+  }
+
+  .clientes-counter .label {
+    margin-left: var(--space-2);
+  }
+
+  .clientes-title {
+    width: min(100%, 1000px);
+    margin-top: var(--space-7);
+  }
+
+  .clientes__marquees {
+    max-width: 1080px;
+    gap: 26px;
+    padding-block: 40px;
+    margin-bottom: 50px;
+  }
+
+  .marquee__track {
+    gap: 38px;
+  }
+
+  .marquee__logo {
+    height: 70px;
+  }
+
+  .clientes {
+    background-position: 85% 72%;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   Tablet — hasta 992px
+   --------------------------------------------------------- */
+
+@media (max-width: 992px) {
+  .clientes-counter {
+    left: 32px;
+    font-size: 15px;
+    letter-spacing: 0.3em;
+  }
+
+  .clientes-title {
+    width: 96%;
+    margin-top: 75px;
+  }
+
+  .clientes__marquees {
+    width: 100%;
+    max-width: none;
+    gap: 22px;
+    padding-block: 30px;
+    margin-bottom: 35px;
+  }
+
+  .marquee__track {
+    gap: 32px;
+  }
+
+  .marquee__logo {
+    height: 66px;
+  }
+
+  .clientes {
+    background-position: 82% 70%;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   Mobile landscape — hasta 768px
+   --------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .clientes {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: 72% 70%;
+  }
+
+  .clientes-counter {
+    left: 24px;
+    top: 28px;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+  }
+
+  .clientes-counter .label {
+    margin-left: 12px;
+  }
+
+  .clientes-title {
+    width: 95%;
+    margin-top: 70px;
+  }
+
+  .clientes__marquees {
+    gap: 18px;
+    padding-block: 24px;
+    margin-bottom: 20px;
+  }
+
+  .marquee {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 5%,
+      #000 95%,
+      transparent
+    );
+
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 5%,
+      #000 95%,
+      transparent
+    );
+  }
+
+  .marquee__track {
+    gap: 28px;
+  }
+
+  .marquee__logo {
+    height: 60px;
+  }
+
+  .marquee--to-left .marquee__track,
+  .marquee--to-right .marquee__track {
+    animation-duration: 32s;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   Mobile — hasta 480px
+   --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .clientes {
+    min-height: 100vh;
+    background-size: auto 100%;
+    background-position: 67% bottom;
+  }
+
+  .clientes-counter {
+    left: 20px;
+    top: 22px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+
+  .clientes-counter .label {
+    margin-left: 10px;
+  }
+
+  .clientes-title {
+    width: 94%;
+    margin-top: 70px;
+  }
+
+  .clientes__marquees {
+    gap: 14px;
+    padding-block: 20px;
+    margin-bottom: 10px;
+  }
+
+  .marquee {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 3%,
+      #000 97%,
+      transparent
+    );
+
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 3%,
+      #000 97%,
+      transparent
+    );
+  }
+
+  .marquee__track {
+    gap: 22px;
+  }
+
+  .marquee__logo {
+    height: 56px;
+  }
+
+  .marquee--to-left .marquee__track,
+  .marquee--to-right .marquee__track {
+    animation-duration: 28s;
+  }
+
+  .marquee__logo img {
+    opacity: 0.95;
   }
 }
