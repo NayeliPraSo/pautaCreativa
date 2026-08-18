@@ -168,31 +168,404 @@
   fill: #fff;
 }
 
-@media (max-width: 900px) {
+/* ==========================================================================
+   Desktop — ≤ 1440px
+   ========================================================================== */
+
+@media (max-width: 1440px) {
+
   #site-footer {
-    padding: var(--space-8) var(--space-5) var(--space-6);
+    padding: 5rem 4rem 2.5rem;
   }
 
   .footer-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-6);
+    max-width: 1320px;
+    gap: 3rem;
   }
 
-  .footer-brand-badge {
-    width: 130px;
-    align-self: center;
+  .footer-wordmark {
+    width: 560px;
   }
 
-  .footer-contact {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
+  .footer-contact,
+  .footer-social {
+    font-size: 1.15rem;
   }
 
   .footer-badges {
+    gap: 2.5rem;
+  }
+
+  .footer-brand-badge {
+    width: 210px;
+  }
+
+  .footer-copy {
+    font-size: 1rem;
+  }
+}
+
+
+/* ==========================================================================
+   Tablet landscape — ≤ 1200px
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+
+  #site-footer {
+    padding: 4.5rem 3rem 2.5rem;
+  }
+
+  .footer-inner {
+    gap: 2.5rem;
+  }
+
+  .footer-wordmark {
+    width: 500px;
+  }
+
+  .footer-contact {
+    gap: 2rem;
+    font-size: 1.05rem;
+  }
+
+  .footer-social {
+    font-size: 1.05rem;
+  }
+
+  .footer-badges {
+    gap: 2rem;
+  }
+
+  .footer-badges-group img {
+    max-width: 360px;
+    height: auto;
+  }
+
+  .footer-brand-badge {
+    width: 185px;
+  }
+
+  .footer-copy {
+    font-size: 0.95rem;
+  }
+}
+
+
+/* ==========================================================================
+   Tablet — ≤ 992px
+   ========================================================================== */
+
+@media (max-width: 992px) {
+
+  #site-footer {
+    padding: 4rem 2.5rem 2rem;
+  }
+
+  .footer-inner {
+    gap: 2rem;
+  }
+
+  .footer-content {
+    gap: 1.5rem;
+  }
+
+  .footer-wordmark {
+    width: 440px;
+  }
+
+  .footer-contact {
+    gap: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .footer-social {
+    gap: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .footer-badges {
+    gap: 1.5rem;
+  }
+
+  .footer-badges-group img {
+    max-width: 320px;
+    height: auto;
+  }
+
+  .footer-brand-badge {
+    width: 160px;
+  }
+
+  .footer-copy {
+    font-size: 0.85rem;
+  }
+}
+
+/* ==========================================================================
+   Mobile landscape — ≤ 768px
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  #site-footer {
+    min-height: 100vh;
+    padding: 5rem 3rem 1rem;
+    overflow: hidden;
+  }
+
+  /* El punto decorativo no aparece en el mockup móvil */
+  .footer-dot {
+    display: none;
+  }
+
+  /* ------------------------------------------------
+     Layout general
+  ------------------------------------------------ */
+
+  .footer-inner {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 0;
+  }
+
+  /*
+   * Hace que los hijos de footer-content participen
+   * directamente en el layout de footer-inner.
+   *
+   * Esto nos permite colocar el círculo de Pauta
+   * antes del copyright sin cambiar el HTML.
+   */
+  .footer-content {
+    display: contents;
+  }
+
+  /* ------------------------------------------------
+     Creadores de soluciones
+  ------------------------------------------------ */
+
+  .footer-wordmark {
+    order: 1;
+
+    display: block;
+
+    width: 570px;
+    max-width: 90%;
+    height: auto;
+
+    margin: 0 auto 3rem;
+  }
+
+  /* ------------------------------------------------
+     Dirección + teléfono
+  ------------------------------------------------ */
+
+  .footer-contact {
+    order: 2;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 2.5rem;
+
+    margin-bottom: 2rem;
+
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+
+  .footer-address {
+    margin: 0;
+    text-align: center;
+  }
+
+  /* ------------------------------------------------
+     Redes sociales
+  ------------------------------------------------ */
+
+  .footer-social {
+    order: 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.8rem;
+
+    width: 100%;
+    margin-bottom: 4.5rem;
+
+    font-size: 1.25rem;
+  }
+
+  /* ------------------------------------------------
+     Asociaciones / Certificaciones
+  ------------------------------------------------ */
+
+  .footer-badges {
+    order: 4;
+    width: 100%;
+    max-width: 540px;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-4);
+    gap: 3rem;
+    margin: 0 auto 5rem;
+  }
+
+  .footer-badges-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .footer-badges-group img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+  }
+
+  /* Asociaciones */
+  .footer-badges-group:first-child img {
+    width: 540px;
+  }
+
+  /* Certificaciones */
+  .footer-badges-group:last-child img {
+    width: 495px;
+  }
+
+  /* ------------------------------------------------
+     Círculo Pauta
+  ------------------------------------------------ */
+
+  .footer-brand-badge {
+    order: 5;
+    width: 200px;
+    margin: 0 auto 5rem;
+    align-self: center;
+  }
+
+  .footer-brand-badge svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ------------------------------------------------
+     Copyright
+  ------------------------------------------------ */
+
+  .footer-copy {
+    order: 6;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   Mobile — ≤ 480px
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  #site-footer {
+    min-height: 100vh;
+    padding: 3rem 1.5rem 1rem;
+  }
+
+  .footer-inner {
+    max-width: 100%;
+  }
+
+  /* ------------------------------------------------
+     Creadores de soluciones
+  ------------------------------------------------ */
+
+  .footer-wordmark {
+    width: 320px;
+    max-width: 92%;
+    margin-bottom: 2.25rem;
+  }
+
+  /* ------------------------------------------------
+     Dirección + teléfono
+  ------------------------------------------------ */
+
+  .footer-contact {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .footer-address {
+    max-width: 320px;
+    text-align: center;
+  }
+
+  /* ------------------------------------------------
+     Redes
+  ------------------------------------------------ */
+
+  .footer-social {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 3.25rem;
+    font-size: 1rem;
+  }
+
+  /* ------------------------------------------------
+     Asociaciones / Certificaciones
+  ------------------------------------------------ */
+
+  .footer-badges {
+    max-width: 340px;
+    gap: 2.25rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .footer-badges-group:first-child img {
+    width: 340px;
+  }
+
+  .footer-badges-group:last-child img {
+    width: 312px;
+  }
+
+  /* ------------------------------------------------
+     Círculo Pauta
+  ------------------------------------------------ */
+
+  .footer-brand-badge {
+    width: 150px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ------------------------------------------------
+     Copyright
+  ------------------------------------------------ */
+
+  .footer-copy {
+    max-width: 340px;
+    font-size: 0.7rem;
+    line-height: 1.45;
   }
 }
