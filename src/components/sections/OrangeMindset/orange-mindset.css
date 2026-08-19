@@ -360,6 +360,7 @@
     top: auto;
     left: auto;
     margin: 0;
+    font-size: var(--fs-base);
   }
 
   .om-panel-2 .om-index {
@@ -371,7 +372,7 @@
      PANEL 1
      ===================================== */
   .om-panel-1 {
-  padding: 80px 24px 30px;
+  padding: 35px 24px 30px;
   background-image: url("../../../assets/images/cascara.avif");
   background-repeat: no-repeat;
   background-size: 420px auto;
@@ -380,7 +381,7 @@
 
   .om-panel-1 .om-index {
     width: 100%;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
   }
 
   .om-index-number,
@@ -428,7 +429,7 @@
      Se convierte en continuación directa
      ===================================== */
   .om-panel-2 {
-    padding: 25px 24px 60px;
+    padding: 25px 24px 0px;
     background-image: none;
     background-color: transparent;
     justify-content: center;

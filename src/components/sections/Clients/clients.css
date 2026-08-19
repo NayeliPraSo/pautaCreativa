@@ -255,8 +255,7 @@
 
   .clientes-counter {
     left: 24px;
-    top: 28px;
-    font-size: 13px;
+    font-size: var(--fs-base);
     letter-spacing: 0.25em;
   }
 

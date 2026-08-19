@@ -196,17 +196,28 @@
 }
 
 @media (max-width: 768px) {
+  .solutions {
+    min-height: auto;
+  }
+
   .solutions-container {
     width: calc(100% - 32px);
+    min-height: auto;
+    margin-bottom: 30px;
   }
 
   .solutions-header {
-    padding-top: 24px;
+    padding-top: 12px;
   }
 
   .solutions-intro {
+    margin-top: 18px;
     margin-left: 0;
     padding-left: 32px;
+  }
+
+  .solutions-index{
+    font-size: var(--fs-base);
   }
 
   .solutions-intro p {
@@ -215,13 +226,11 @@
   }
 
   .solutions-content {
-    margin-top: 16px;
+    flex-direction: column;
+    margin-top: 10px;
     margin-bottom: 24px;
   }
 
-  .solutions-content {
-    flex-direction: column;
-  }
   .solutions-scroll{
     display: none; 
   }

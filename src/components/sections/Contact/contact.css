@@ -532,7 +532,7 @@
     align-items: center;
     gap: 1.5rem;
 
-    font-size: 0.8rem;
+    font-size: var(--fs-base);
     letter-spacing: 0.32em;
   }
 

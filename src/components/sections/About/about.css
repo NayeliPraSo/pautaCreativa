@@ -219,13 +219,13 @@
 
   .about-container {
     width: 94%;
-    max-width: 620px;
+    max-width: 650px;
     gap: 28px;
   }
 
   .about-intro {
     width: 100%;
-    max-width: 620px;
+    max-width: 650px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -246,8 +246,8 @@
   }
 
   .about-diagram {
-    width: 125%;
-    max-width: 720px;
+    width: 115%;
+    max-width: 700px;
     aspect-ratio: 1200 / 650;
     margin: 0 auto;
   }

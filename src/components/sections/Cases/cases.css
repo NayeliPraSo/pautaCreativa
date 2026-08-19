@@ -155,6 +155,7 @@
 @media (max-width: 768px) {
   .cases-counter {
     left: var(--space-4);
+    font-size: var(--fs-base);
   }
 
   .cases-intro {
