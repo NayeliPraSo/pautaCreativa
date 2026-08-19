@@ -195,7 +195,7 @@
   .hero {
     min-height: 100svh;
     align-items: flex-end;
-    padding-top: 0;
+    padding-top: 150px;
     background-position: center center;
   }
 
@@ -258,6 +258,7 @@
 @media (max-width: 480px) {
   .hero {
     min-height: 100svh;
+    padding-top: 130px;
     background-position: center center;
   }
 

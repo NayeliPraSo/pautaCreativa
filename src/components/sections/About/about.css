@@ -234,7 +234,7 @@
   }
 
   .about-plus {
-    font-size: 2.5rem;
+    display: none;
   }
 
   .about-copy {
@@ -246,8 +246,8 @@
   }
 
   .about-diagram {
-    width: 100%;
-    max-width: 580px;
+    width: 125%;
+    max-width: 720px;
     aspect-ratio: 1200 / 650;
     margin: 0 auto;
   }
@@ -263,12 +263,12 @@
   }
 
   .left {
-    left: 9%;
+    left: 10%;
     width: 34%;
   }
 
   .right {
-    right: 9%;
+    right: 10%;
     width: 34%;
   }
 
