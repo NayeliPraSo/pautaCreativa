@@ -211,7 +211,7 @@
 }
 
 .om-timeline-dotactive {
-  background: var(--color-active);
+  background: var(--color-teal2);
 }
 
 /* ≤ 1440px — Desktop */
@@ -219,6 +219,11 @@
   .om-content {
     gap: var(--space-4);
     margin-left: 30px;
+    margin-top: 40px;
+  }
+
+  .om-index {
+    top:var(--space-3);
   }
 
   .om-circle {
