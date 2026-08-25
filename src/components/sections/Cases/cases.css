@@ -153,6 +153,9 @@
 }
 
 @media (max-width: 768px) {
+  .cases-header{
+    padding-top: var(--space-3);
+  }
   .cases-counter {
     left: var(--space-4);
     font-size: var(--fs-base);
@@ -161,6 +164,10 @@
   .cases-intro {
     padding: 0 var(--space-4);
     font-size: var(--fs-base);
+  }
+
+  .cases-title {
+    margin-top: var(--space-4);
   }
 
   /* El grid de columnas se convierte en un carrusel de una sola
@@ -195,7 +202,7 @@
   }
 
   .cases-dot {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
   }
 }

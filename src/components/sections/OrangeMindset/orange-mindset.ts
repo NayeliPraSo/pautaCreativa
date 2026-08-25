@@ -13,7 +13,6 @@ const initHorizontalScroll = () => {
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-
   /* =========================================
      LIMPIAR COMPLETAMENTE ORANGE MINDSET
      ========================================= */
@@ -23,10 +22,6 @@ const initHorizontalScroll = () => {
     orangeTween = null;
   }
 
-  /*
-   * Buscar solamente los ScrollTriggers
-   * pertenecientes a esta sección.
-   */
   ScrollTrigger.getAll().forEach((trigger) => {
     const triggerElement = trigger.trigger;
 
@@ -38,45 +33,36 @@ const initHorizontalScroll = () => {
     }
   });
 
-  /*
-   * Eliminar cualquier transformación
-   * aplicada previamente por GSAP.
-   */
   gsap.set(slider, {
-    clearProps: "all",
+    clearProps: "transform",
   });
-
 
   /* =========================================
      MOBILE
      ========================================= */
 
   if (isMobile) {
-
-    /*
-     * Aseguramos que el slider esté
-     * completamente en su posición natural.
-     */
     gsap.set(slider, {
       x: 0,
       clearProps: "transform",
     });
 
+    ScrollTrigger.refresh();
+
     return;
   }
-
 
   /* =========================================
      DESKTOP
      ========================================= */
 
-  const totalScroll =
-    slider.scrollWidth - window.innerWidth;
+  const getTotalScroll = () =>
+    slider.scrollWidth - section.clientWidth;
 
-  if (totalScroll <= 0) return;
+  if (getTotalScroll() <= 0) return;
 
   orangeTween = gsap.to(slider, {
-    x: -totalScroll,
+    x: () => -getTotalScroll(),
 
     ease: "none",
 
@@ -85,23 +71,45 @@ const initHorizontalScroll = () => {
 
       start: "top top",
 
-      end: () => `+=${totalScroll}`,
+      end: () => `+=${getTotalScroll()}`,
 
       pin: true,
 
       scrub: 1,
 
       anticipatePin: 1,
+
+      invalidateOnRefresh: true,
     },
   });
+
+  ScrollTrigger.refresh();
 };
 
+/* =========================================
+   INICIALIZACIÓN
+   ========================================= */
 
-window.addEventListener("load", initHorizontalScroll);
-
-window.addEventListener("resize", () => {
+window.addEventListener("load", () => {
   initHorizontalScroll();
+
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
 });
 
+/* =========================================
+   RESIZE
+   ========================================= */
+
+let resizeTimer: number;
+
+window.addEventListener("resize", () => {
+  window.clearTimeout(resizeTimer);
+
+  resizeTimer = window.setTimeout(() => {
+    initHorizontalScroll();
+  }, 150);
+});
 
 export {};

@@ -1,8 +1,9 @@
 .solutions-diagram {
-  position: relative;
-  width: min(68vw, 800px);
-  aspect-ratio: 900 / 941;
-  margin: 0 auto;
+   position: relative;
+   width: 680px;
+   max-width: 100%;
+   aspect-ratio: 900 / 941;
+   margin: 0 auto;
 }
 
 /* ================================
@@ -29,7 +30,7 @@
   z-index: 4;
   color: var(--color-primary);
   font-family: var(--font-primary);
-  font-size: 85px;
+  font-size: 55px;
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
@@ -57,10 +58,10 @@
 
 .solution-card {
   position: absolute;
-  top: 45%;
+  top: 37%;
   left: 42%;
   z-index: 4;
-  width: 360px;
+  width: 340px;
   transform: translate(-50%, -50%);
   text-align: center;
   opacity: 0;
@@ -145,8 +146,8 @@
 /* Influencer */
 
 .solution-node-influencer {
-  top: 1%;
-  left: 51%;
+  top: -1%;
+  left: 50%;
   transform: translateX(-50%);
   flex-direction: column;
   align-items: center;
@@ -186,8 +187,8 @@
 /* Innovation Lab */
 
 .solution-node-innovation-lab {
-  top: 68%;
-  left: 47%;
+  top: 67%;
+  left: 46%;
   flex-direction: column;
   align-items: center;
 }
@@ -219,8 +220,8 @@
 /* Experience Marketing */
 
 .solution-node-experience-marketing {
-  top: 91.2%;
-  left: 21.7%;
+  top: 91%;
+  left: 20.6%;
   flex-direction: column;
   align-items: center;
 }
@@ -235,8 +236,8 @@
 /* Diseño Estratégico */
 
 .solution-node-strategic-design {
-  top: 63%;
-  left: -12%;
+  top: 62%;
+  left: -16%;
   flex-direction: row-reverse;
 }
 
@@ -260,7 +261,7 @@
 .solution-title {
   margin: 0;
   color: var(--color-text);
-  font-size: var(--fs-1xl);
+  font-size: var(--fs-lg);
   font-weight: 700;
   line-height: 1.05;
 }
@@ -268,7 +269,7 @@
 .solution-subtitle {
   margin: 6px 0 26px;
   color: var(--color-text);
-  font-size: var(--fs-xl);
+  font-size: var(--fs-md);
   font-weight: 400;
   line-height: 1.05;
 }
@@ -276,13 +277,13 @@
 .solution-description {
   margin: 0;
   color: var(--color-text);
-  font-size: var(--fs-lg);
+  font-size: var(--fs-base);
   line-height: 1.35;
 }
 
 .solution-icon {
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   display: block;
   margin-bottom: 12px;
@@ -324,7 +325,7 @@
 /* Puntos */
 
 .solutions-diagram.is-active .solution-dot {
-  background: var(--color-bg);
+  background: var(--color-primary);
 }
 
 .solutions-diagram.is-active .solution-node.is-selected .solution-dot {
@@ -378,179 +379,246 @@
 }
 
 @media (max-width: 1440px) {
-  .solutions-diagram-title {
-    font-size: 68px;
+  .solutions-container {
+    width: calc(100% - 100px);
   }
 
-  .solution-label strong {
-    font-size: 26px;
+  .solutions-layout {
+    grid-template-columns: 30% 1fr;
+    gap: 30px;
   }
 
-  .solution-label span {
-    font-size: 22px;
+  .solutions-intro {
+    margin: 0;
+    padding-left: 36px;
+    transform: translateY(5px);
   }
+
+  .solutions-intro p {
+    max-width: 340px;
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .solutions-content {
+    margin: 0;
+    transform: translateY(-30px);
+  }
+
 }
 
 @media (max-width: 1200px) {
-  .solutions-diagram {
-    width: min(78vw, 700px);
+  .solutions-container {
+    width: calc(100% - 80px);
   }
 
-  .solutions-diagram-title {
-    font-size: 56px;
+  .solutions-layout {
+    grid-template-columns: 32% 1fr;
+    gap: 24px;
   }
 
-  .solution-dot {
-    width: 22px;
-    height: 22px;
-    flex: 0 0 22px;
+  .solutions-intro {
+    margin: 0;
+    padding-left: 32px;
+    transform: translateY(0);
   }
 
-  .solution-label strong {
-    font-size: 22px;
+  .solutions-intro p {
+    max-width: 300px;
+    font-size: 1.35rem;
+    line-height: 1.4;
   }
 
-  .solution-label span {
-    font-size: 19px;
-  }
-
-  .solution-title {
-    font-size: var(--fs-2xl);
-  }
-
-  .solution-subtitle {
-    font-size: var(--fs-xl);
-  }
-
-  .solution-description {
-    font-size: var(--fs-base);
-  }
-
-  .solution-icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 10px;
+  .solutions-content {
+    margin: 0;
+    transform: translateY(-25px);
   }
 }
 
 @media (max-width: 992px) {
-  .solutions-diagram {
-    width: min(85vw, 560px);
+  .solutions-container {
+    width: calc(100% - 48px);
   }
 
-  .solutions-diagram-title {
-    font-size: 44px;
+  .solutions-layout {
+    grid-template-columns: 34% 1fr;
+    gap: 20px;
   }
 
-  .solution-dot {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 18px;
+  .solutions-intro {
+    margin: 0;
+    padding-left: 28px;
+    transform: translateY(0);
   }
 
-  .solution-label strong {
-    font-size: 18px;
+  .solutions-intro p {
+    max-width: 260px;
+    font-size: 1.15rem;
+    line-height: 1.4;
   }
 
-  .solution-label span {
-    font-size: 15px;
-  }
-
-  .solution-card {
-    width: 280px;
-  }
-
-  .solution-icon {
-    width: 42px;
-    height: 42px;
-    margin-bottom: 9px;
+  .solutions-content {
+    margin: 0;
+    transform: translateY(-20px);
   }
 }
 
 @media (max-width: 768px) {
+  /* =========================================
+     LAYOUT GENERAL
+     ========================================= */
+
+  .solutions-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 28px;
+  }
+
+  .solutions-intro {
+    width: 100%;
+    margin: 0;
+    padding-left: 30px;
+    transform: none;
+  }
+
+  .solutions-intro p {
+    width: 100%;
+    max-width: 520px;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .solutions-plus {
+    top: 2px;
+    left: 0;
+  }
+
+  /* =========================================
+     DIAGRAMA
+     ========================================= */
+
+  .solutions-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    transform: none;
+  }
+
   .solutions-diagram {
-    width: min(92vw, 460px);
-    /* El navegador sigue gestionando el scroll vertical de la
-       página; solutions.ts detecta el swipe horizontal por encima. */
+    width: min(78vw, 430px);
+    max-width: 430px;
+    margin: 0 auto 1rem;
     touch-action: pan-y;
   }
 
   .solutions-diagram-title {
-    font-size: 34px;
+    font-size: 32px;
   }
 
+  /* =========================================
+     DOTS Y LABELS
+     ========================================= */
+
   .solution-dot {
-    width: 14px;
-    height: 14px;
-    flex: 0 0 14px;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
   }
 
   .solution-label strong {
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.05;
   }
 
   .solution-label span {
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.05;
   }
 
-  .solution-card {
-    width: 230px;
+  /* Influencer */
+  .solution-node-influencer {
+    top: 1%;
   }
 
-  .solution-title {
-    font-size: var(--fs-xl);
+  /* Total */
+  .solution-node-total-promotion {
+    top: 25%;
+    left: 86%;
   }
 
-  .solution-subtitle {
-    margin: 4px 0 14px;
-    font-size: var(--fs-lg);
+  /* Shopper */
+  .solution-node-shopper-connections {
+    top: 61%;
+    left: 94%;
   }
 
-  .solution-description {
-    font-size: var(--fs-base);
-    line-height: 1.4;
+  /* Innovation */
+  .solution-node-innovation-lab {
+    top: 69%;
+    left: 47%;
   }
 
-  .solution-icon {
-    width: 38px;
-    height: 38px;
-    margin-bottom: 8px;
+  .solution-node-innovation-lab .solution-label {
+    margin-top: 13px;
+    margin-left: 0;
   }
 
+  /* Advertising */
+  .solution-node-advertising {
+    top: 95%;
+    left: 59%;
+  }
+
+  .solution-node-advertising .solution-label {
+    margin-top: 7px;
+  }
+
+  /* Experience */
+  .solution-node-experience-marketing {
+    top: 91%;
+    left: 24%;
+  }
+
+  .solution-node-experience-marketing .solution-label {
+    margin-top: 7px;
+    white-space: normal;
+    max-width: 80px;
+    text-align: center;
+  }
+
+  /* Diseño */
   .solution-node-strategic-design {
-    left: 1.4%;
-    top: 65%;
-    flex-direction: column;
+    left: -7%;
+    top: 63%;
   }
 
   .solution-node-strategic-design .solution-label {
     align-items: center;
     margin-right: 0;
-    margin-top: 8px;
+    margin-top: 7px;
     white-space: normal;
-    max-width: 90px;
+    max-width: 80px;
     text-align: center;
   }
 
-  .solution-node-experience-marketing {
-    top: 91.5%;
-    left: 23%;
-  }
-
-  .solution-node-experience-marketing .solution-label {
-    white-space: normal;
-    max-width: 90px;
-    text-align: center;
-  }
+  /* =========================================
+     DOTS DE NAVEGACIÓN
+     ========================================= */
 
   .solutions-dots {
     display: flex;
+    margin-top: 28px;
   }
 
-  /* =========================================================
-     ESTADO "SOLUCIÓN ACTIVA" — reemplaza el diagrama completo
-     por la foto de fondo + naranja blanca con la card
-     ========================================================= */
+  /* =========================================
+     ESTADO SOLUCIÓN ACTIVA
+     ========================================= */
 
   .solutions.is-active .solutions-diagram-circle,
   .solutions.is-active .solutions-diagram-title,
@@ -562,23 +630,23 @@
     width: 100%;
     max-width: none;
     aspect-ratio: auto;
-    min-height: 75vh;
+    min-height: 60vh;
   }
 
   .solutions.is-active .solutions-diagram-orange {
     left: 50%;
     top: auto;
-    bottom: 6%;
+    bottom: 7%;
     transform: translateX(-50%);
-    width: min(88vw, 420px);
+    width: min(92vw, 420px);
   }
 
   .solutions.is-active .solution-card {
     left: 53%;
     top: auto;
-    bottom: 23%;
+    bottom: 25%;
     transform: translateX(-50%);
-    width: min(78vw, 300px);
+    width: min(74vw, 280px);
     text-align: center;
   }
 
@@ -594,49 +662,158 @@
 }
 
 @media (max-width: 480px) {
+  /* =========================================
+     LAYOUT GENERAL
+     ========================================= */
+
+  .solutions-layout {
+    gap: 22px;
+  }
+
+  .solutions-intro {
+    padding-left: 26px;
+  }
+
+  .solutions-intro p {
+    max-width: 100%;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .solutions-plus {
+    top: 1px;
+    left: 0;
+  }
+
+
+  /* =========================================
+     DIAGRAMA
+     ========================================= */
+
   .solutions-diagram {
-    width: min(96vw, 340px);
+    width: min(84vw, 340px);
+    max-width: 340px;
+    margin: 0 auto 0.75rem;
   }
 
   .solutions-diagram-title {
     font-size: 26px;
   }
 
+
+  /* =========================================
+     DOTS Y LABELS
+     ========================================= */
+
+  .solution-dot {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+  }
+
   .solution-label strong {
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 1.05;
   }
 
   .solution-label span {
-    font-size: 10px;
+    font-size: 11px;
+    line-height: 1.05;
   }
 
-  .solution-dot {
-    width: 12px;
-    height: 12px;
-    flex: 0 0 12px;
+
+  /* Influencer */
+
+  .solution-node-influencer {
+    top: -1%;
+    left: 50%;
   }
 
-  .solution-card {
-    width: 190px;
+
+  /* Total */
+
+  .solution-node-total-promotion {
+    top: 24%;
+    left: 85%;
   }
 
-  .solution-title {
-    font-size: var(--fs-base);
+  .solution-node-total-promotion .solution-label {
+    margin-left: 8px;
   }
 
-  .solution-subtitle {
-    font-size: var(--fs-sm);
+
+  /* Shopper */
+
+  .solution-node-shopper-connections {
+    top: 60%;
+    left: 94%;
   }
 
-  .solution-description {
-    font-size: var(--fs-xs);
+  .solution-node-shopper-connections .solution-label {
+    margin-left: 5px;
   }
 
-  .solution-icon {
-    width: 32px;
-    height: 32px;
-    margin-bottom: 5px;
+
+  /* Innovation */
+
+  .solution-node-innovation-lab {
+    top: 69%;
+    left: 46%;
   }
+
+  .solution-node-innovation-lab .solution-label {
+    margin-top: 12px;
+    margin-left: 3px;
+  }
+
+
+  /* Advertising */
+
+  .solution-node-advertising {
+    top: 95%;
+    left: 59%;
+  }
+
+  .solution-node-advertising .solution-label {
+    margin-top: 5px;
+  }
+
+
+  /* Experience */
+
+  .solution-node-experience-marketing {
+    top: 91%;
+    left: 22%;
+  }
+
+  .solution-node-experience-marketing .solution-label {
+    margin-top: 5px;
+    max-width: 70px;
+    white-space: normal;
+    text-align: center;
+  }
+
+
+  /* Diseño */
+
+  .solution-node-strategic-design {
+    left: -10%;
+    top: 63%;
+  }
+
+  .solution-node-strategic-design .solution-label {
+    margin-top: 5px;
+    margin-right: 0;
+    max-width: 70px;
+    align-items: center;
+    white-space: normal;
+    text-align: center;
+  }
+
+
+  /* =========================================
+     DOTS DE NAVEGACIÓN
+     ========================================= */
 
   .solutions-dots {
     gap: 8px;
@@ -644,7 +821,52 @@
   }
 
   .solutions-dot {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
+  }
+
+
+  /* =========================================
+     ESTADO SOLUCIÓN ACTIVA
+     ========================================= */
+
+  .solutions.is-active .solutions-diagram {
+    width: 100%;
+    max-width: none;
+    min-height: 55vh;
+  }
+
+  .solutions.is-active .solutions-diagram-orange {
+    left: 50%;
+    bottom: 6%;
+    width: min(94vw, 350px);
+    transform: translateX(-50%);
+  }
+
+  .solutions.is-active .solution-card {
+    left: 54%;
+    bottom: 30%;
+    width: min(78vw, 250px);
+    transform: translateX(-50%);
+  }
+
+  .solutions.is-active .solution-title {
+    font-size: var(--fs-base);
+  }
+
+  .solutions.is-active .solution-subtitle {
+    margin: 4px 0 12px;
+    font-size: var(--fs-sm);
+  }
+
+  .solutions.is-active .solution-description {
+    font-size: var(--fs-xs);
+    line-height: 1.4;
+  }
+
+  .solutions.is-active .solution-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 5px;
   }
 }

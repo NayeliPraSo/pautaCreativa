@@ -9,6 +9,8 @@
   background-size: auto 108%;
   background-position: center;
   background-repeat: no-repeat;
+
+  overflow-x: clip;
 }
 
 .about-container{

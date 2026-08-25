@@ -9,6 +9,8 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  overflow-x: clip;
 }
 
 .hero-content {
@@ -45,6 +47,7 @@
   max-width: 100%;
   margin-left: -38px;
   margin-top: -39px;
+  will-change: transform, opacity;
 }
 
 .hero-subtitle {
@@ -87,6 +90,25 @@
   position: absolute;
   left: 48%;
   bottom: var(--space-5);
+}
+
+/* =========================================================
+   ANIMACIÓN DE TEXTO
+   ========================================================= */
+
+.hero-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* =========================================================
+   PLUS ANIMADOS
+   ========================================================= */
+
+.hero-plus {
+  display: inline-flex;
+  transform-origin: center;
+  will-change: transform;
 }
 
 /* =========================================================
@@ -198,7 +220,7 @@
     min-height: 100svh;
     align-items: flex-end;
     padding-top: 150px;
-    background-position: center center;
+    background-position: 100% center;
   }
 
   .hero-content {
@@ -261,7 +283,7 @@
   .hero {
     min-height: 100svh;
     padding-top: 130px;
-    background-position: center center;
+    background-position: 82% center;
   }
 
   .hero-content {
@@ -276,7 +298,7 @@
   }
 
   .hero-subtitle {
-    font-size: var(--fs-md);
+    font-size: var(--fs-base);
     line-height: 1.25;
   }
 

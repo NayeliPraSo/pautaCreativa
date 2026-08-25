@@ -158,10 +158,11 @@
   .header-mobile-brand {
     display: block;
     position: relative;
+    top: 3px;
     z-index: 1003;
 
-    width: 105px;
-    height: 105px;
+    width: 96px;
+    height: 96px;
 
     transition:
       opacity 0.25s ease,
@@ -396,8 +397,9 @@
   }
 
   .header-mobile-brand {
-    width: 88px;
-    height: 88px;
+    width: 84px;
+    height: 84px;
+    top: 2px;
   }
 
   .header-menu-toggle {

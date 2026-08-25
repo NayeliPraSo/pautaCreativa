@@ -46,11 +46,11 @@
   z-index: 2;
   width: calc(100% - 120px);
   max-width: 1400px;
-  min-height: 100vh;
+  height: 100vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  margin-bottom: 60px;
+  padding-bottom: 30px;
 }
 
 
@@ -60,7 +60,7 @@
 
 .solutions-header {
   width: 100%;
-  padding-top: 40px;
+  padding-top: 24px;
 }
 
 
@@ -88,25 +88,39 @@
 
 
 /* =========================================
+   LAYOUT PRINCIPAL
+   Texto 30% / Diagrama 70%
+   ========================================= */
+
+.solutions-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 30% 1fr;
+  align-items: center;
+  gap: 40px;
+}
+
+
+/* =========================================
    INTRO
    ========================================= */
 
 .solutions-intro {
   position: relative;
-  display: flex;
-  align-items: flex-start;
   width: 100%;
-  margin-top: 35px;
-  margin-left: 65px;
+  margin: 0;
   padding-left: 40px;
+  align-self: center;
+  transform: translateY(10px);
 }
 
 .solutions-intro p {
   margin: 0;
-  max-width: 1000px;
+  max-width: 380px;
   color: var(--color-text);
   font-size: var(--fs-xl);
-  line-height: 1.4;
+  line-height: 1.45;
   font-weight: 300;
 }
 
@@ -119,26 +133,28 @@
 
 .solutions-plus {
   position: absolute;
-  top: 0;
+  top: 4px;
   left: 0;
   color: var(--color-primary);
 }
 
 
 /* =========================================
-   CONTENIDO
+   CONTENIDO / DIAGRAMA
    ========================================= */
 
 .solutions-content {
   position: relative;
-  flex: 1;
+  width: 100%;
+  min-width: 0;
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 32px;
-  margin-bottom: 60px;
+  margin: 0;
+  transform: translateY(-35px);
 }
+
 
 /* =========================================
    SCROLL
@@ -150,7 +166,7 @@
   bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  color:var(--color-black);
+  color: var(--color-black);
 }
 
 @media (max-width: 1440px) {
@@ -208,12 +224,14 @@
 
   .solutions-header {
     padding-top: 12px;
+    padding-bottom: 1rem;
   }
 
   .solutions-intro {
     margin-top: 18px;
     margin-left: 0;
     padding-left: 32px;
+    padding-bottom: 1.5rem;
   }
 
   .solutions-index{
@@ -234,6 +252,9 @@
   .solutions-scroll{
     display: none; 
   }
+  .solutions-background{
+    background-position: 90% center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -243,6 +264,10 @@
 
   .solutions-scroll {
     display: none; /* el indicador de scroll no aporta valor en móvil */
+  }
+
+  .solutions-background{
+    background-position: 80% center;
   }
 }
 
