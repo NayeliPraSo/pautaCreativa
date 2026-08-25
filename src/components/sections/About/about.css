@@ -30,6 +30,10 @@
     max-width:980px;
 }
 
+.about-letter {
+  display: inline;
+}
+
 .about-plus{
     color:var(--color-teal);
     font-size:4rem;
@@ -73,7 +77,6 @@
 .venn-left,
 .venn-right,
 .venn-overlap,
-.venn-arrow,
 .venn-dot{
 
     transform-box:fill-box;
@@ -100,21 +103,35 @@
     text-align:center;
 }
 
-.circle-content p{
-    font-family:var(--font-primary);
-    font-size:2.3rem;
-    line-height:1.25;
-    font-weight:300;
-    margin-bottom:2.2rem;
+.circle-content p {
+  font-family: var(--font-primary);
+  font-size: 2.3rem;
+  line-height: 1.25;
+  font-weight: 300;
+  margin-bottom: 2.2rem;
+
+  transition:
+    transform 0.45s ease,
+    opacity 0.45s ease;
 }
 
-.circle-content h3{
-    font-family:var(--font-heading);
-    font-size:3rem;
-    font-style:italic;
-    font-weight:800;
-    line-height:1;
-    margin:0;
+.circle-content:hover p {
+  transform: translateY(-6px);
+}
+
+.circle-content h3 {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+  cursor: default;
+}
+
+.circle-title-letter {
+  display: inline-block;
+  will-change: transform;
 }
 
 .hero-scroll {
