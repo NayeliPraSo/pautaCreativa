@@ -413,6 +413,32 @@
   .solution-node-strategic-design {
     left: -15%;
   }
+
+  .solutions-diagram.is-active .solution-card {
+    width: 310px;
+    top: 37%;
+    left: 42%;
+  }
+
+  .solutions-diagram.is-active .solution-icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 10px;
+  }
+
+  .solutions-diagram.is-active .solution-title {
+    font-size: 1.25rem;
+  }
+
+  .solutions-diagram.is-active .solution-subtitle {
+    margin: 5px 0 20px;
+    font-size: 1.05rem;
+  }
+
+  .solutions-diagram.is-active .solution-description {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -493,6 +519,32 @@
 
   .solution-node-strategic-design .solution-label {
     margin-right: 10px;
+  }
+
+  .solutions-diagram.is-active .solution-card {
+    width: 270px;
+    top: 39%;
+    left: 42%;
+  }
+
+  .solutions-diagram.is-active .solution-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 9px;
+  }
+
+  .solutions-diagram.is-active .solution-title {
+    font-size: 1.1rem;
+  }
+
+  .solutions-diagram.is-active .solution-subtitle {
+    margin: 4px 0 16px;
+    font-size: 0.95rem;
+  }
+
+  .solutions-diagram.is-active .solution-description {
+    font-size: 0.85rem;
+    line-height: 1.35;
   }
 }
 
@@ -588,6 +640,32 @@
 
   .solution-node-strategic-design .solution-label {
     margin-right: 8px;
+  }
+
+  .solutions-diagram.is-active .solution-card {
+    width: 235px;
+    top: 40%;
+    left: 42%;
+  }
+
+  .solutions-diagram.is-active .solution-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 7px;
+  }
+
+  .solutions-diagram.is-active .solution-title {
+    font-size: 1rem;
+  }
+
+  .solutions-diagram.is-active .solution-subtitle {
+    margin: 4px 0 12px;
+    font-size: 0.85rem;
+  }
+
+  .solutions-diagram.is-active .solution-description {
+    font-size: 0.76rem;
+    line-height: 1.3;
   }
 }
 
