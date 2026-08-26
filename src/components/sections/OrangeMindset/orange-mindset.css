@@ -693,3 +693,41 @@
     margin-top: 35px;
   }
 }
+
+@media (max-height: 750px) {
+  .om-panel {
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .om-circle {
+    width: 380px;
+  }
+
+  .om-copy {
+    font-size: 1.6rem;
+    line-height: 1.3;
+  }
+
+  .om-index {
+    top: var(--space-3);
+  }
+
+  .om-divider {
+    bottom: var(--space-3);
+  }
+}
+
+@media (max-height: 600px) {
+  .om-circle {
+    width: 260px;
+  }
+
+  .om-copy {
+    font-size: 1.25rem;
+  }
+
+  .om-content {
+    gap: var(--space-3);
+  }
+}

@@ -686,7 +686,7 @@
   .solutions-intro {
     width: 100%;
     margin: 0;
-    padding-left: 30px;
+    padding-left: 40px;
     transform: none;
   }
 
@@ -823,6 +823,16 @@
     margin-top: 28px;
   }
 
+  /* Dots del carrusel en segunda vista */
+  .solutions.is-active .solutions-dot {
+    border-color: var(--color-bg);
+    background: transparent;
+  }
+
+  .solutions.is-active .solutions-dot.is-active {
+    background: var(--color-bg);
+  }
+
   /* =========================================
      ESTADO SOLUCIÓN ACTIVA
      ========================================= */
@@ -851,7 +861,7 @@
   .solutions.is-active .solution-card {
     left: 53%;
     top: auto;
-    bottom: 25%;
+    bottom: 35%;
     transform: translateX(-50%);
     width: min(74vw, 280px);
     text-align: center;
@@ -878,7 +888,7 @@
   }
 
   .solutions-intro {
-    padding-left: 26px;
+    padding-left: 35px;
   }
 
   .solutions-intro p {

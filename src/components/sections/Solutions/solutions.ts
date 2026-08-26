@@ -1050,6 +1050,7 @@ function initSolutions() {
     if (background) {
       background.style.backgroundImage =
         `url("${solution.background.src}")`;
+      background.dataset.solution = solution.id;
     }
 
     if (title) {

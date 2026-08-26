@@ -296,7 +296,43 @@
     display: none; 
   }
   .solutions-background{
+     background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center;
+  }
+  /* Influencer */
+  .solutions-background[data-solution="influencer"] {
     background-position: 90% center;
+  }
+
+  /* Total Promotion */
+  .solutions-background[data-solution="total-promotion"] {
+    background-position: 60% center;
+  }
+
+  /* Shopper Connections */
+  .solutions-background[data-solution="shopper-connections"] {
+    background-position: 80% center;
+  }
+
+  /* Innovation Lab */
+  .solutions-background[data-solution="innovation-lab"] {
+    background-position: 60% center;
+  }
+
+  /* Advertising */
+  .solutions-background[data-solution="advertising"] {
+    background-position: 50% center;
+  }
+
+  /* Experience Marketing */
+  .solutions-background[data-solution="experience-marketing"] {
+    background-position: 80% center;
+  }
+
+  /* Diseño Estratégico */
+  .solutions-background[data-solution="strategic-design"] {
+    background-position: 75% center;
   }
 }
 
@@ -310,7 +346,43 @@
   }
 
   .solutions-background{
-    background-position: 80% center;
+     background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center;
+  }
+  /* Influencer */
+  .solutions-background[data-solution="influencer"] {
+    background-position: 85% center;
+  }
+
+  /* Total Promotion */
+  .solutions-background[data-solution="total-promotion"] {
+    background-position: 54% center;
+  }
+
+  /* Shopper Connections */
+  .solutions-background[data-solution="shopper-connections"] {
+    background-position: 64% center;
+  }
+
+  /* Innovation Lab */
+  .solutions-background[data-solution="innovation-lab"] {
+    background-position: 58% center;
+  }
+
+  /* Advertising */
+  .solutions-background[data-solution="advertising"] {
+    background-position:46% center;
+  }
+
+  /* Experience Marketing */
+  .solutions-background[data-solution="experience-marketing"] {
+    background-position:74% center;
+  }
+
+  /* Diseño Estratégico */
+  .solutions-background[data-solution="strategic-design"] {
+    background-position: 70% center;
   }
 }
 
