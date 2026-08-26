@@ -325,7 +325,8 @@
 /* Puntos */
 
 .solutions-diagram.is-active .solution-dot {
-  background: var(--color-primary);
+  background: var(--color-bg);
+  border: 2px solid var(--color-primary);
 }
 
 .solutions-diagram.is-active .solution-node.is-selected .solution-dot {
