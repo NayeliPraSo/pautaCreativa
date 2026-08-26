@@ -1,4 +1,11 @@
-import influencerBg from "../../../assets/images/solutions/bg_interior01.avif"; // Imagen de fondo para cada solucion influencerBg (de momento es la misma imagen para todas, pero se puede cambiar en el futuro)
+/*import influencerBg from "../../../assets/images/solutions/bg_interior01.avif"; Imagen de fondo para cada solucion influencerBg (de momento es la misma imagen para todas, pero se puede cambiar en el futuro)*/
+import influencerBg from "../../../assets/images/solutions/INFLUENCER.avif";
+import totalPromotionBg from "../../../assets/images/solutions/total-promotion.avif";
+import shopperBg from "../../../assets/images/solutions/SHOPPER.avif";
+import innovationBg from "../../../assets/images/solutions/FONDO.avif";
+import advertisingBg from "../../../assets/images/solutions/ADVERTISING.avif";
+import experienceBg from "../../../assets/images/solutions/EXPERIENCIE.avif";
+import strategicBg from "../../../assets/images/solutions/DISENO.avif";
 
 import influencerIcon from "../../../assets/icons/solutions/icon-influencer.svg"
 import totalIcon from "../../../assets/icons/solutions/icon-promotion.svg"
@@ -63,7 +70,7 @@ export const solutions: Solution[] = [
       "Promotion",
     ],
 
-    background: influencerBg,
+    background: totalPromotionBg,
 
     icon:totalIcon,
 
@@ -84,7 +91,7 @@ export const solutions: Solution[] = [
       "Connections",
     ],
 
-    background: influencerBg,
+    background: shopperBg,
 
     icon:shopperIcon,
 
@@ -105,7 +112,7 @@ export const solutions: Solution[] = [
       "Lab",
     ],
 
-    background: influencerBg,
+    background: innovationBg,
 
     icon:innovationIcon,
 
@@ -125,7 +132,7 @@ export const solutions: Solution[] = [
       "Advertising",
     ],
 
-    background: influencerBg,
+    background: advertisingBg,
 
     icon:advertisingIcon,
 
@@ -146,7 +153,7 @@ export const solutions: Solution[] = [
       "Marketing",
     ],
 
-    background: influencerBg,
+    background: experienceBg,
 
     icon:experienceIcon,
 
@@ -167,7 +174,7 @@ export const solutions: Solution[] = [
       "Estratégico",
     ],
 
-    background: influencerBg,
+    background: strategicBg,
 
     icon:strategicIcon,
 
