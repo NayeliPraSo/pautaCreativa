@@ -379,87 +379,215 @@
 }
 
 @media (max-width: 1440px) {
-  .solutions-container {
-    width: calc(100% - 100px);
+  .solutions-diagram {
+    width: 620px;
   }
 
-  .solutions-layout {
-    grid-template-columns: 30% 1fr;
-    gap: 30px;
+  .solutions-diagram-title {
+    font-size: 50px;
   }
 
-  .solutions-intro {
-    margin: 0;
-    padding-left: 36px;
-    transform: translateY(5px);
+  .solution-dot {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
   }
 
-  .solutions-intro p {
-    max-width: 340px;
-    font-size: 1.5rem;
-    line-height: 1.4;
+  .solution-label strong {
+    font-size: 27px;
   }
 
-  .solutions-content {
-    margin: 0;
-    transform: translateY(-30px);
+  .solution-label span {
+    font-size: 23px;
   }
 
+  /* Acercamos ligeramente los nodos laterales */
+  .solution-node-total-promotion {
+    left: 85%;
+  }
+
+  .solution-node-shopper-connections {
+    left: 93%;
+  }
+
+  .solution-node-strategic-design {
+    left: -15%;
+  }
 }
 
 @media (max-width: 1200px) {
-  .solutions-container {
-    width: calc(100% - 80px);
+  .solutions-diagram {
+    width: 560px;
   }
 
-  .solutions-layout {
-    grid-template-columns: 32% 1fr;
-    gap: 24px;
+  .solutions-diagram-title {
+    font-size: 44px;
   }
 
-  .solutions-intro {
-    margin: 0;
-    padding-left: 32px;
-    transform: translateY(0);
+  .solution-dot {
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
   }
 
-  .solutions-intro p {
-    max-width: 300px;
-    font-size: 1.35rem;
-    line-height: 1.4;
+  .solution-label strong {
+    font-size: 23px;
   }
 
-  .solutions-content {
-    margin: 0;
-    transform: translateY(-25px);
+  .solution-label span {
+    font-size: 20px;
+  }
+
+  /* Influencer */
+  .solution-node-influencer {
+    top: -1%;
+  }
+
+  /* Total Promotion */
+  .solution-node-total-promotion {
+    top: 24%;
+    left: 85%;
+  }
+
+  .solution-node-total-promotion .solution-label {
+    margin-left: 10px;
+  }
+
+  /* Shopper Connections */
+  .solution-node-shopper-connections {
+    top: 60%;
+    left: 93%;
+  }
+
+  .solution-node-shopper-connections .solution-label {
+    margin-left: 10px;
+  }
+
+  /* Innovation */
+  .solution-node-innovation-lab {
+    top: 68%;
+    left: 46%;
+  }
+
+  .solution-node-innovation-lab .solution-label {
+    margin-top: 16px;
+    margin-left: 8px;
+  }
+
+  /* Advertising */
+  .solution-node-advertising {
+    top: 95%;
+  }
+
+  /* Experience */
+  .solution-node-experience-marketing {
+    top: 91%;
+    left: 21%;
+  }
+
+  /* Diseño */
+  .solution-node-strategic-design {
+    top: 63%;
+    left: -14%;
+  }
+
+  .solution-node-strategic-design .solution-label {
+    margin-right: 10px;
   }
 }
 
 @media (max-width: 992px) {
-  .solutions-container {
-    width: calc(100% - 48px);
+  .solutions-diagram {
+    width: 500px;
   }
 
-  .solutions-layout {
-    grid-template-columns: 34% 1fr;
-    gap: 20px;
+  .solutions-diagram-title {
+    font-size: 38px;
   }
 
-  .solutions-intro {
-    margin: 0;
-    padding-left: 28px;
-    transform: translateY(0);
+  .solution-dot {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
   }
 
-  .solutions-intro p {
-    max-width: 260px;
-    font-size: 1.15rem;
-    line-height: 1.4;
+  .solution-label strong {
+    font-size: 19px;
   }
 
-  .solutions-content {
-    margin: 0;
-    transform: translateY(-20px);
+  .solution-label span {
+    font-size: 17px;
+  }
+
+  /* Influencer */
+  .solution-node-influencer {
+    top: 0;
+    left: 50%;
+  }
+
+  .solution-node-influencer .solution-label {
+    margin-bottom: 7px;
+  }
+
+  /* Total Promotion */
+  .solution-node-total-promotion {
+    top: 24%;
+    left: 86%;
+  }
+
+  .solution-node-total-promotion .solution-label {
+    margin-left: 8px;
+  }
+
+  /* Shopper Connections */
+  .solution-node-shopper-connections {
+    top: 60%;
+    left: 94%;
+  }
+
+  .solution-node-shopper-connections .solution-label {
+    margin-left: 8px;
+  }
+
+  /* Innovation Lab */
+  .solution-node-innovation-lab {
+    top: 67%;
+    left: 48%;
+  }
+
+  .solution-node-innovation-lab .solution-label {
+    margin-top: 17px;
+    margin-left: 8px;
+  }
+
+  /* Advertising */
+  .solution-node-advertising {
+    top: 95%;
+    left: 59%;
+  }
+
+  .solution-node-advertising .solution-label {
+    margin-top: 6px;
+  }
+
+  /* Experience Marketing */
+  .solution-node-experience-marketing {
+    top: 91%;
+    left: 21%;
+  }
+
+  .solution-node-experience-marketing .solution-label {
+    margin-top: 6px;
+  }
+
+  /* Diseño Estratégico */
+  .solution-node-strategic-design {
+    top: 63%;
+    left: -13%;
+  }
+
+  .solution-node-strategic-design .solution-label {
+    margin-right: 8px;
   }
 }
 
