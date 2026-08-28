@@ -23,9 +23,7 @@
   background-repeat: no-repeat;
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.5s ease,
-    visibility 0.5s ease;
+  transition: visibility 0.5s ease;
   z-index: 0;
 }
 

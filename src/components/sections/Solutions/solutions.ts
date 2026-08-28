@@ -6,7 +6,10 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { solutions, solutionsById } from "./solutions.data";
+import {
+  solutions,
+  solutionsById,
+} from "./solutions.data";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,43 +32,69 @@ let isTouchActive = false;
 
 let swipeListenersBound = false;
 
-let resizeTimeout: ReturnType<typeof setTimeout>;
+let resizeTimeout:
+  ReturnType<typeof setTimeout>;
 
-let cleanupCurrentPage: (() => void) | null = null;
+let cleanupCurrentPage:
+  (() => void) | null = null;
 
-let activeDotTween: gsap.core.Tween | null = null;
-let activeLabelTween: gsap.core.Tween | null = null;
+let activeDotTween:
+  gsap.core.Tween | null = null;
+
+let activeLabelTween:
+  gsap.core.Tween | null = null;
+
+/*
+ * Transición actual entre fondos.
+ */
+let backgroundTransitionTimeline:
+  gsap.core.Timeline | null = null;
 
 /* ============================================================
    MÁQUINA DE ESCRIBIR
    ============================================================ */
 
-function splitTextIntoLetters(element: HTMLElement) {
+function splitTextIntoLetters(
+  element: HTMLElement,
+) {
   const letters: HTMLSpanElement[] = [];
+
   const textNodes: Text[] = [];
 
-  const walker = document.createTreeWalker(
-    element,
-    NodeFilter.SHOW_TEXT,
-  );
+  const walker =
+    document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+    );
 
   let node: Node | null;
 
-  while ((node = walker.nextNode())) {
+  while (
+    (node = walker.nextNode())
+  ) {
     textNodes.push(node as Text);
   }
 
   textNodes.forEach((textNode) => {
-    const text = textNode.textContent ?? "";
-    const fragment = document.createDocumentFragment();
+    const text =
+      textNode.textContent ?? "";
+
+    const fragment =
+      document.createDocumentFragment();
 
     [...text].forEach((character) => {
-      const span = document.createElement("span");
+      const span =
+        document.createElement("span");
 
-      span.classList.add("solutions-letter");
-      span.textContent = character;
+      span.classList.add(
+        "solutions-letter",
+      );
+
+      span.textContent =
+        character;
 
       fragment.appendChild(span);
+
       letters.push(span);
     });
 
@@ -87,16 +116,24 @@ function initEntryAnimation(
   nodes: HTMLElement[],
 ) {
   const index =
-    section.querySelector<HTMLElement>(".solutions-index");
+    section.querySelector<HTMLElement>(
+      ".solutions-index",
+    );
 
   const intro =
-    section.querySelector<HTMLElement>(".solutions-intro");
+    section.querySelector<HTMLElement>(
+      ".solutions-intro",
+    );
 
   const introText =
-    section.querySelector<HTMLElement>(".solutions-intro p");
+    section.querySelector<HTMLElement>(
+      ".solutions-intro p",
+    );
 
   const plus =
-    section.querySelector<HTMLElement>(".solutions-plus");
+    section.querySelector<HTMLElement>(
+      ".solutions-plus",
+    );
 
   const diagramCircle =
     section.querySelector<HTMLElement>(
@@ -109,24 +146,35 @@ function initEntryAnimation(
     );
 
   const nodeDots = Array.from(
-    section.querySelectorAll<HTMLElement>(".solution-dot"),
+    section.querySelectorAll<HTMLElement>(
+      ".solution-dot",
+    ),
   );
 
   const nodeLabels = Array.from(
-    section.querySelectorAll<HTMLElement>(".solution-label"),
+    section.querySelectorAll<HTMLElement>(
+      ".solution-label",
+    ),
   );
 
   const scroll =
-    section.querySelector<HTMLElement>(".solutions-scroll");
+    section.querySelector<HTMLElement>(
+      ".solutions-scroll",
+    );
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  if (prefersReducedMotion) return;
+  if (prefersReducedMotion) {
+    return;
+  }
 
   ScrollTrigger
-    .getById("solutions-entry-animation")
+    .getById(
+      "solutions-entry-animation",
+    )
     ?.kill();
 
   gsap.killTweensOf([
@@ -145,10 +193,14 @@ function initEntryAnimation(
      PREPARAR TEXTO
      ========================================= */
 
-  let introLetters: HTMLElement[] = [];
+  let introLetters:
+    HTMLElement[] = [];
 
   if (introText) {
-    if (introText.dataset.split === "true") {
+    if (
+      introText.dataset.split ===
+      "true"
+    ) {
       introLetters = Array.from(
         introText.querySelectorAll<HTMLElement>(
           ".solutions-letter",
@@ -156,9 +208,12 @@ function initEntryAnimation(
       );
     } else {
       introLetters =
-        splitTextIntoLetters(introText);
+        splitTextIntoLetters(
+          introText,
+        );
 
-      introText.dataset.split = "true";
+      introText.dataset.split =
+        "true";
     }
   }
 
@@ -187,7 +242,8 @@ function initEntryAnimation(
     gsap.set(diagramCircle, {
       opacity: 0,
       scale: 0.88,
-      transformOrigin: "center center",
+      transformOrigin:
+        "center center",
     });
   }
 
@@ -195,14 +251,16 @@ function initEntryAnimation(
     gsap.set(diagramTitle, {
       opacity: 0,
       scale: 0.75,
-      transformOrigin: "center center",
+      transformOrigin:
+        "center center",
     });
   }
 
   gsap.set(nodeDots, {
     opacity: 0,
     scale: 0,
-    transformOrigin: "center center",
+    transformOrigin:
+      "center center",
   });
 
   gsap.set(nodeLabels, {
@@ -221,36 +279,54 @@ function initEntryAnimation(
      TIMELINE
      ========================================= */
 
-  const timeline = gsap.timeline({
-    scrollTrigger: {
-      id: "solutions-entry-animation",
-      trigger: section,
-      start: "top 68%",
-      once: true,
-    },
-  });
+  const timeline =
+    gsap.timeline({
+      scrollTrigger: {
+        id:
+          "solutions-entry-animation",
+
+        trigger: section,
+
+        start: "top 68%",
+
+        once: true,
+      },
+    });
+
+  /* Índice */
 
   if (index) {
     timeline.to(index, {
       opacity: 1,
       y: 0,
+
       duration: 0.5,
+
       ease: "power2.out",
     });
   }
 
-  if (introLetters.length > 0) {
+  /* Texto máquina de escribir */
+
+  if (
+    introLetters.length > 0
+  ) {
     timeline.to(
       introLetters,
       {
         opacity: 1,
+
         duration: 0.01,
+
         stagger: 0.025,
+
         ease: "none",
       },
       "-=0.15",
     );
   }
+
+  /* Círculo */
 
   if (diagramCircle) {
     timeline.to(
@@ -258,13 +334,19 @@ function initEntryAnimation(
       {
         opacity: 1,
         scale: 1,
+
         duration: 1.15,
+
         ease: "power3.out",
-        clearProps: "opacity,scale",
+
+        clearProps:
+          "opacity,scale",
       },
       "-=0.35",
     );
   }
+
+  /* Título central */
 
   if (diagramTitle) {
     timeline.to(
@@ -272,39 +354,61 @@ function initEntryAnimation(
       {
         opacity: 1,
         scale: 1,
+
         duration: 0.65,
-        ease: "back.out(1.5)",
-        clearProps: "opacity,scale",
+
+        ease:
+          "back.out(1.5)",
+
+        clearProps:
+          "opacity,scale",
       },
       "-=0.5",
     );
   }
+
+  /* Dots */
 
   timeline.to(
     nodeDots,
     {
       opacity: 1,
       scale: 1,
+
       duration: 0.4,
+
       stagger: 0.08,
-      ease: "back.out(1.8)",
-      clearProps: "opacity,scale",
+
+      ease:
+        "back.out(1.8)",
+
+      clearProps:
+        "opacity,scale",
     },
     "-=0.2",
   );
+
+  /* Labels */
 
   timeline.to(
     nodeLabels,
     {
       opacity: 1,
       y: 0,
+
       duration: 0.4,
+
       stagger: 0.08,
+
       ease: "power2.out",
-      clearProps: "opacity,transform",
+
+      clearProps:
+        "opacity,transform",
     },
     "-=0.45",
   );
+
+  /* Scroll */
 
   if (scroll) {
     timeline.to(
@@ -312,12 +416,16 @@ function initEntryAnimation(
       {
         opacity: 1,
         y: 0,
+
         duration: 0.45,
+
         ease: "power2.out",
       },
       "-=0.1",
     );
   }
+
+  /* Plus permanente */
 
   if (plus) {
     timeline.call(() => {
@@ -326,11 +434,17 @@ function initEntryAnimation(
       gsap.to(plus, {
         scale: 1.35,
         y: -5,
+
         duration: 0.9,
+
         ease: "sine.inOut",
+
         repeat: -1,
+
         yoyo: true,
-        transformOrigin: "50% 50%",
+
+        transformOrigin:
+          "50% 50%",
       });
     });
   }
@@ -340,17 +454,27 @@ function initEntryAnimation(
    HOVER DEL PLUS
    ============================================================ */
 
-function initPlusHover(section: HTMLElement) {
+function initPlusHover(
+  section: HTMLElement,
+) {
   const plus =
-    section.querySelector<HTMLElement>(".solutions-plus");
+    section.querySelector<HTMLElement>(
+      ".solutions-plus",
+    );
 
-  if (!plus) return () => {};
+  if (!plus) {
+    return () => {};
+  }
 
   const onMouseEnter = () => {
     gsap.to(plus, {
       rotation: "+=180",
+
       duration: 0.45,
-      ease: "back.out(1.7)",
+
+      ease:
+        "back.out(1.7)",
+
       overwrite: "auto",
     });
   };
@@ -385,22 +509,30 @@ function initDiagramBreathing(
       ".solutions-diagram-title",
     );
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  const tweens: gsap.core.Tween[] = [];
+  const tweens:
+    gsap.core.Tween[] = [];
 
   if (!prefersReducedMotion) {
     if (circle) {
       tweens.push(
         gsap.to(circle, {
           scale: 1.008,
+
           duration: 2.8,
+
           ease: "sine.inOut",
+
           repeat: -1,
+
           yoyo: true,
-          transformOrigin: "center center",
+
+          transformOrigin:
+            "center center",
         }),
       );
     }
@@ -409,11 +541,17 @@ function initDiagramBreathing(
       tweens.push(
         gsap.to(title, {
           scale: 1.025,
+
           duration: 2.8,
+
           ease: "sine.inOut",
+
           repeat: -1,
+
           yoyo: true,
-          transformOrigin: "center center",
+
+          transformOrigin:
+            "center center",
         }),
       );
     }
@@ -421,31 +559,39 @@ function initDiagramBreathing(
 
   return {
     play() {
-      tweens.forEach((tween) => {
-        tween.play();
-      });
+      tweens.forEach(
+        (tween) => {
+          tween.play();
+        },
+      );
     },
 
     pause() {
-      tweens.forEach((tween) => {
-        tween.pause();
-      });
+      tweens.forEach(
+        (tween) => {
+          tween.pause();
+        },
+      );
     },
 
     kill() {
-      tweens.forEach((tween) => {
-        tween.kill();
-      });
+      tweens.forEach(
+        (tween) => {
+          tween.kill();
+        },
+      );
 
       if (circle) {
         gsap.set(circle, {
-          clearProps: "transform",
+          clearProps:
+            "transform",
         });
       }
 
       if (title) {
         gsap.set(title, {
-          clearProps: "transform",
+          clearProps:
+            "transform",
         });
       }
     },
@@ -464,9 +610,10 @@ function initOrangeBreathing(
       ".solutions-diagram-orange",
     );
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
   if (!orange) {
     return {
@@ -476,19 +623,29 @@ function initOrangeBreathing(
     };
   }
 
-  const tween = gsap.to(orange, {
-    scale: 1.012,
-    duration: 2.6,
-    ease: "sine.inOut",
-    repeat: -1,
-    yoyo: true,
-    paused: true,
-    transformOrigin: "center center",
-  });
+  const tween =
+    gsap.to(orange, {
+      scale: 1.012,
+
+      duration: 2.6,
+
+      ease: "sine.inOut",
+
+      repeat: -1,
+
+      yoyo: true,
+
+      paused: true,
+
+      transformOrigin:
+        "center center",
+    });
 
   return {
     play() {
-      if (!prefersReducedMotion) {
+      if (
+        !prefersReducedMotion
+      ) {
         tween.play();
       }
     },
@@ -497,7 +654,8 @@ function initOrangeBreathing(
       tween.pause(0);
 
       gsap.set(orange, {
-        clearProps: "transform",
+        clearProps:
+          "transform",
       });
     },
 
@@ -505,7 +663,8 @@ function initOrangeBreathing(
       tween.kill();
 
       gsap.set(orange, {
-        clearProps: "transform",
+        clearProps:
+          "transform",
       });
     },
   };
@@ -540,59 +699,78 @@ function animateSelectedNode(
       ".solution-label",
     );
 
-  if (!dot || !label) return;
+  if (!dot || !label) {
+    return;
+  }
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  if (prefersReducedMotion) return;
+  if (prefersReducedMotion) {
+    return;
+  }
 
   /*
-   * Quitamos transform inline previo para que
-   * la nueva animación empiece limpia.
+   * Limpiamos transform inline previo.
    */
-  gsap.set([dot, label], {
-    clearProps: "transform",
-  });
 
-  /* =========================================
-     DOT ACTIVO
-     ========================================= */
-
-  activeDotTween = gsap.fromTo(
-    dot,
+  gsap.set(
+    [dot, label],
     {
-      scale: 1.45,
-    },
-    {
-      scale: 1.58,
-      duration: 0.85,
-      ease: "sine.inOut",
-      repeat: -1,
-      yoyo: true,
-      transformOrigin: "center center",
+      clearProps:
+        "transform",
     },
   );
 
-  /* =========================================
-     LABEL ACTIVO
-     ========================================= */
+  /* Dot */
 
-  activeLabelTween = gsap.fromTo(
-    label,
-    {
-      scale: 1,
-    },
-    {
-      scale: 1.04,
-      duration: 0.85,
-      ease: "sine.inOut",
-      repeat: -1,
-      yoyo: true,
-      transformOrigin: "center center",
-    },
-  );
+  activeDotTween =
+    gsap.fromTo(
+      dot,
+      {
+        scale: 1.45,
+      },
+      {
+        scale: 1.58,
+
+        duration: 0.85,
+
+        ease: "sine.inOut",
+
+        repeat: -1,
+
+        yoyo: true,
+
+        transformOrigin:
+          "center center",
+      },
+    );
+
+  /* Label */
+
+  activeLabelTween =
+    gsap.fromTo(
+      label,
+      {
+        scale: 1,
+      },
+      {
+        scale: 1.04,
+
+        duration: 0.85,
+
+        ease: "sine.inOut",
+
+        repeat: -1,
+
+        yoyo: true,
+
+        transformOrigin:
+          "center center",
+      },
+    );
 }
 
 /* ============================================================
@@ -603,9 +781,11 @@ function stopSelectedNodeAnimation(
   section: HTMLElement,
 ) {
   activeDotTween?.kill();
+
   activeLabelTween?.kill();
 
   activeDotTween = null;
+
   activeLabelTween = null;
 
   section
@@ -614,7 +794,8 @@ function stopSelectedNodeAnimation(
     )
     .forEach((element) => {
       gsap.set(element, {
-        clearProps: "transform",
+        clearProps:
+          "transform",
       });
     });
 }
@@ -626,15 +807,19 @@ function stopSelectedNodeAnimation(
 function initNodeAttention(
   nodes: HTMLElement[],
 ) {
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  const timeline = gsap.timeline({
-    repeat: -1,
-    repeatDelay: 1.5,
-    paused: true,
-  });
+  const timeline =
+    gsap.timeline({
+      repeat: -1,
+
+      repeatDelay: 1.5,
+
+      paused: true,
+    });
 
   if (!prefersReducedMotion) {
     nodes.forEach((node) => {
@@ -648,27 +833,38 @@ function initNodeAttention(
           ".solution-label",
         );
 
-      if (!dot || !label) return;
+      if (!dot || !label) {
+        return;
+      }
 
       timeline
         .to(dot, {
           scale: 1.35,
+
           duration: 0.25,
-          ease: "power2.out",
+
+          ease:
+            "power2.out",
         })
 
         .to(dot, {
           scale: 1,
+
           duration: 0.4,
-          ease: "back.out(1.7)",
+
+          ease:
+            "back.out(1.7)",
         })
 
         .to(
           label,
           {
             x: 4,
+
             duration: 0.25,
-            ease: "power2.out",
+
+            ease:
+              "power2.out",
           },
           "<",
         )
@@ -677,21 +873,29 @@ function initNodeAttention(
           label,
           {
             x: 0,
+
             duration: 0.35,
-            ease: "power2.out",
+
+            ease:
+              "power2.out",
           },
           "<0.15",
         )
 
-        .to({}, {
-          duration: 0.12,
-        });
+        .to(
+          {},
+          {
+            duration: 0.12,
+          },
+        );
     });
   }
 
   return {
     play() {
-      if (!prefersReducedMotion) {
+      if (
+        !prefersReducedMotion
+      ) {
         timeline.restart();
       }
     },
@@ -699,61 +903,73 @@ function initNodeAttention(
     pause() {
       timeline.pause(0);
 
-      nodes.forEach((node) => {
-        const dot =
-          node.querySelector<HTMLElement>(
-            ".solution-dot",
-          );
+      nodes.forEach(
+        (node) => {
+          const dot =
+            node.querySelector<HTMLElement>(
+              ".solution-dot",
+            );
 
-        const label =
-          node.querySelector<HTMLElement>(
-            ".solution-label",
-          );
+          const label =
+            node.querySelector<HTMLElement>(
+              ".solution-label",
+            );
 
-        if (dot) {
-          gsap.killTweensOf(dot);
+          if (dot) {
+            gsap.killTweensOf(
+              dot,
+            );
 
-          gsap.set(dot, {
-            clearProps: "transform",
-          });
-        }
+            gsap.set(dot, {
+              clearProps:
+                "transform",
+            });
+          }
 
-        if (label) {
-          gsap.killTweensOf(label);
+          if (label) {
+            gsap.killTweensOf(
+              label,
+            );
 
-          gsap.set(label, {
-            clearProps: "transform",
-          });
-        }
-      });
+            gsap.set(label, {
+              clearProps:
+                "transform",
+            });
+          }
+        },
+      );
     },
 
     kill() {
       timeline.kill();
 
-      nodes.forEach((node) => {
-        const dot =
-          node.querySelector<HTMLElement>(
-            ".solution-dot",
-          );
+      nodes.forEach(
+        (node) => {
+          const dot =
+            node.querySelector<HTMLElement>(
+              ".solution-dot",
+            );
 
-        const label =
-          node.querySelector<HTMLElement>(
-            ".solution-label",
-          );
+          const label =
+            node.querySelector<HTMLElement>(
+              ".solution-label",
+            );
 
-        if (dot) {
-          gsap.set(dot, {
-            clearProps: "transform",
-          });
-        }
+          if (dot) {
+            gsap.set(dot, {
+              clearProps:
+                "transform",
+            });
+          }
 
-        if (label) {
-          gsap.set(label, {
-            clearProps: "transform",
-          });
-        }
-      });
+          if (label) {
+            gsap.set(label, {
+              clearProps:
+                "transform",
+            });
+          }
+        },
+      );
     },
   };
 }
@@ -790,13 +1006,18 @@ function animateSolutionCard(
       "#solution-description",
     );
 
-  if (!cardContent) return;
+  if (!cardContent) {
+    return;
+  }
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  if (prefersReducedMotion) return;
+  if (prefersReducedMotion) {
+    return;
+  }
 
   gsap.killTweensOf([
     cardContent,
@@ -806,7 +1027,10 @@ function animateSolutionCard(
     description,
   ]);
 
-  const timeline = gsap.timeline();
+  const timeline =
+    gsap.timeline();
+
+  /* Card */
 
   timeline.fromTo(
     cardContent,
@@ -817,10 +1041,14 @@ function animateSolutionCard(
     {
       opacity: 1,
       y: 0,
-      duration: 0.45,
+
+      duration: 0.6,
+
       ease: "power2.out",
     },
   );
+
+  /* Icono */
 
   if (icon) {
     timeline.fromTo(
@@ -832,23 +1060,32 @@ function animateSolutionCard(
       {
         opacity: 1,
         scale: 1,
-        duration: 0.45,
-        ease: "back.out(1.7)",
+
+        duration: 0.55,
+
+        ease:
+          "back.out(1.7)",
       },
-      "-=0.3",
+      "-=0.35",
     );
   }
+
+  /* Textos */
 
   const textElements = [
     title,
     subtitle,
     description,
   ].filter(
-    (element): element is HTMLElement =>
+    (
+      element,
+    ): element is HTMLElement =>
       element !== null,
   );
 
-  if (textElements.length > 0) {
+  if (
+    textElements.length > 0
+  ) {
     timeline.fromTo(
       textElements,
       {
@@ -858,13 +1095,260 @@ function animateSolutionCard(
       {
         opacity: 1,
         y: 0,
-        duration: 0.4,
-        stagger: 0.07,
+
+        duration: 0.5,
+
+        stagger: 0.1,
+
         ease: "power2.out",
       },
-      "-=0.25",
+      "-=0.3",
     );
   }
+}
+
+/* ============================================================
+   TRANSICIÓN SUAVE ENTRE FONDOS
+   ============================================================ */
+
+function transitionSolutionBackground(
+  background: HTMLElement,
+  imageSrc: string,
+  solutionId: string,
+) {
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+  /* ==========================================================
+     REDUCED MOTION
+     ========================================================== */
+
+  if (prefersReducedMotion) {
+    background.style.backgroundImage =
+      `url("${imageSrc}")`;
+
+    background.dataset.solution =
+      solutionId;
+
+    gsap.set(background, {
+      opacity: 1,
+    });
+
+    return;
+  }
+
+  /* ==========================================================
+     DETENER TRANSICIÓN ANTERIOR
+     ========================================================== */
+
+  backgroundTransitionTimeline?.kill();
+
+  backgroundTransitionTimeline =
+    null;
+
+  /*
+   * Eliminamos cualquier capa temporal anterior.
+   */
+
+  background
+    .parentElement
+    ?.querySelectorAll(
+      ".solutions-background-transition",
+    )
+    .forEach((element) => {
+      element.remove();
+    });
+
+  /*
+   * Importante:
+   *
+   * Recuperamos opacity 1 antes de tomar
+   * una captura visual del fondo actual.
+   */
+  gsap.set(background, {
+    opacity: 1,
+  });
+
+  const currentBackground =
+    background.style.backgroundImage;
+
+  /* ==========================================================
+     PRIMERA SOLUCIÓN
+     ========================================================== */
+
+  if (
+    !currentBackground ||
+    currentBackground === "none"
+  ) {
+    background.style.backgroundImage =
+      `url("${imageSrc}")`;
+
+    background.dataset.solution =
+      solutionId;
+
+    gsap.fromTo(
+      background,
+      {
+        opacity: 0,
+      },
+      {
+        opacity: 1,
+
+        duration: 1.35,
+
+        ease:
+          "power2.inOut",
+
+        overwrite: true,
+      },
+    );
+
+    return;
+  }
+
+  /* ==========================================================
+     GUARDAMOS EL FONDO ANTERIOR
+     ========================================================== */
+
+  const computed =
+    window.getComputedStyle(
+      background,
+    );
+
+  const previousBackground =
+    document.createElement("div");
+
+  previousBackground.className =
+    "solutions-background-transition";
+
+  /*
+   * Copiamos únicamente las propiedades visuales
+   * necesarias para reproducir exactamente
+   * el fondo anterior.
+   */
+
+  previousBackground.style.position =
+    "absolute";
+
+  previousBackground.style.inset =
+    "0";
+
+  previousBackground.style.pointerEvents =
+    "none";
+
+  previousBackground.style.backgroundImage =
+    computed.backgroundImage;
+
+  previousBackground.style.backgroundSize =
+    computed.backgroundSize;
+
+  previousBackground.style.backgroundPosition =
+    computed.backgroundPosition;
+
+  previousBackground.style.backgroundRepeat =
+    computed.backgroundRepeat;
+
+  previousBackground.style.opacity =
+    "1";
+
+  /*
+   * El fondo real tiene z-index 0.
+   * Esta copia debe quedar justo encima
+   * durante el crossfade, pero debajo
+   * del overlay y del contenido.
+   */
+
+  previousBackground.style.zIndex =
+    "0";
+
+  /*
+   * Lo colocamos después del background real.
+   * Al compartir z-index, el que aparece después
+   * en DOM queda visualmente encima.
+   */
+
+  background.parentElement?.insertBefore(
+    previousBackground,
+    background.nextSibling,
+  );
+
+  /* ==========================================================
+     COLOCAMOS EL NUEVO FONDO
+     ========================================================== */
+
+  background.style.backgroundImage =
+    `url("${imageSrc}")`;
+
+  /*
+   * Cambiamos data-solution después de haber
+   * capturado la posición del fondo anterior.
+   *
+   * Así cada imagen nueva conserva sus
+   * background-position personalizados del CSS.
+   */
+
+  background.dataset.solution =
+    solutionId;
+
+  gsap.set(background, {
+    opacity: 0,
+  });
+
+  /* ==========================================================
+     CROSSFADE
+     ========================================================== */
+
+  backgroundTransitionTimeline =
+    gsap.timeline({
+      onComplete: () => {
+        previousBackground.remove();
+
+        backgroundTransitionTimeline =
+          null;
+
+        gsap.set(background, {
+          opacity: 1,
+        });
+      },
+    });
+
+  /*
+   * El fondo nuevo entra.
+   */
+
+  backgroundTransitionTimeline.to(
+    background,
+    {
+      opacity: 1,
+
+      duration: 1.4,
+
+      ease:
+        "power2.inOut",
+    },
+    0,
+  );
+
+  /*
+   * El anterior desaparece ligeramente
+   * más despacio para evitar sensación
+   * de flash o salto.
+   */
+
+  backgroundTransitionTimeline.to(
+    previousBackground,
+    {
+      opacity: 0,
+
+      duration: 1.55,
+
+      ease:
+        "power2.inOut",
+    },
+    0,
+  );
 }
 
 /* ============================================================
@@ -874,36 +1358,26 @@ function animateSolutionCard(
 function animateActiveView(
   section: HTMLElement,
 ) {
-  const background =
-    section.querySelector<HTMLElement>(
-      "[data-solutions-background]",
-    );
-
   const orange =
     section.querySelector<HTMLElement>(
       ".solutions-diagram-orange",
     );
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  if (prefersReducedMotion) return;
-
-  if (background) {
-    gsap.fromTo(
-      background,
-      {
-        opacity: 0,
-      },
-      {
-        opacity: 1,
-        duration: 0.65,
-        ease: "power2.out",
-        overwrite: "auto",
-      },
-    );
+  if (prefersReducedMotion) {
+    return;
   }
+
+  /*
+   * El fondo ya NO se anima aquí.
+   *
+   * transitionSolutionBackground()
+   * controla exclusivamente el crossfade.
+   */
 
   if (orange) {
     gsap.fromTo(
@@ -915,8 +1389,11 @@ function animateActiveView(
       {
         opacity: 1,
         scale: 1,
-        duration: 0.7,
+
+        duration: 1,
+
         ease: "power3.out",
+
         overwrite: "auto",
       },
     );
@@ -929,6 +1406,7 @@ function animateActiveView(
 
 function initSolutions() {
   cleanupCurrentPage?.();
+
   cleanupCurrentPage = null;
 
   /* =========================================
@@ -940,7 +1418,9 @@ function initSolutions() {
       "#soluciones",
     );
 
-  if (!sectionElement) return;
+  if (!sectionElement) {
+    return;
+  }
 
   const section: HTMLElement =
     sectionElement;
@@ -950,7 +1430,9 @@ function initSolutions() {
       ".solutions-diagram",
     );
 
-  if (!diagramElement) return;
+  if (!diagramElement) {
+    return;
+  }
 
   const diagram: HTMLElement =
     diagramElement;
@@ -1006,52 +1488,75 @@ function initSolutions() {
     initNodeAttention(nodes);
 
   const diagramBreathing =
-    initDiagramBreathing(section);
+    initDiagramBreathing(
+      section,
+    );
 
   const orangeBreathing =
-    initOrangeBreathing(section);
+    initOrangeBreathing(
+      section,
+    );
 
   /*
-   * El diagrama respira en la vista inicial.
+   * Vista inicial:
+   * respira el diagrama.
    */
+
   diagramBreathing.play();
 
   let attentionDelay:
-    gsap.core.Tween | null = null;
+    gsap.core.Tween | null =
+    null;
 
   /* ============================================================
      MOSTRAR SOLUCIÓN
      ============================================================ */
 
-  function showSolution(id: string) {
+  function showSolution(
+    id: string,
+  ) {
     const solution =
       solutionsById[id];
 
-    if (!solution) return;
+    if (!solution) {
+      return;
+    }
+
+    /*
+     * Si cambia de una solución a otra,
+     * el fondo todavía conoce la solución
+     * anterior en este momento.
+     */
 
     activeSolutionId = id;
 
-    /*
-     * Detenemos animaciones de la
-     * vista general.
-     */
+    /* =========================================
+       DETENER VISTA GENERAL
+       ========================================= */
+
     nodeAttention.pause();
+
     diagramBreathing.pause();
 
-    /*
-     * Eliminamos el pulso del nodo anterior.
-     */
-    stopSelectedNodeAnimation(section);
+    stopSelectedNodeAnimation(
+      section,
+    );
 
     /* =========================================
-       ACTUALIZAR DATOS
+       FONDO
        ========================================= */
 
     if (background) {
-      background.style.backgroundImage =
-        `url("${solution.background.src}")`;
-      background.dataset.solution = solution.id;
+      transitionSolutionBackground(
+        background,
+        solution.background.src,
+        solution.id,
+      );
     }
+
+    /* =========================================
+       CONTENIDO DE CARD
+       ========================================= */
 
     if (title) {
       title.textContent =
@@ -1091,7 +1596,8 @@ function initSolutions() {
     nodes.forEach((node) => {
       node.classList.toggle(
         "is-selected",
-        node.dataset.solution === id,
+        node.dataset.solution ===
+          id,
       );
     });
 
@@ -1103,26 +1609,33 @@ function initSolutions() {
     });
 
     /*
-     * En segunda vista respira la naranja.
+     * Segunda vista:
+     * respira la naranja.
      */
+
     orangeBreathing.play();
 
     /*
-     * Esperamos un frame para que las clases
-     * CSS ya estén aplicadas.
+     * Esperamos a que las clases CSS
+     * ya hayan sido aplicadas.
      */
-    requestAnimationFrame(() => {
-      animateActiveView(section);
-      animateSolutionCard(section);
 
-      /*
-       * Dot + label seleccionados pulsan juntos.
-       */
-      animateSelectedNode(
-        section,
-        id,
-      );
-    });
+    requestAnimationFrame(
+      () => {
+        animateActiveView(
+          section,
+        );
+
+        animateSolutionCard(
+          section,
+        );
+
+        animateSelectedNode(
+          section,
+          id,
+        );
+      },
+    );
   }
 
   /* ============================================================
@@ -1143,17 +1656,28 @@ function initSolutions() {
       );
     }
 
-    /*
-     * Detener movimiento del elemento activo.
-     */
     stopSelectedNodeAnimation(
       section,
     );
 
-    /*
-     * Detener naranja.
-     */
     orangeBreathing.pause();
+
+    /* =========================================
+       DETENER TRANSICIÓN DE FONDO
+       ========================================= */
+
+    backgroundTransitionTimeline?.kill();
+
+    backgroundTransitionTimeline =
+      null;
+
+    section
+      .querySelectorAll(
+        ".solutions-background-transition",
+      )
+      .forEach((element) => {
+        element.remove();
+      });
 
     /* =========================================
        QUITAR ESTADO ACTIVO
@@ -1172,8 +1696,19 @@ function initSolutions() {
        ========================================= */
 
     if (background) {
+      gsap.killTweensOf(
+        background,
+      );
+
+      gsap.set(background, {
+        clearProps: "opacity",
+      });
+
       background.style.backgroundImage =
         "";
+
+      delete background.dataset
+        .solution;
     }
 
     if (title) {
@@ -1206,11 +1741,12 @@ function initSolutions() {
       );
     });
 
-    /*
-     * Recuperamos animaciones de
-     * la vista general.
-     */
+    /* =========================================
+       RECUPERAR VISTA GENERAL
+       ========================================= */
+
     diagramBreathing.play();
+
     nodeAttention.play();
   }
 
@@ -1218,26 +1754,32 @@ function initSolutions() {
      CLICK — NODOS
      ============================================================ */
 
-  const nodeHandlers = new Map<
-    HTMLElement,
-    () => void
-  >();
+  const nodeHandlers =
+    new Map<
+      HTMLElement,
+      () => void
+    >();
 
   nodes.forEach((node) => {
     const handler = () => {
       const id =
         node.dataset.solution;
 
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       /*
-       * Click en el mismo nodo activo:
-       * regresar al diagrama.
+       * Si se toca nuevamente
+       * la solución activa,
+       * regresamos al diagrama.
        */
+
       if (
         activeSolutionId === id
       ) {
         hideSolution();
+
         return;
       }
 
@@ -1259,10 +1801,11 @@ function initSolutions() {
      CLICK — DOTS INFERIORES
      ============================================================ */
 
-  const dotHandlers = new Map<
-    HTMLButtonElement,
-    () => void
-  >();
+  const dotHandlers =
+    new Map<
+      HTMLButtonElement,
+      () => void
+    >();
 
   dots.forEach((dot) => {
     const handler = () => {
@@ -1271,10 +1814,12 @@ function initSolutions() {
 
       /*
        * Primer dot =
-       * vista del diagrama.
+       * regresar al diagrama.
        */
+
       if (!id) {
         hideSolution();
+
         return;
       }
 
@@ -1296,7 +1841,8 @@ function initSolutions() {
      MOBILE — SWIPE
      ============================================================ */
 
-  function getCurrentIndex(): number {
+  function getCurrentIndex():
+    number {
     if (!activeSolutionId) {
       return 0;
     }
@@ -1332,11 +1878,14 @@ function initSolutions() {
 
     if (nextIndex === 0) {
       hideSolution();
+
       return;
     }
 
     const nextSolution =
-      solutions[nextIndex - 1];
+      solutions[
+        nextIndex - 1
+      ];
 
     if (nextSolution) {
       showSolution(
@@ -1384,9 +1933,10 @@ function initSolutions() {
       touchStartY;
 
     /*
-     * Movimiento principalmente vertical:
-     * permitir scroll.
+     * Movimiento principalmente
+     * vertical: dejamos hacer scroll.
      */
+
     if (
       Math.abs(deltaX) <
       Math.abs(deltaY)
@@ -1394,9 +1944,6 @@ function initSolutions() {
       return;
     }
 
-    /*
-     * Gesto demasiado pequeño.
-     */
     if (
       Math.abs(deltaX) <
       SWIPE_THRESHOLD
@@ -1405,7 +1952,9 @@ function initSolutions() {
     }
 
     goToRelativeSolution(
-      deltaX < 0 ? 1 : -1,
+      deltaX < 0
+        ? 1
+        : -1,
     );
   }
 
@@ -1414,7 +1963,9 @@ function initSolutions() {
      ============================================================ */
 
   function bindSwipeListeners() {
-    if (swipeListenersBound) {
+    if (
+      swipeListenersBound
+    ) {
       return;
     }
 
@@ -1435,7 +1986,9 @@ function initSolutions() {
   }
 
   function unbindSwipeListeners() {
-    if (!swipeListenersBound) {
+    if (
+      !swipeListenersBound
+    ) {
       return;
     }
 
@@ -1505,10 +2058,11 @@ function initSolutions() {
     );
 
   /*
-   * Después de la animación inicial,
-   * empezamos la llamada de atención
+   * Después de la entrada esperamos
+   * para comenzar la invitación
    * secuencial de los nodos.
    */
+
   attentionDelay =
     gsap.delayedCall(
       4,
@@ -1533,6 +2087,29 @@ function initSolutions() {
       ?.kill();
 
     attentionDelay?.kill();
+
+    backgroundTransitionTimeline?.kill();
+
+    backgroundTransitionTimeline =
+      null;
+
+    section
+      .querySelectorAll(
+        ".solutions-background-transition",
+      )
+      .forEach((element) => {
+        element.remove();
+      });
+
+    if (background) {
+      gsap.killTweensOf(
+        background,
+      );
+
+      gsap.set(background, {
+        clearProps: "opacity",
+      });
+    }
 
     removePlusHover();
 
