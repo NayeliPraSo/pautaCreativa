@@ -7,6 +7,8 @@
 }
 
 .om-slider {
+  position: relative;
+  z-index: 1;
   display: flex;
   width: 200%;
   height: 100%;
@@ -24,18 +26,6 @@
   gap: var(--space-8);
   padding: var(--space-5) var(--space-6);
   color: var(--color-text);
-}
-.om-panel-1 {
-  background-image: url("../../../assets/images/cascara.avif");
-  background-size: 40%;
-  background-position: calc(100% - 140px) center;
-  background-repeat: no-repeat;
-}
-.om-panel-2 {
-  background-image: url("../../../assets/images/cascara.avif");
-  background-size: 65%;
-  background-position: -250px center;
-  background-repeat: no-repeat;
 }
 
 /* Contador "02 / 06 ORANGE MINDSET" */
@@ -215,8 +205,26 @@
   background: var(--color-teal2);
 }
 
+@media (min-width: 769px) {
+  .om-bg-peel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url("../../../assets/images/cascara.avif");
+    background-repeat: no-repeat;
+    background-size: auto 70%;
+    --peel-x: 78%;
+    background-position: var(--peel-x) center;
+    pointer-events: none;
+  }
+}
+
 /* ≤ 1440px — Desktop */
 @media (max-width: 1440px) {
+  .om-bg-peel {
+    background-size: auto 62%;
+  }
+
   .om-content {
     gap: var(--space-4);
     margin-left: 30px;
@@ -243,6 +251,10 @@
 
 /* ≤ 1200px — Tablet landscape */
 @media (max-width: 1200px) {
+  .om-bg-peel {
+    background-size: auto 55%;
+  }
+
   .om-panel {
     padding: var(--space-7) var(--space-5);
   }
@@ -275,6 +287,10 @@
 
 /* ≤ 992px — Tablet */
 @media (max-width: 992px) {
+  .om-bg-peel {
+    background-size: auto 48%;
+  }
+
   .om-panel-1 {
     background-size: 42%;
     background-position: calc(100% - 60px) center;

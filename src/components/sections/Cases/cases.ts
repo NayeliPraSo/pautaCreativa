@@ -4,9 +4,6 @@
  */
 
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
    ELEMENTOS BASE
@@ -198,14 +195,7 @@ function initCasesIntroAnimation(): void {
      ========================================================== */
 
   const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: casesSection,
-
-      start: "top 72%",
-
-      toggleActions:
-        "play none none reverse",
-    },
+    paused: true,
   });
 
   /* ----------------------------------------------------------
@@ -326,19 +316,63 @@ function initCasesIntroAnimation(): void {
 
   /* ==========================================================
      PULSO DEL PLUS
+     Empieza SOLO cuando termina la entrada.
      ========================================================== */
 
   if (plus) {
-    gsap.to(plus, {
-      scale: 1.15,
-      duration: 1.2,
-      ease: "sine.inOut",
-      repeat: -1,
-      yoyo: true,
-      delay: 2,
-      transformOrigin: "center center",
+    tl.call(() => {
+      gsap.killTweensOf(plus);
+
+      gsap.to(plus, {
+        scale: 1.15,
+        duration: 1.2,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        transformOrigin: "center center",
+      });
     });
   }
+
+  /* ==========================================================
+     DISPARO REAL DE ENTRADA
+
+     No usamos ScrollTrigger aquí porque Orange Mindset tiene
+     un pin horizontal que puede alterar el cálculo de las
+     posiciones de las secciones posteriores.
+
+     IntersectionObserver espera a que Cases esté físicamente
+     dentro del viewport.
+     ========================================================== */
+
+  let hasPlayed = false;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0];
+
+      if (
+        hasPlayed ||
+        !entry?.isIntersecting ||
+        entry.intersectionRatio < 0.1
+      ) {
+        return;
+      }
+
+      hasPlayed = true;
+
+      observer.disconnect();
+
+      tl.play(0);
+    },
+    {
+      root: null,
+      threshold: 0.1,
+      rootMargin: "0px 0px -20% 0px",
+    }
+  );
+
+  observer.observe(casesSection);
 }
 
 /* ============================================================
@@ -622,4 +656,3 @@ if (grid && dots.length) {
 
 initCasesIntroAnimation();
 
-ScrollTrigger.refresh();
