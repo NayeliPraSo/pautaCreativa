@@ -352,6 +352,26 @@
   transform: translateY(-50%);
 }
 
+/* --------------------------------------------------------------------------
+   Movimiento ambiental del punto teal
+   Se activa desde recognition.ts cuando termina la entrada del bloque.
+   -------------------------------------------------------------------------- */
+
+@keyframes recognition-dot-drift {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  50% {
+    transform: translateY(-50%) translateX(-22px);
+  }
+}
+
+.recognition__line--section.is-alive::before {
+  animation: recognition-dot-drift 2.8s ease-in-out infinite;
+}
+
 @media (max-width: 1440px) {
   .recognition__clients-content {
     max-width: 1200px;
