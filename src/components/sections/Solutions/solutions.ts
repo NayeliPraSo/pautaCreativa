@@ -113,8 +113,8 @@ function splitTextIntoLetters(
 
 function initEntryAnimation(
   section: HTMLElement,
-  nodes: HTMLElement[],
   onComplete?: () => void,
+  onReset?: () => void,
 ) {
   const index =
     section.querySelector<HTMLElement>(
@@ -172,18 +172,6 @@ function initEntryAnimation(
     onComplete?.();
     return () => {};
   }
-
-  gsap.killTweensOf([
-    index,
-    intro,
-    plus,
-    diagramCircle,
-    diagramTitle,
-    ...nodes,
-    ...nodeDots,
-    ...nodeLabels,
-    scroll,
-  ]);
 
   /* =========================================
      PREPARAR TEXTO
@@ -418,11 +406,14 @@ function initEntryAnimation(
 
   /* Plus permanente */
 
+  let plusPulse:
+    gsap.core.Tween | null = null;
+
   if (plus) {
     timeline.call(() => {
-      gsap.killTweensOf(plus);
+      plusPulse?.kill();
 
-      gsap.to(plus, {
+      plusPulse = gsap.to(plus, {
         scale: 1.35,
         y: -5,
 
@@ -441,27 +432,11 @@ function initEntryAnimation(
   }
 
   /* =========================================
-     ACTIVACIÓN REAL POR VISIBILIDAD
-     =========================================
-
-     Solutions está inmediatamente después de Orange Mindset.
-     Mientras Orange Mindset está fijada con pin, Solutions puede
-     llegar a intersectar geométricamente el viewport por debajo
-     del panel fijado. Por eso IntersectionObserver por sí solo no
-     basta en esta sección.
-
-     Para reproducir la entrada exigimos DOS condiciones:
-
-     1. Orange Mindset ya terminó completamente su pin horizontal.
-     2. Solutions no solo está geométricamente dentro del viewport,
-        sino que además está realmente pintada por encima en pantalla.
-
-     La segunda condición usa elementFromPoint(), porque un elemento
-     pinned puede cubrir Solutions aunque IntersectionObserver y
-     getBoundingClientRect() ya la consideren visible.
-  */
+     ACTIVACIÓN REAL + REPLAY
+     ========================================= */
 
   let hasPlayed = false;
+  let isArmedForReplay = true;
   let checkFrame = 0;
 
   const isOrangeMindsetFinished = () => {
@@ -470,10 +445,6 @@ function initEntryAnimation(
         "orange-mindset-pin",
       );
 
-    /*
-     * En móvil no existe el pin horizontal.
-     * Si el trigger no existe, no necesitamos bloquear Solutions.
-     */
     if (!orangeMindsetTrigger) {
       return true;
     }
@@ -488,10 +459,6 @@ function initEntryAnimation(
     const rect =
       section.getBoundingClientRect();
 
-    /*
-     * Primero comprobamos que Solutions haya entrado
-     * suficientemente en el viewport.
-     */
     const activationLine =
       window.innerHeight * 0.82;
 
@@ -502,17 +469,6 @@ function initEntryAnimation(
       return false;
     }
 
-    /*
-     * IMPORTANTE:
-     * getBoundingClientRect() e IntersectionObserver pueden decir
-     * que Solutions está visible aunque Orange Mindset siga
-     * dibujándose encima debido al pin.
-     *
-     * elementFromPoint() nos permite comprobar qué sección está
-     * realmente pintada encima en el viewport. Si en los puntos
-     * donde debería verse Solutions seguimos tocando elementos
-     * de Orange Mindset, todavía NO iniciamos la entrada.
-     */
     const sampleY = Math.min(
       Math.max(rect.top + 24, 0),
       window.innerHeight - 1,
@@ -533,17 +489,203 @@ function initEntryAnimation(
 
       return Boolean(
         topElement &&
-        (
-          topElement === section ||
-          section.contains(
-            topElement,
-          )
-        )
+          (
+            topElement === section ||
+            section.contains(
+              topElement,
+            )
+          ),
       );
     });
   };
 
-  const cleanupActivationListeners = () => {
+  const setEntryInitialState = () => {
+    if (index) {
+      gsap.set(index, {
+        opacity: 0,
+        y: 15,
+      });
+    }
+
+    if (intro) {
+      gsap.set(intro, {
+        opacity: 1,
+      });
+    }
+
+    gsap.set(introLetters, {
+      opacity: 0,
+    });
+
+    if (diagramCircle) {
+      gsap.set(diagramCircle, {
+        opacity: 0,
+        scale: 0.88,
+        transformOrigin:
+          "center center",
+      });
+    }
+
+    if (diagramTitle) {
+      gsap.set(diagramTitle, {
+        opacity: 0,
+        scale: 0.75,
+        transformOrigin:
+          "center center",
+      });
+    }
+
+    gsap.set(nodeDots, {
+      opacity: 0,
+      scale: 0,
+      transformOrigin:
+        "center center",
+    });
+
+    gsap.set(nodeLabels, {
+      opacity: 0,
+      y: 8,
+    });
+
+    if (scroll) {
+      gsap.set(scroll, {
+        opacity: 0,
+        y: 10,
+      });
+    }
+
+    if (plus) {
+      gsap.set(plus, {
+        scale: 1,
+        y: 0,
+      });
+    }
+  };
+
+  const playEntrance = () => {
+    if (!isArmedForReplay) {
+      return;
+    }
+
+    if (
+      !isOrangeMindsetFinished() ||
+      !isSolutionsActuallyVisible()
+    ) {
+      return;
+    }
+
+    isArmedForReplay = false;
+    hasPlayed = true;
+
+    /*
+     * Si una solución está abierta,
+     * conservamos exactamente esa vista.
+     */
+    if (activeSolutionId) {
+      return;
+    }
+
+    plusPulse?.kill();
+    plusPulse = null;
+
+    setEntryInitialState();
+    timeline.restart();
+  };
+
+  const resetEntrance = () => {
+    if (!hasPlayed || isArmedForReplay) {
+      return;
+    }
+
+    isArmedForReplay = true;
+    hasPlayed = false;
+
+    onReset?.();
+
+    plusPulse?.kill();
+    plusPulse = null;
+
+    timeline.pause(0);
+
+    /*
+     * Una solución seleccionada no se borra
+     * ni se devuelve al diagrama general.
+     */
+    if (activeSolutionId) {
+      return;
+    }
+
+    setEntryInitialState();
+  };
+
+  const checkPosition = () => {
+    const rect =
+      section.getBoundingClientRect();
+
+    const viewportHeight =
+      window.innerHeight;
+
+    /* Hacia Cases */
+    const leftThroughTop =
+      rect.bottom <=
+      viewportHeight * 0.05;
+
+    /* Hacia Orange Mindset */
+    const leftThroughBottom =
+      rect.top >=
+      viewportHeight * 0.95;
+
+    if (
+      leftThroughTop ||
+      leftThroughBottom
+    ) {
+      resetEntrance();
+      return;
+    }
+
+    playEntrance();
+  };
+
+  const scheduleCheck = () => {
+    if (checkFrame) {
+      return;
+    }
+
+    checkFrame =
+      requestAnimationFrame(() => {
+        checkFrame = 0;
+        checkPosition();
+      });
+  };
+
+  const observer =
+    new IntersectionObserver(
+      scheduleCheck,
+      {
+        root: null,
+        threshold: [0, 0.1, 0.25],
+        rootMargin:
+          "0px 0px -15% 0px",
+      },
+    );
+
+  observer.observe(section);
+
+  window.addEventListener(
+    "scroll",
+    scheduleCheck,
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "resize",
+    scheduleCheck,
+    { passive: true },
+  );
+
+  scheduleCheck();
+
+  return () => {
     observer.disconnect();
 
     window.removeEventListener(
@@ -560,76 +702,10 @@ function initEntryAnimation(
       cancelAnimationFrame(
         checkFrame,
       );
-
       checkFrame = 0;
     }
-  };
 
-  const tryPlay = () => {
-    if (
-      hasPlayed ||
-      !isOrangeMindsetFinished() ||
-      !isSolutionsActuallyVisible()
-    ) {
-      return;
-    }
-
-    hasPlayed = true;
-
-    cleanupActivationListeners();
-
-    timeline.play(0);
-  };
-
-  const scheduleCheck = () => {
-    if (hasPlayed || checkFrame) {
-      return;
-    }
-
-    checkFrame =
-      requestAnimationFrame(() => {
-        checkFrame = 0;
-        tryPlay();
-      });
-  };
-
-  const observer =
-    new IntersectionObserver(
-      () => {
-        scheduleCheck();
-      },
-      {
-        root: null,
-        threshold: [0, 0.1],
-        rootMargin:
-          "0px 0px -20% 0px",
-      },
-    );
-
-  observer.observe(section);
-
-  /*
-   * El scroll listener es importante: si Solutions ya está
-   * geométricamente detrás del panel pinned, el observer puede
-   * no emitir otra entrada justo cuando Orange Mindset termina.
-   * Este listener vuelve a comprobar ambas condiciones mientras
-   * el usuario avanza y se elimina en cuanto la animación inicia.
-   */
-  window.addEventListener(
-    "scroll",
-    scheduleCheck,
-    { passive: true },
-  );
-
-  window.addEventListener(
-    "resize",
-    scheduleCheck,
-  );
-
-  scheduleCheck();
-
-  return () => {
-    cleanupActivationListeners();
+    plusPulse?.kill();
     timeline.kill();
   };
 }
@@ -1104,10 +1180,6 @@ function initNodeAttention(
             );
 
           if (dot) {
-            gsap.killTweensOf(
-              dot,
-            );
-
             gsap.set(dot, {
               clearProps:
                 "transform",
@@ -1115,10 +1187,6 @@ function initNodeAttention(
           }
 
           if (label) {
-            gsap.killTweensOf(
-              label,
-            );
-
             gsap.set(label, {
               clearProps:
                 "transform",
@@ -2236,14 +2304,9 @@ function initSolutions() {
   const cleanupEntryAnimation =
     initEntryAnimation(
       section,
-      nodes,
-      () => {
-        /*
-         * Solo después de que Solutions entró realmente
-         * al viewport y terminó su animación inicial,
-         * arrancan las animaciones ambientales.
-         */
 
+      /* ON COMPLETE */
+      () => {
         if (activeSolutionId) {
           return;
         }
@@ -2263,6 +2326,19 @@ function initSolutions() {
               }
             },
           );
+      },
+
+      /* ON RESET */
+      () => {
+        attentionDelay?.kill();
+        attentionDelay = null;
+
+        if (activeSolutionId) {
+          return;
+        }
+
+        nodeAttention.pause();
+        diagramBreathing.pause();
       },
     );
 

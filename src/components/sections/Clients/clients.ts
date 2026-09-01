@@ -9,7 +9,8 @@ import gsap from "gsap";
    ESTADO / CLEANUP
    ============================================================ */
 
-let cleanupCurrentPage: (() => void) | null = null;
+let cleanupCurrentPage:
+  (() => void) | null = null;
 
 /* ============================================================
    UTILIDAD:
@@ -20,10 +21,12 @@ function isElementActuallyVisible(
   element: HTMLElement,
   activationRatio = 0.8,
 ): boolean {
-  const rect = element.getBoundingClientRect();
+  const rect =
+    element.getBoundingClientRect();
 
   const activationLine =
-    window.innerHeight * activationRatio;
+    window.innerHeight *
+    activationRatio;
 
   if (
     rect.top > activationLine ||
@@ -33,7 +36,10 @@ function isElementActuallyVisible(
   }
 
   const sampleY = Math.min(
-    Math.max(rect.top + 24, 0),
+    Math.max(
+      rect.top + 24,
+      0,
+    ),
     window.innerHeight - 1,
   );
 
@@ -53,8 +59,11 @@ function isElementActuallyVisible(
     return Boolean(
       topElement &&
         (
-          topElement === element ||
-          element.contains(topElement)
+          topElement ===
+            element ||
+          element.contains(
+            topElement,
+          )
         )
     );
   });
@@ -81,7 +90,9 @@ function initMarquees(
   const observer =
     new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
+        for (
+          const entry of entries
+        ) {
           const track =
             entry.target as HTMLElement;
 
@@ -96,23 +107,27 @@ function initMarquees(
       },
     );
 
-  marquees.forEach((track) => {
-    observer.observe(track);
-  });
+  marquees.forEach(
+    (track) => {
+      observer.observe(track);
+    },
+  );
 
   return () => {
     observer.disconnect();
 
-    marquees.forEach((track) => {
-      track.classList.remove(
-        "is-out-of-view",
-      );
-    });
+    marquees.forEach(
+      (track) => {
+        track.classList.remove(
+          "is-out-of-view",
+        );
+      },
+    );
   };
 }
 
 /* ============================================================
-   ANIMACIÓN DE ENTRADA
+   ANIMACIÓN DE ENTRADA — REPLAY
    ============================================================ */
 
 function initEntryAnimation(
@@ -149,47 +164,60 @@ function initEntryAnimation(
     return () => {};
   }
 
-  /* ----------------------------------------------------------
-     Estados iniciales
+  /* ==========================================================
+     ESTADO INICIAL
+
      IMPORTANTE:
-     no tocamos .marquee__track porque ahí vive
-     la animación CSS infinita.
-     ---------------------------------------------------------- */
+     NO tocamos .marquee__track.
+     Solo los wrappers .marquee.
+     ========================================================== */
 
-  if (counter) {
-    gsap.set(counter, {
-      autoAlpha: 0,
-      y: 18,
-    });
-  }
+  const setInitialState =
+    (): void => {
+      if (counter) {
+        gsap.set(counter, {
+          autoAlpha: 0,
+          y: 18,
+        });
+      }
 
-  if (title) {
-    gsap.set(title, {
-      autoAlpha: 0,
-      y: 28,
-      scale: 0.96,
-      transformOrigin:
-        "center center",
-    });
-  }
+      if (title) {
+        gsap.set(title, {
+          autoAlpha: 0,
+          y: 28,
+          scale: 0.96,
 
-  if (firstMarquee) {
-    gsap.set(firstMarquee, {
-      autoAlpha: 0,
-      x: 80,
-    });
-  }
+          transformOrigin:
+            "center center",
+        });
+      }
 
-  if (secondMarquee) {
-    gsap.set(secondMarquee, {
-      autoAlpha: 0,
-      x: -80,
-    });
-  }
+      if (firstMarquee) {
+        gsap.set(
+          firstMarquee,
+          {
+            autoAlpha: 0,
+            x: 80,
+          },
+        );
+      }
 
-  /* ----------------------------------------------------------
-     Timeline pausada
-     ---------------------------------------------------------- */
+      if (secondMarquee) {
+        gsap.set(
+          secondMarquee,
+          {
+            autoAlpha: 0,
+            x: -80,
+          },
+        );
+      }
+    };
+
+  setInitialState();
+
+  /* ==========================================================
+     TIMELINE
+     ========================================================== */
 
   const timeline =
     gsap.timeline({
@@ -200,7 +228,9 @@ function initEntryAnimation(
     timeline.to(counter, {
       autoAlpha: 1,
       y: 0,
+
       duration: 0.65,
+
       ease: "power3.out",
     });
   }
@@ -212,10 +242,14 @@ function initEntryAnimation(
         autoAlpha: 1,
         y: 0,
         scale: 1,
+
         duration: 1,
+
         ease: "power3.out",
       },
-      counter ? "-=0.25" : 0,
+      counter
+        ? "-=0.25"
+        : 0,
     );
   }
 
@@ -225,7 +259,9 @@ function initEntryAnimation(
       {
         autoAlpha: 1,
         x: 0,
+
         duration: 1,
+
         ease: "power3.out",
       },
       "-=0.35",
@@ -238,67 +274,221 @@ function initEntryAnimation(
       {
         autoAlpha: 1,
         x: 0,
+
         duration: 1,
+
         ease: "power3.out",
       },
       "-=0.65",
     );
   }
 
-  /* ----------------------------------------------------------
-     Disparo por visibilidad real
-     ---------------------------------------------------------- */
+  /* ==========================================================
+     ESTADO DEL REPLAY
+     ========================================================== */
 
   let hasPlayed = false;
 
-  const tryPlay = () => {
-    if (hasPlayed) return;
+  let isArmedForReplay = true;
 
-    if (
-      !isElementActuallyVisible(
-        section,
-        0.82,
-      )
-    ) {
-      return;
-    }
+  let checkFrame = 0;
 
-    hasPlayed = true;
+  /* ==========================================================
+     PLAY
+     ========================================================== */
 
-    observer.disconnect();
+  const playClients =
+    (): void => {
+      if (
+        !isArmedForReplay
+      ) {
+        return;
+      }
 
-    window.removeEventListener(
-      "scroll",
-      tryPlay,
-    );
+      if (
+        !isElementActuallyVisible(
+          section,
+          0.82,
+        )
+      ) {
+        return;
+      }
 
-    window.removeEventListener(
-      "resize",
-      tryPlay,
-    );
+      isArmedForReplay =
+        false;
 
-    timeline.play(0);
-  };
+      hasPlayed = true;
+
+      /*
+       * Reconstruimos únicamente
+       * los wrappers visuales de
+       * la entrada.
+       */
+      setInitialState();
+
+      timeline.restart();
+    };
+
+  /* ==========================================================
+     RESET
+     ========================================================== */
+
+  const resetClients =
+    (): void => {
+      if (!hasPlayed) {
+        return;
+      }
+
+      if (
+        isArmedForReplay
+      ) {
+        return;
+      }
+
+      hasPlayed = false;
+
+      isArmedForReplay =
+        true;
+
+      /*
+       * La timeline sigue existiendo,
+       * solo vuelve al inicio.
+       */
+      timeline.pause(0);
+
+      /*
+       * Nunca tocamos los tracks.
+       */
+      setInitialState();
+    };
+
+  /* ==========================================================
+     CHECK DE POSICIÓN
+     ========================================================== */
+
+  const checkPosition =
+    (): void => {
+      const rect =
+        section.getBoundingClientRect();
+
+      const viewportHeight =
+        window.innerHeight;
+
+      /*
+       * Salimos hacia abajo:
+       * Clients quedó arriba.
+       */
+      const leftThroughTop =
+        rect.bottom <=
+        viewportHeight * 0.05;
+
+      /*
+       * Salimos hacia arriba:
+       * Clients quedó debajo.
+       */
+      const leftThroughBottom =
+        rect.top >=
+        viewportHeight * 0.95;
+
+      if (
+        leftThroughTop ||
+        leftThroughBottom
+      ) {
+        resetClients();
+
+        return;
+      }
+
+      /* =====================================
+         ALTURA REAL VISIBLE
+         ===================================== */
+
+      const visibleTop =
+        Math.max(
+          rect.top,
+          0,
+        );
+
+      const visibleBottom =
+        Math.min(
+          rect.bottom,
+          viewportHeight,
+        );
+
+      const visibleHeight =
+        Math.max(
+          0,
+          visibleBottom -
+            visibleTop,
+        );
+
+      const minimumVisible =
+        Math.min(
+          100,
+          viewportHeight *
+            0.1,
+        );
+
+      const isVisibleEnough =
+        visibleHeight >=
+        minimumVisible;
+
+      const reachedActivationZone =
+        rect.top <
+          viewportHeight *
+            0.82 &&
+        rect.bottom >
+          viewportHeight *
+            0.05;
+
+      if (
+        !isVisibleEnough ||
+        !reachedActivationZone
+      ) {
+        return;
+      }
+
+      playClients();
+    };
+
+  /* ==========================================================
+     RAF THROTTLE
+     ========================================================== */
+
+  const scheduleCheck =
+    (): void => {
+      if (checkFrame) {
+        return;
+      }
+
+      checkFrame =
+        requestAnimationFrame(
+          () => {
+            checkFrame = 0;
+
+            checkPosition();
+          },
+        );
+    };
+
+  /* ==========================================================
+     OBSERVER
+     ========================================================== */
 
   const observer =
     new IntersectionObserver(
-      (entries) => {
-        const entry =
-          entries[0];
-
-        if (
-          !entry?.isIntersecting ||
-          hasPlayed
-        ) {
-          return;
-        }
-
-        tryPlay();
+      () => {
+        scheduleCheck();
       },
       {
         root: null,
 
-        threshold: 0.08,
+        threshold: [
+          0,
+          0.05,
+          0.1,
+          0.2,
+        ],
 
         rootMargin:
           "0px 0px -15% 0px",
@@ -308,14 +498,14 @@ function initEntryAnimation(
   observer.observe(section);
 
   /*
-   * El listener de scroll es intencional:
-   * si alguna sección pinned está visualmente
-   * por encima, volvemos a comprobar la
-   * visibilidad real al seguir desplazándonos.
+   * Estos listeners permanecen
+   * activos para poder rearmar
+   * la animación al salir y volver.
    */
+
   window.addEventListener(
     "scroll",
-    tryPlay,
+    scheduleCheck,
     {
       passive: true,
     },
@@ -323,46 +513,42 @@ function initEntryAnimation(
 
   window.addEventListener(
     "resize",
-    tryPlay,
+    scheduleCheck,
     {
       passive: true,
     },
   );
+
+  requestAnimationFrame(
+    scheduleCheck,
+  );
+
+  /* ==========================================================
+     CLEANUP
+     ========================================================== */
 
   return () => {
     observer.disconnect();
 
     window.removeEventListener(
       "scroll",
-      tryPlay,
+      scheduleCheck,
     );
 
     window.removeEventListener(
       "resize",
-      tryPlay,
+      scheduleCheck,
     );
 
+    if (checkFrame) {
+      cancelAnimationFrame(
+        checkFrame,
+      );
+
+      checkFrame = 0;
+    }
+
     timeline.kill();
-
-    if (counter) {
-      gsap.killTweensOf(counter);
-    }
-
-    if (title) {
-      gsap.killTweensOf(title);
-    }
-
-    if (firstMarquee) {
-      gsap.killTweensOf(
-        firstMarquee,
-      );
-    }
-
-    if (secondMarquee) {
-      gsap.killTweensOf(
-        secondMarquee,
-      );
-    }
   };
 }
 
@@ -372,6 +558,7 @@ function initEntryAnimation(
 
 function initClients() {
   cleanupCurrentPage?.();
+
   cleanupCurrentPage = null;
 
   const section =
@@ -379,30 +566,38 @@ function initClients() {
       "#clientes",
     );
 
-  if (!section) return;
+  if (!section) {
+    return;
+  }
 
   /*
-   * La lógica original de las marquesinas
-   * sigue funcionando de forma independiente.
+   * Las marquesinas continúan
+   * funcionando de manera
+   * totalmente independiente.
    */
   const removeMarquees =
     initMarquees(section);
 
   /*
-   * GSAP únicamente anima:
+   * GSAP anima únicamente:
+   *
    * - contador
    * - título
-   * - contenedores .marquee
+   * - wrappers .marquee
    *
-   * Nunca los .marquee__track.
+   * Nunca .marquee__track.
    */
   const removeEntry =
-    initEntryAnimation(section);
+    initEntryAnimation(
+      section,
+    );
 
-  cleanupCurrentPage = () => {
-    removeEntry();
-    removeMarquees();
-  };
+  cleanupCurrentPage =
+    () => {
+      removeEntry();
+
+      removeMarquees();
+    };
 }
 
 /* ============================================================
@@ -410,10 +605,5 @@ function initClients() {
    ============================================================ */
 
 initClients();
-
-document.addEventListener(
-  "astro:page-load",
-  initClients,
-);
 
 export {};

@@ -1061,7 +1061,7 @@ function initContact() {
   closeForms(false);
 
   /* ==========================================================
-     ANIMACIÓN DE ENTRADA
+     ANIMACIÓN DE ENTRADA — REPLAY
      ========================================================== */
 
   if (prefersReducedMotion) {
@@ -1081,75 +1081,53 @@ function initContact() {
       : [];
 
   /* ----------------------------------------------------------
-     Estados iniciales
+     Estado inicial reutilizable
      ---------------------------------------------------------- */
 
-  if (label) {
-    gsap.set(
-      label,
-      {
-        autoAlpha: 0,
-        y: 16,
-      },
-    );
-  }
+  const setEntryInitialState =
+    (): void => {
+      if (label) {
+        gsap.set(label, {
+          autoAlpha: 0,
+          y: 16,
+        });
+      }
 
-  /*
-   * IMPORTANTE:
-   *
-   * Quitamos scale.
-   *
-   * Solo usamos y para la entrada,
-   * y al terminar limpiamos transform.
-   */
-  if (titleImage) {
-    gsap.set(
-      titleImage,
-      {
-        autoAlpha: 0,
-        y: 28,
-      },
-    );
-  }
+      if (titleImage) {
+        gsap.set(titleImage, {
+          autoAlpha: 0,
+          y: 28,
+        });
+      }
 
-  if (letters.length) {
-    gsap.set(
-      letters,
-      {
-        autoAlpha: 0,
-      },
-    );
-  }
+      if (letters.length) {
+        gsap.set(letters, {
+          autoAlpha: 0,
+        });
+      }
 
-  if (decoration) {
-    gsap.set(
-      decoration,
-      {
-        autoAlpha: 0,
-        scale: 0.9,
+      if (decoration) {
+        gsap.set(decoration, {
+          autoAlpha: 0,
+          scale: 0.9,
+          transformOrigin: "center center",
+        });
+      }
 
-        transformOrigin:
-          "center center",
-      },
-    );
-  }
+      if (buttons.length) {
+        gsap.set(buttons, {
+          autoAlpha: 0,
+          y: 18,
+          scale: 0.96,
+          transformOrigin: "center center",
+        });
+      }
+    };
 
-  if (buttons.length) {
-    gsap.set(
-      buttons,
-      {
-        autoAlpha: 0,
-        y: 18,
-        scale: 0.96,
-
-        transformOrigin:
-          "center center",
-      },
-    );
-  }
+  setEntryInitialState();
 
   /* ----------------------------------------------------------
-     Timeline entrada
+     Timeline de entrada reutilizable
      ---------------------------------------------------------- */
 
   const entryTimeline =
@@ -1158,17 +1136,12 @@ function initContact() {
     });
 
   if (label) {
-    entryTimeline.to(
-      label,
-      {
-        autoAlpha: 1,
-        y: 0,
-
-        duration: 0.65,
-
-        ease: "power3.out",
-      },
-    );
+    entryTimeline.to(label, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.65,
+      ease: "power3.out",
+    });
   }
 
   if (titleImage) {
@@ -1177,176 +1150,225 @@ function initContact() {
       {
         autoAlpha: 1,
         y: 0,
-
         duration: 0.95,
-
         ease: "power3.out",
       },
-      label
-        ? "-=0.25"
-        : 0,
+      label ? "-=0.25" : 0,
     );
 
     /*
-     * ESTA ES LA CORRECCIÓN PRINCIPAL.
-     *
-     * GSAP utilizó transform para mover `y`,
-     * pero inmediatamente después lo eliminamos.
-     *
-     * Así posteriormente tu media query puede aplicar:
-     *
-     * transform: rotate(90deg);
+     * El título recupera el control del transform por CSS.
+     * Esto conserva correctamente la rotación responsive.
      */
-    entryTimeline.set(
-      titleImage,
-      {
-        clearProps:
-          "transform",
-      },
-    );
+    entryTimeline.set(titleImage, {
+      clearProps: "transform",
+    });
   }
 
-  /*
-   * Máquina de escribir
-   */
   if (letters.length) {
     entryTimeline.to(
       letters,
       {
         autoAlpha: 1,
-
         duration: 0.01,
-
         stagger: 0.025,
-
         ease: "none",
       },
       "-=0.15",
     );
   }
 
-  /*
-   * Plus
-   */
   if (decoration) {
     entryTimeline.to(
       decoration,
       {
         autoAlpha: 1,
-
         scale: 1,
-
         duration: 0.55,
-
-        ease:
-          "back.out(1.5)",
-
-        /*
-         * También podemos devolver transform
-         * al CSS al terminar.
-         */
-        clearProps:
-          "transform",
+        ease: "back.out(1.5)",
+        clearProps: "transform",
       },
       "-=0.2",
     );
   }
 
-  /*
-   * Clientes
-   * Bolsa de trabajo
-   * Proveedores
-   */
   if (buttons.length) {
     entryTimeline.to(
       buttons,
       {
         autoAlpha: 1,
-
         y: 0,
-
         scale: 1,
-
         duration: 0.55,
-
         stagger: 0.18,
-
         ease: "power3.out",
-
-        clearProps:
-          "transform",
+        clearProps: "transform",
       },
       "-=0.1",
     );
   }
 
   /* ==========================================================
-     TRIGGER VISIBILIDAD REAL
+     CONTROL DE REPLAY
      ========================================================== */
 
-  let hasPlayed =
-    false;
+  let hasPlayed = false;
+  let isArmedForReplay = true;
+  let checkFrame = 0;
 
-  const tryPlayEntry =
-    () => {
-      if (hasPlayed) return;
+  const isFormOpen = (): boolean =>
+    contact.classList.contains(
+      "is-form-open",
+    );
+
+  const playEntry = (): void => {
+    if (!isArmedForReplay) return;
+
+    if (
+      !isActuallyVisible(
+        contact,
+        0.82,
+      )
+    ) {
+      return;
+    }
+
+    isArmedForReplay = false;
+    hasPlayed = true;
+
+    /*
+     * Si el usuario dejó un formulario abierto,
+     * no reconstruimos la Vista 1. Se conserva:
+     * - formulario activo
+     * - campos capturados
+     * - archivo elegido
+     * - título correspondiente
+     * - botón activo
+     */
+    if (isFormOpen()) {
+      return;
+    }
+
+    setEntryInitialState();
+    entryTimeline.restart();
+  };
+
+  const resetEntry = (): void => {
+    if (!hasPlayed || isArmedForReplay) {
+      return;
+    }
+
+    hasPlayed = false;
+    isArmedForReplay = true;
+
+    /*
+     * Nunca tocamos la Vista 2 al salir.
+     * Así no se pierde ningún estado del formulario.
+     */
+    if (isFormOpen()) {
+      return;
+    }
+
+    entryTimeline.pause(0);
+    setEntryInitialState();
+  };
+
+  const checkContactPosition =
+    (): void => {
+      const rect =
+        contact.getBoundingClientRect();
+
+      const viewportHeight =
+        window.innerHeight;
+
+      const leftThroughTop =
+        rect.bottom <=
+        viewportHeight * 0.05;
+
+      const leftThroughBottom =
+        rect.top >=
+        viewportHeight * 0.95;
 
       if (
-        !isActuallyVisible(
-          contact,
-          0.82,
-        )
+        leftThroughTop ||
+        leftThroughBottom
       ) {
+        resetEntry();
         return;
       }
 
-      hasPlayed = true;
+      const visibleTop =
+        Math.max(rect.top, 0);
 
-      entryObserver.disconnect();
+      const visibleBottom =
+        Math.min(
+          rect.bottom,
+          viewportHeight,
+        );
 
-      window.removeEventListener(
-        "scroll",
-        tryPlayEntry,
-      );
+      const visibleHeight =
+        Math.max(
+          0,
+          visibleBottom - visibleTop,
+        );
 
-      window.removeEventListener(
-        "resize",
-        tryPlayEntry,
-      );
+      const minimumVisible =
+        Math.min(
+          100,
+          viewportHeight * 0.1,
+        );
 
-      entryTimeline.play(0);
+      const isVisibleEnough =
+        visibleHeight >=
+        minimumVisible;
+
+      const reachedActivationZone =
+        rect.top <
+          viewportHeight * 0.82 &&
+        rect.bottom >
+          viewportHeight * 0.05;
+
+      if (
+        isVisibleEnough &&
+        reachedActivationZone
+      ) {
+        playEntry();
+      }
+    };
+
+  const scheduleEntryCheck =
+    (): void => {
+      if (checkFrame) return;
+
+      checkFrame =
+        requestAnimationFrame(() => {
+          checkFrame = 0;
+          checkContactPosition();
+        });
     };
 
   const entryObserver =
     new IntersectionObserver(
-      (entries) => {
-        const entry =
-          entries[0];
-
-        if (
-          !entry?.isIntersecting ||
-          hasPlayed
-        ) {
-          return;
-        }
-
-        tryPlayEntry();
+      () => {
+        scheduleEntryCheck();
       },
       {
-        threshold: 0.08,
-
+        threshold: [
+          0,
+          0.05,
+          0.08,
+          0.2,
+        ],
         rootMargin:
           "0px 0px -12% 0px",
       },
     );
 
-  entryObserver.observe(
-    contact,
-  );
+  entryObserver.observe(contact);
 
   window.addEventListener(
     "scroll",
-    tryPlayEntry,
+    scheduleEntryCheck,
     {
       passive: true,
       signal,
@@ -1355,11 +1377,15 @@ function initContact() {
 
   window.addEventListener(
     "resize",
-    tryPlayEntry,
+    scheduleEntryCheck,
     {
       passive: true,
       signal,
     },
+  );
+
+  requestAnimationFrame(
+    scheduleEntryCheck,
   );
 
   /* ==========================================================
@@ -1441,10 +1467,5 @@ function initContact() {
    ============================================================ */
 
 initContact();
-
-document.addEventListener(
-  "astro:page-load",
-  initContact,
-);
 
 export {};

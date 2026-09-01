@@ -100,27 +100,56 @@ function isActuallyVisible(element: HTMLElement): boolean {
 function createRealVisibilityTrigger(
   element: HTMLElement,
   onEnter: () => void,
+  onLeave: () => void,
   rootMargin = "0px 0px -15% 0px",
 ): () => void {
+  let isArmedForReplay = true;
   let hasPlayed = false;
+  let checkFrame = 0;
 
-  const tryPlay = () => {
-    if (hasPlayed || !isActuallyVisible(element)) return;
-
+  const checkPosition = (): void => {
     const rect = element.getBoundingClientRect();
-    const activationLine = window.innerHeight * 0.85;
+    const viewportHeight = window.innerHeight;
 
+    const leftThroughTop =
+      rect.bottom <= viewportHeight * 0.05;
+
+    const leftThroughBottom =
+      rect.top >= viewportHeight * 0.95;
+
+    if (leftThroughTop || leftThroughBottom) {
+      if (hasPlayed && !isArmedForReplay) {
+        hasPlayed = false;
+        isArmedForReplay = true;
+        onLeave();
+      }
+
+      return;
+    }
+
+    if (!isArmedForReplay) return;
+    if (!isActuallyVisible(element)) return;
+
+    const activationLine = viewportHeight * 0.85;
     if (rect.top > activationLine) return;
 
+    isArmedForReplay = false;
     hasPlayed = true;
-    cleanup();
     onEnter();
   };
 
+  const scheduleCheck = (): void => {
+    if (checkFrame) return;
+
+    checkFrame = requestAnimationFrame(() => {
+      checkFrame = 0;
+      checkPosition();
+    });
+  };
+
   const observer = new IntersectionObserver(
-    (entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      tryPlay();
+    () => {
+      scheduleCheck();
     },
     {
       root: null,
@@ -129,22 +158,29 @@ function createRealVisibilityTrigger(
     },
   );
 
-  const onScroll = () => tryPlay();
-  const onResize = () => tryPlay();
-
   observer.observe(element);
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onResize, { passive: true });
 
-  const cleanup = () => {
+  window.addEventListener("scroll", scheduleCheck, {
+    passive: true,
+  });
+
+  window.addEventListener("resize", scheduleCheck, {
+    passive: true,
+  });
+
+  requestAnimationFrame(scheduleCheck);
+
+  return () => {
     observer.disconnect();
-    window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("resize", onResize);
+
+    window.removeEventListener("scroll", scheduleCheck);
+    window.removeEventListener("resize", scheduleCheck);
+
+    if (checkFrame) {
+      cancelAnimationFrame(checkFrame);
+      checkFrame = 0;
+    }
   };
-
-  requestAnimationFrame(tryPlay);
-
-  return cleanup;
 }
 
 function animateCounter(
@@ -155,7 +191,11 @@ function animateCounter(
 
   element.textContent = "#1";
 
-  const duration = gsap.utils.clamp(0.65, 1.35, 0.55 + target * 0.04);
+  const duration = gsap.utils.clamp(
+    0.65,
+    1.35,
+    0.55 + target * 0.04,
+  );
 
   return gsap.to(state, {
     value: target,
@@ -178,48 +218,57 @@ function initRecognition(): void {
   cleanupRecognition?.();
   cleanupRecognition = null;
 
-  const section = document.querySelector<HTMLElement>("#recognition");
+  const section =
+    document.querySelector<HTMLElement>("#recognition");
+
   if (!section) return;
 
-  const clientsBlock = section.querySelector<HTMLElement>(
-    ".recognition__clients-content",
-  );
+  const clientsBlock =
+    section.querySelector<HTMLElement>(
+      ".recognition__clients-content",
+    );
 
-  const industryBlock = section.querySelector<HTMLElement>(
-    ".recognition__industry",
-  );
+  const industryBlock =
+    section.querySelector<HTMLElement>(
+      ".recognition__industry",
+    );
 
   if (!clientsBlock || !industryBlock) return;
 
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
   const cleanupFns: Array<() => void> = [];
-  const ambientTweens: gsap.core.Tween[] = [];
-  const ambientTimelines: gsap.core.Timeline[] = [];
   const counterTweens: gsap.core.Tween[] = [];
   const timelines: gsap.core.Timeline[] = [];
+  const ambientTweens: gsap.core.Tween[] = [];
+  const ambientTimelines: gsap.core.Timeline[] = [];
 
   /* ==========================================================
      BLOQUE 1 — LO DICEN NUESTROS CLIENTES
      ========================================================== */
 
-  const badge = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__clients-badge",
-  );
+  const badge =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__clients-badge",
+    );
 
-  const topLine = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__line--top",
-  );
+  const topLine =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__line--top",
+    );
 
-  const numberOne = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__ranking-number",
-  );
+  const numberOne =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__ranking-number",
+    );
 
-  const verticalLine = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__line--vertical",
-  );
+  const verticalLine =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__line--vertical",
+    );
 
   const categoryParagraphs = Array.from(
     clientsBlock.querySelectorAll<HTMLElement>(
@@ -227,9 +276,10 @@ function initRecognition(): void {
     ),
   );
 
-  const rankingLine = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__line--ranking",
-  );
+  const rankingLine =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__line--ranking",
+    );
 
   const statementParagraphs = Array.from(
     clientsBlock.querySelectorAll<HTMLElement>(
@@ -237,31 +287,45 @@ function initRecognition(): void {
     ),
   );
 
-  const statementsLine = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__line--statements",
+  const statementsLine =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__line--statements",
+    );
+
+  const integratedParagraph =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__integrated p",
+    );
+
+  const sectionLine =
+    clientsBlock.querySelector<HTMLElement>(
+      ".recognition__line--section",
+    );
+
+  const categoryLetters = categoryParagraphs.map(
+    (paragraph) =>
+      getLetters(
+        paragraph,
+        "recognition-type-letter",
+      ),
   );
 
-  const integratedParagraph = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__integrated p",
-  );
-
-  const sectionLine = clientsBlock.querySelector<HTMLElement>(
-    ".recognition__line--section",
-  );
-
-  const categoryLetters = categoryParagraphs.map((paragraph) =>
-    getLetters(paragraph, "recognition-type-letter"),
-  );
-
-  const statementLetters = statementParagraphs.map((paragraph) =>
-    getLetters(paragraph, "recognition-type-letter"),
+  const statementLetters = statementParagraphs.map(
+    (paragraph) =>
+      getLetters(
+        paragraph,
+        "recognition-type-letter",
+      ),
   );
 
   const integratedLetters = integratedParagraph
-    ? getLetters(integratedParagraph, "recognition-type-letter")
+    ? getLetters(
+        integratedParagraph,
+        "recognition-type-letter",
+      )
     : [];
 
-  if (!prefersReducedMotion) {
+  const setClientsInitialState = (): void => {
     if (topLine) {
       gsap.set(topLine, {
         scaleX: 0,
@@ -274,6 +338,7 @@ function initRecognition(): void {
         autoAlpha: 0,
         scale: 0.88,
         y: 18,
+        rotation: 0,
         transformOrigin: "center center",
       });
     }
@@ -281,8 +346,13 @@ function initRecognition(): void {
     if (numberOne) {
       gsap.set(numberOne, {
         autoAlpha: 0,
+        x: 0,
+        y: 0,
         scale: 0.82,
-        transformOrigin: "center center",
+        scaleX: 1,
+        scaleY: 1,
+        rotation: 0,
+        transformOrigin: "center bottom",
       });
     }
 
@@ -294,7 +364,9 @@ function initRecognition(): void {
     }
 
     categoryLetters.flat().forEach((letter) => {
-      gsap.set(letter, { autoAlpha: 0 });
+      gsap.set(letter, {
+        autoAlpha: 0,
+      });
     });
 
     if (rankingLine) {
@@ -305,7 +377,9 @@ function initRecognition(): void {
     }
 
     statementLetters.flat().forEach((letter) => {
-      gsap.set(letter, { autoAlpha: 0 });
+      gsap.set(letter, {
+        autoAlpha: 0,
+      });
     });
 
     if (statementsLine) {
@@ -316,17 +390,98 @@ function initRecognition(): void {
     }
 
     integratedLetters.forEach((letter) => {
-      gsap.set(letter, { autoAlpha: 0 });
+      gsap.set(letter, {
+        autoAlpha: 0,
+      });
     });
 
     if (sectionLine) {
+      sectionLine.classList.remove("is-alive");
+
       gsap.set(sectionLine, {
         clipPath: "inset(0 100% 0 0)",
       });
     }
+  };
+
+  if (!prefersReducedMotion) {
+    setClientsInitialState();
   }
 
-  const clientsTimeline = gsap.timeline({ paused: true });
+  /* ==========================================================
+     AMBIENTAL — #1
+     Golpe vertical + squash/stretch + salto + aterrizaje
+     ========================================================== */
+
+  const numberOneBounce =
+    numberOne && !prefersReducedMotion
+      ? gsap.timeline({
+          repeat: -1,
+          repeatDelay: 3,
+          paused: true,
+        })
+          .to(numberOne, {
+            scaleX: 1.04,
+            scaleY: 0.96,
+            duration: 0.16,
+            ease: "power2.in",
+            transformOrigin: "center bottom",
+          })
+          .to(numberOne, {
+            y: -9,
+            scaleX: 0.98,
+            scaleY: 1.04,
+            duration: 0.26,
+            ease: "power2.out",
+          })
+          .to(numberOne, {
+            y: 0,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 0.48,
+            ease: "bounce.out",
+          })
+      : null;
+
+  const badgeFloat =
+    badge && !prefersReducedMotion
+      ? gsap.fromTo(
+          badge,
+          {
+            y: 0,
+            rotation: 0,
+          },
+          {
+            y: -5,
+            rotation: 0.35,
+            duration: 3.4,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            paused: true,
+            immediateRender: false,
+            transformOrigin: "center center",
+          },
+        )
+      : null;
+
+  if (numberOneBounce) {
+    ambientTimelines.push(numberOneBounce);
+  }
+
+  if (badgeFloat) {
+    ambientTweens.push(badgeFloat);
+  }
+
+  const clientsTimeline = gsap.timeline({
+    paused: true,
+    onComplete: () => {
+      numberOneBounce?.restart();
+      badgeFloat?.restart();
+      sectionLine?.classList.add("is-alive");
+    },
+  });
+
   timelines.push(clientsTimeline);
 
   if (!prefersReducedMotion) {
@@ -358,24 +513,14 @@ function initRecognition(): void {
         {
           autoAlpha: 1,
           scale: 1,
+          scaleX: 1,
+          scaleY: 1,
+          y: 0,
           duration: 0.75,
           ease: "back.out(1.55)",
         },
         "-=0.2",
       );
-
-      clientsTimeline.call(() => {
-        const pulse = gsap.to(numberOne, {
-          scale: 1.035,
-          duration: 1.55,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          transformOrigin: "center center",
-        });
-
-        ambientTweens.push(pulse);
-      });
     }
 
     if (verticalLine) {
@@ -440,43 +585,47 @@ function initRecognition(): void {
         clearProps: "clipPath",
       });
     }
-
-    clientsTimeline.call(() => {
-      /* Movimiento ambiental del badge */
-      if (badge) {
-        const badgeFloat = gsap.to(badge, {
-          y: -5,
-          rotation: 0.35,
-          duration: 3.4,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          transformOrigin: "center center",
-        });
-
-        ambientTweens.push(badgeFloat);
-      }
-
-      /* Activa el pequeño viaje del punto teal inferior (CSS). */
-      sectionLine?.classList.add("is-alive");
-    });
   }
+
+  const playClients = (): void => {
+    if (prefersReducedMotion) return;
+
+    numberOneBounce?.pause();
+    badgeFloat?.pause();
+
+    setClientsInitialState();
+    clientsTimeline.restart();
+  };
+
+  const resetClients = (): void => {
+    if (prefersReducedMotion) return;
+
+    numberOneBounce?.pause(0);
+    badgeFloat?.pause(0);
+
+    clientsTimeline.pause(0);
+    setClientsInitialState();
+  };
 
   /* ==========================================================
      BLOQUE 2 — RECONOCIMIENTOS DE LA INDUSTRIA
      ========================================================== */
 
-  const industryTitle = industryBlock.querySelector<HTMLElement>(
-    ".recognition__industry-title",
-  );
+  const industryTitle =
+    industryBlock.querySelector<HTMLElement>(
+      ".recognition__industry-title",
+    );
 
   const awards = Array.from(
-    industryBlock.querySelectorAll<HTMLElement>(".recognition__award"),
+    industryBlock.querySelectorAll<HTMLElement>(
+      ".recognition__award",
+    ),
   );
 
-  const timeline = industryBlock.querySelector<HTMLElement>(
-    ".recognition__timeline",
-  );
+  const timeline =
+    industryBlock.querySelector<HTMLElement>(
+      ".recognition__timeline",
+    );
 
   const timelineItems = Array.from(
     industryBlock.querySelectorAll<HTMLElement>(
@@ -485,19 +634,27 @@ function initRecognition(): void {
   );
 
   const rankings = timelineItems.map((item) => {
-    const number = item.querySelector<HTMLElement>(
-      ".recognition__timeline-number",
-    );
+    const number =
+      item.querySelector<HTMLElement>(
+        ".recognition__timeline-number",
+      );
 
-    const label = item.querySelector<HTMLElement>(
-      ".recognition__timeline-label",
-    );
+    const label =
+      item.querySelector<HTMLElement>(
+        ".recognition__timeline-label",
+      );
 
-    const rawTarget = number?.textContent?.replace(/[^0-9]/g, "") ?? "0";
-    const target = Number.parseInt(rawTarget, 10) || 0;
+    const rawTarget =
+      number?.textContent?.replace(/[^0-9]/g, "") ?? "0";
+
+    const target =
+      Number.parseInt(rawTarget, 10) || 0;
 
     const letters = label
-      ? getLetters(label, "recognition-glow-letter")
+      ? getLetters(
+          label,
+          "recognition-glow-letter",
+        )
       : [];
 
     return {
@@ -511,15 +668,35 @@ function initRecognition(): void {
 
   const awardIcons = awards
     .map((award) =>
-      award.querySelector<HTMLElement>(".recognition__award-icon"),
+      award.querySelector<HTMLElement>(
+        ".recognition__award-icon",
+      ),
     )
-    .filter((icon): icon is HTMLElement => Boolean(icon));
+    .filter(
+      (icon): icon is HTMLElement =>
+        Boolean(icon),
+    );
 
   const rankingAccentTexts = rankings
-    .map(({ label }) => label?.querySelector<HTMLElement>("strong") ?? null)
-    .filter((element): element is HTMLElement => Boolean(element));
+    .map(({ label }) =>
+      label?.querySelector<HTMLElement>("strong") ?? null,
+    )
+    .filter(
+      (element): element is HTMLElement =>
+        Boolean(element),
+    );
 
-  if (!prefersReducedMotion) {
+  const stopCounterAnimations = (): void => {
+    counterTweens.forEach((tween) => {
+      tween.kill();
+    });
+
+    counterTweens.length = 0;
+  };
+
+  const setIndustryInitialState = (): void => {
+    stopCounterAnimations();
+
     if (industryTitle) {
       gsap.set(industryTitle, {
         autoAlpha: 0,
@@ -527,151 +704,104 @@ function initRecognition(): void {
       });
     }
 
-    gsap.set(awards, {
-      autoAlpha: 0,
-      y: 22,
-      scale: 0.9,
-      transformOrigin: "center center",
-    });
+    if (awards.length) {
+      gsap.set(awards, {
+        autoAlpha: 0,
+        y: 22,
+        scale: 0.9,
+        transformOrigin: "center center",
+      });
+    }
 
-    rankings.forEach(({ number, letters }) => {
-      if (number) {
-        gsap.set(number, {
-          autoAlpha: 0,
-          y: 18,
-        });
-      }
-
-      letters.forEach((letter) => {
-        gsap.set(letter, {
-          opacity: 0.12,
-          filter: "blur(0.8px)",
-        });
+    awardIcons.forEach((icon) => {
+      gsap.set(icon, {
+        scale: 1,
+        y: 0,
       });
     });
 
-    if (timeline && window.innerWidth > 768) {
+    rankings.forEach(
+      ({ number, target, letters, item }) => {
+        if (number) {
+          number.textContent =
+            target > 0
+              ? "#1"
+              : number.textContent;
+
+          gsap.set(number, {
+            autoAlpha: 0,
+            y: 18,
+            scale: 1,
+          });
+        }
+
+        gsap.set(item, {
+          x: 0,
+        });
+
+        letters.forEach((letter) => {
+          gsap.set(letter, {
+            opacity: 0.12,
+            filter: "blur(0.8px)",
+          });
+        });
+      },
+    );
+
+    rankingAccentTexts.forEach((accent) => {
+      gsap.set(accent, {
+        opacity: 1,
+      });
+    });
+
+    if (
+      timeline &&
+      window.innerWidth > 768
+    ) {
       gsap.set(timeline, {
         clipPath: "inset(0 100% 0 0)",
       });
     }
-  }
-
-  const industryTimeline = gsap.timeline({ paused: true });
-  timelines.push(industryTimeline);
+  };
 
   if (!prefersReducedMotion) {
-    if (industryTitle) {
-      industryTimeline.to(industryTitle, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      });
-    }
+    setIndustryInitialState();
+  }
 
-    industryTimeline.to(
-      awards,
-      {
-        autoAlpha: 1,
-        y: 0,
+  const ambientWave = gsap.timeline({
+    repeat: -1,
+    repeatDelay: 1.8,
+    paused: true,
+  });
+
+  if (!prefersReducedMotion) {
+    awardIcons.forEach((icon) => {
+      ambientWave.to(icon, {
+        scale: 1.065,
+        y: -3,
+        duration: 0.42,
+        ease: "sine.out",
+        transformOrigin: "center center",
+      });
+
+      ambientWave.to(icon, {
         scale: 1,
-        duration: 0.7,
-        stagger: 0.18,
-        ease: "back.out(1.35)",
-      },
-      "-=0.2",
-    );
-
-    if (timeline && window.innerWidth > 768) {
-      industryTimeline.to(timeline, {
-        clipPath: "inset(0 0% 0 0)",
-        duration: 1.15,
-        ease: "power2.inOut",
-      });
-
-      industryTimeline.set(timeline, {
-        clearProps: "clipPath",
-      });
-    }
-
-    rankings.forEach(({ number, target, letters }) => {
-      if (!number || target <= 0) return;
-
-      industryTimeline.to(number, {
-        autoAlpha: 1,
         y: 0,
-        duration: 0.3,
-        ease: "power2.out",
+        duration: 0.52,
+        ease: "sine.inOut",
       });
-
-      industryTimeline.add(() => {
-        const counterTween = animateCounter(number, target);
-        counterTweens.push(counterTween);
-      });
-
-      const counterDuration = gsap.utils.clamp(
-        0.65,
-        1.35,
-        0.55 + target * 0.04,
-      );
-
-      industryTimeline.to(
-        {},
-        {
-          duration: counterDuration,
-        },
-      );
-
-      if (letters.length) {
-        industryTimeline.to(
-          letters,
-          {
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 0.16,
-            stagger: 0.018,
-            ease: "power1.out",
-          },
-          "-=0.15",
-        );
-      }
     });
 
-    industryTimeline.call(() => {
-      /*
-       * Onda ambiental continua:
-       * premios → rankings → pausa → repetir.
-       * Solo un elemento recibe protagonismo a la vez.
-       */
-      const ambientWave = gsap.timeline({
-        repeat: -1,
-        repeatDelay: 1.8,
-      });
+    ambientWave.to({}, {
+      duration: 0.45,
+    });
 
-      awardIcons.forEach((icon) => {
-        ambientWave.to(icon, {
-          scale: 1.065,
-          y: -3,
-          duration: 0.42,
-          ease: "sine.out",
-          transformOrigin: "center center",
-        });
-
-        ambientWave.to(icon, {
-          scale: 1,
-          y: 0,
-          duration: 0.52,
-          ease: "sine.inOut",
-        });
-      });
-
-      ambientWave.to({}, { duration: 0.45 });
-
-      rankings.forEach(({ number, item }, index) => {
+    rankings.forEach(
+      ({ number, item }, index) => {
         if (!number) return;
 
-        const accent = rankingAccentTexts[index];
+        const accent =
+          rankingAccentTexts[index];
 
         ambientWave.to(number, {
           scale: 1.07,
@@ -712,10 +842,11 @@ function initRecognition(): void {
           );
         }
 
-        /* pequeño acento de movimiento en todo el item */
         ambientWave.fromTo(
           item,
-          { x: 0 },
+          {
+            x: 0,
+          },
           {
             x: 2,
             duration: 0.16,
@@ -725,63 +856,185 @@ function initRecognition(): void {
           },
           "-=0.36",
         );
+      },
+    );
+  }
+
+  ambientTimelines.push(ambientWave);
+
+  const industryTimeline = gsap.timeline({
+    paused: true,
+    onComplete: () => {
+      ambientWave.restart();
+    },
+  });
+
+  timelines.push(industryTimeline);
+
+  if (!prefersReducedMotion) {
+    if (industryTitle) {
+      industryTimeline.to(industryTitle, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    }
+
+    industryTimeline.to(
+      awards,
+      {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.7,
+        stagger: 0.18,
+        ease: "back.out(1.35)",
+      },
+      "-=0.2",
+    );
+
+    if (
+      timeline &&
+      window.innerWidth > 768
+    ) {
+      industryTimeline.to(timeline, {
+        clipPath: "inset(0 0% 0 0)",
+        duration: 1.15,
+        ease: "power2.inOut",
       });
 
-      ambientTimelines.push(ambientWave);
-    });
+      industryTimeline.set(timeline, {
+        clearProps: "clipPath",
+      });
+    }
+
+    rankings.forEach(
+      ({ number, target, letters }) => {
+        if (!number || target <= 0) return;
+
+        industryTimeline.to(number, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+
+        industryTimeline.add(() => {
+          const counterTween =
+            animateCounter(
+              number,
+              target,
+            );
+
+          counterTweens.push(
+            counterTween,
+          );
+        });
+
+        const counterDuration =
+          gsap.utils.clamp(
+            0.65,
+            1.35,
+            0.55 + target * 0.04,
+          );
+
+        industryTimeline.to(
+          {},
+          {
+            duration:
+              counterDuration,
+          },
+        );
+
+        if (letters.length) {
+          industryTimeline.to(
+            letters,
+            {
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 0.16,
+              stagger: 0.018,
+              ease: "power1.out",
+            },
+            "-=0.15",
+          );
+        }
+      },
+    );
   }
+
+  const playIndustry = (): void => {
+    if (prefersReducedMotion) return;
+
+    ambientWave.pause(0);
+    setIndustryInitialState();
+    industryTimeline.restart();
+  };
+
+  const resetIndustry = (): void => {
+    if (prefersReducedMotion) return;
+
+    ambientWave.pause(0);
+    industryTimeline.pause(0);
+    setIndustryInitialState();
+  };
 
   /* ==========================================================
      DISPARADORES POR VISIBILIDAD REAL
      ========================================================== */
 
   if (prefersReducedMotion) {
+    cleanupRecognition = () => {};
     return;
   }
 
-  const stopClientsTrigger = createRealVisibilityTrigger(
-    clientsBlock,
-    () => clientsTimeline.play(0),
-    "0px 0px -12% 0px",
-  );
+  const stopClientsTrigger =
+    createRealVisibilityTrigger(
+      clientsBlock,
+      playClients,
+      resetClients,
+      "0px 0px -12% 0px",
+    );
 
-  const stopIndustryTrigger = createRealVisibilityTrigger(
-    industryBlock,
-    () => industryTimeline.play(0),
-    "0px 0px -12% 0px",
-  );
+  const stopIndustryTrigger =
+    createRealVisibilityTrigger(
+      industryBlock,
+      playIndustry,
+      resetIndustry,
+      "0px 0px -12% 0px",
+    );
 
-  cleanupFns.push(stopClientsTrigger, stopIndustryTrigger);
+  cleanupFns.push(
+    stopClientsTrigger,
+    stopIndustryTrigger,
+  );
 
   cleanupRecognition = () => {
     cleanupFns.forEach((fn) => fn());
-    timelines.forEach((tl) => tl.kill());
-    ambientTweens.forEach((tween) => tween.kill());
-    ambientTimelines.forEach((tl) => tl.kill());
-    counterTweens.forEach((tween) => tween.kill());
+
+    stopCounterAnimations();
+
+    timelines.forEach((tl) => {
+      tl.kill();
+    });
+
+    ambientTweens.forEach((tween) => {
+      tween.kill();
+    });
+
+    ambientTimelines.forEach((tl) => {
+      tl.kill();
+    });
 
     sectionLine?.classList.remove("is-alive");
-
-    gsap.killTweensOf([
-      badge,
-      topLine,
-      numberOne,
-      verticalLine,
-      rankingLine,
-      statementsLine,
-      sectionLine,
-      industryTitle,
-      timeline,
-      ...awards,
-      ...awardIcons,
-      ...timelineItems,
-      ...rankingAccentTexts,
-    ]);
   };
 }
 
-initRecognition();
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
 
-document.addEventListener("astro:page-load", initRecognition);
+initRecognition();
 
 export {};
