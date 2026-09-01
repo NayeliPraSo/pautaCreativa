@@ -5,9 +5,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const mm = gsap.matchMedia();
 
-const prefersReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-).matches;
+const prefersReducedMotion =
+  window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
 /* ============================================================
    MÁQUINA DE ESCRIBIR
@@ -19,10 +20,11 @@ function splitTextIntoLetters(
   const letters: HTMLElement[] = [];
   const textNodes: Text[] = [];
 
-  const walker = document.createTreeWalker(
-    element,
-    NodeFilter.SHOW_TEXT
-  );
+  const walker =
+    document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT
+    );
 
   let node: Node | null;
 
@@ -31,11 +33,15 @@ function splitTextIntoLetters(
   }
 
   textNodes.forEach((textNode) => {
-    const text = textNode.textContent ?? "";
-    const fragment = document.createDocumentFragment();
+    const text =
+      textNode.textContent ?? "";
+
+    const fragment =
+      document.createDocumentFragment();
 
     [...text].forEach((character) => {
-      const span = document.createElement("span");
+      const span =
+        document.createElement("span");
 
       span.classList.add("om-letter");
       span.textContent = character;
@@ -103,13 +109,7 @@ function createTimelinePulse(
   const timeline =
     gsap.timeline({
       repeat: -1,
-
-      /*
-       * Pausa al terminar el último
-       * antes de volver al primero.
-       */
       repeatDelay: 0.7,
-
       paused: true,
     });
 
@@ -138,8 +138,7 @@ function createTimelinePulse(
 
       ease: "sine.inOut",
 
-      transformOrigin:
-        "50% 50%",
+      transformOrigin: "50% 50%",
     });
 
     /* =========================================
@@ -156,8 +155,7 @@ function createTimelinePulse(
 
           ease: "sine.inOut",
 
-          transformOrigin:
-            "50% 50%",
+          transformOrigin: "50% 50%",
         },
         "<"
       );
@@ -224,7 +222,7 @@ function createTimelinePulse(
    ORANGE MINDSET
    ============================================================ */
 
-function initOrangeMindset() {
+function initOrangeMindset(): void {
   const section =
     document.querySelector<HTMLElement>(
       "#orange-mindset"
@@ -315,7 +313,7 @@ function initOrangeMindset() {
   }
 
   /* ==========================================================
-     PULSO AMBIENTAL DEL TIMELINE
+     PULSO AMBIENTAL DEL PANEL 2
      ========================================================== */
 
   const timelinePulse =
@@ -324,7 +322,165 @@ function initOrangeMindset() {
     );
 
   /* ==========================================================
-     PANEL 1 — ENTRADA
+     ESTADOS DE REPLAY
+     ========================================================== */
+
+  let panelOnePlayed = false;
+  let panelTwoPlayed = false;
+
+  let panelOneTimeline:
+    gsap.core.Timeline | null = null;
+
+  let panelTwoTimeline:
+    gsap.core.Timeline | null = null;
+
+  /* ==========================================================
+     PANEL 1 — ESTADO INICIAL
+     ========================================================== */
+
+  const setPanelOneInitialState =
+    (): void => {
+      if (
+        !p1Index ||
+        !p1Circle ||
+        !p1Copy ||
+        !p1Divider
+      ) {
+        return;
+      }
+
+      gsap.set(p1Index, {
+        opacity: 0,
+        y: 20,
+      });
+
+      gsap.set(p1Circle, {
+        opacity: 0,
+        scale: 0.6,
+
+        transformOrigin:
+          "50% 50%",
+      });
+
+      /*
+       * El contenedor permanece visible.
+       * Solo las letras desaparecen.
+       */
+
+      gsap.set(p1Copy, {
+        opacity: 1,
+      });
+
+      gsap.set(
+        p1CopyLetters,
+        {
+          opacity: 0,
+        }
+      );
+
+      gsap.set(p1Divider, {
+        scaleX: 0,
+
+        transformOrigin:
+          "left center",
+      });
+    };
+
+  /* ==========================================================
+     PANEL 2 — ESTADO INICIAL
+     ========================================================== */
+
+  const setPanelTwoInitialState =
+    (): void => {
+      if (
+        !panel2 ||
+        !p2Intro ||
+        !p2DescriptionWrap ||
+        !p2TimelineItems.length
+      ) {
+        return;
+      }
+
+      gsap.set(p2Intro, {
+        opacity: 1,
+      });
+
+      gsap.set(
+        p2IntroLetters,
+        {
+          opacity: 0,
+        }
+      );
+
+      gsap.set(
+        p2TimelineItems,
+        {
+          opacity: 0,
+          y: 20,
+        }
+      );
+
+      gsap.set(
+        p2DescriptionWrap,
+        {
+          opacity: 1,
+        }
+      );
+
+      gsap.set(
+        p2DescriptionLetters,
+        {
+          opacity: 0,
+        }
+      );
+
+      /*
+       * Restauramos también el estado
+       * visual del pulso ambiental.
+       *
+       * Esto NO toca la entrada de los
+       * wrappers del timeline.
+       */
+
+      p2TimelineItems.forEach(
+        (item) => {
+          const dot =
+            item.querySelector<HTMLElement>(
+              ".om-timeline-dot"
+            );
+
+          const label =
+            item.querySelector<HTMLElement>(
+              ".om-timeline-label"
+            );
+
+          if (dot) {
+            gsap.set(dot, {
+              scale: 1,
+              opacity: 1,
+            });
+          }
+
+          if (label) {
+            gsap.set(label, {
+              scale: 1,
+            });
+          }
+        }
+      );
+    };
+
+  /* ==========================================================
+     ESTADO INICIAL
+     ========================================================== */
+
+  if (!prefersReducedMotion) {
+    setPanelOneInitialState();
+    setPanelTwoInitialState();
+  }
+
+  /* ==========================================================
+     PANEL 1 — TIMELINE DE ENTRADA
      ========================================================== */
 
   if (
@@ -334,127 +490,79 @@ function initOrangeMindset() {
     p1Copy &&
     p1Divider
   ) {
-    gsap.set(p1Index, {
-      opacity: 0,
-      y: 20,
-    });
+    panelOneTimeline =
+      gsap.timeline({
+        paused: true,
 
-    gsap.set(p1Circle, {
-      opacity: 0,
-      scale: 0.6,
+        defaults: {
+          ease: "power3.out",
+        },
+      });
 
-      transformOrigin:
-        "50% 50%",
-    });
+    /* Índice */
 
-    /*
-     * El contenedor permanece visible.
-     * Solo ocultamos las letras.
-     */
-
-    gsap.set(p1Copy, {
-      opacity: 1,
-    });
-
-    gsap.set(
-      p1CopyLetters,
+    panelOneTimeline.to(
+      p1Index,
       {
-        opacity: 0,
-      }
-    );
-
-    gsap.set(p1Divider, {
-      scaleX: 0,
-
-      transformOrigin:
-        "left center",
-    });
-
-    gsap.timeline({
-      scrollTrigger: {
-        id:
-          "orange-mindset-panel1-entrance",
-
-        trigger: section,
-
-        start: "top 75%",
-
-        once: true,
-      },
-
-      defaults: {
-        ease: "power3.out",
-      },
-    })
-
-      /* Índice */
-
-      .to(p1Index, {
         opacity: 1,
         y: 0,
 
         duration: 0.7,
-      })
+      }
+    );
 
-      /* Círculo */
+    /* Círculo */
 
-      .to(
-        p1Circle,
-        {
-          opacity: 1,
-          scale: 1,
+    panelOneTimeline.to(
+      p1Circle,
+      {
+        opacity: 1,
+        scale: 1,
 
-          duration: 1,
+        duration: 1,
 
-          ease:
-            "back.out(1.6)",
+        ease: "back.out(1.6)",
+      },
+      "-=0.25"
+    );
+
+    /* Copy — máquina de escribir */
+
+    panelOneTimeline.to(
+      p1CopyLetters,
+      {
+        opacity: 1,
+
+        duration: 0.01,
+
+        stagger: {
+          each: 0.025,
+          from: "start",
         },
-        "-=0.25"
-      )
 
-      /* Copy — máquina de escribir */
+        ease: "none",
+      },
+      "-=0.25"
+    );
 
-      .to(
-        p1CopyLetters,
-        {
-          opacity: 1,
+    /* Divider */
 
-          duration: 0.01,
+    panelOneTimeline.to(
+      p1Divider,
+      {
+        scaleX: 1,
 
-          stagger: {
-            each: 0.025,
-            from: "start",
-          },
+        duration: 0.8,
 
-          ease: "none",
-        },
-        "-=0.25"
-      )
-
-      /* Divider */
-
-      .to(
-        p1Divider,
-        {
-          scaleX: 1,
-
-          duration: 0.8,
-
-          ease:
-            "power2.inOut",
-        },
-        "-=0.15"
-      );
+        ease: "power2.inOut",
+      },
+      "-=0.15"
+    );
   }
 
   /* ==========================================================
-     PANEL 2 — ENTRADA
+     PANEL 2 — TIMELINE DE ENTRADA
      ========================================================== */
-
-  let panelTwoPlayed = false;
-
-  let panelTwoTimeline:
-    gsap.core.Timeline | null = null;
 
   if (
     !prefersReducedMotion &&
@@ -463,55 +571,6 @@ function initOrangeMindset() {
     p2DescriptionWrap &&
     p2TimelineItems.length
   ) {
-    /* =========================================
-       INTRO
-       ========================================= */
-
-    gsap.set(p2Intro, {
-      opacity: 1,
-    });
-
-    gsap.set(
-      p2IntroLetters,
-      {
-        opacity: 0,
-      }
-    );
-
-    /* =========================================
-       ITEMS
-       ========================================= */
-
-    gsap.set(
-      p2TimelineItems,
-      {
-        opacity: 0,
-        y: 20,
-      }
-    );
-
-    /* =========================================
-       DESCRIPCIÓN
-       ========================================= */
-
-    gsap.set(
-      p2DescriptionWrap,
-      {
-        opacity: 1,
-      }
-    );
-
-    gsap.set(
-      p2DescriptionLetters,
-      {
-        opacity: 0,
-      }
-    );
-
-    /* =========================================
-       TIMELINE COMPLETA
-       ========================================= */
-
     panelTwoTimeline =
       gsap.timeline({
         paused: true,
@@ -519,83 +578,98 @@ function initOrangeMindset() {
         defaults: {
           ease: "power3.out",
         },
-      })
+      });
 
-        /* Intro — máquina de escribir */
+    /* Intro — máquina de escribir */
 
-        .to(
-          p2IntroLetters,
-          {
-            opacity: 1,
+    panelTwoTimeline.to(
+      p2IntroLetters,
+      {
+        opacity: 1,
 
-            duration: 0.01,
+        duration: 0.01,
 
-            stagger: {
-              each: 0.025,
-              from: "start",
-            },
+        stagger: {
+          each: 0.025,
+          from: "start",
+        },
 
-            ease: "none",
-          }
-        )
+        ease: "none",
+      }
+    );
 
-        /* Valores del timeline */
+    /* Valores del timeline */
 
-        .to(
-          p2TimelineItems,
-          {
-            opacity: 1,
-            y: 0,
+    panelTwoTimeline.to(
+      p2TimelineItems,
+      {
+        opacity: 1,
+        y: 0,
 
-            duration: 0.6,
+        duration: 0.6,
 
-            stagger: {
-              each: 0.1,
-              from: "start",
-            },
-          },
-          "-=0.1"
-        )
+        stagger: {
+          each: 0.1,
+          from: "start",
+        },
+      },
+      "-=0.1"
+    );
 
-        /* Descripción — máquina de escribir */
+    /* Descripción — máquina de escribir */
 
-        .to(
-          p2DescriptionLetters,
-          {
-            opacity: 1,
+    panelTwoTimeline.to(
+      p2DescriptionLetters,
+      {
+        opacity: 1,
 
-            duration: 0.01,
+        duration: 0.01,
 
-            stagger: {
-              each: 0.022,
-              from: "start",
-            },
+        stagger: {
+          each: 0.022,
+          from: "start",
+        },
 
-            ease: "none",
-          },
-          "-=0.05"
-        )
+        ease: "none",
+      },
+      "-=0.05"
+    );
 
-        /* =====================================
-           INICIAR PULSO SECUENCIAL
-           ===================================== */
+    /*
+     * Cuando termina toda la entrada
+     * comienza el movimiento ambiental.
+     */
 
-        .call(() => {
-          /*
-           * Solo comienza cuando toda
-           * la entrada ya terminó.
-           */
-
-          timelinePulse?.restart();
-        });
+    panelTwoTimeline.call(() => {
+      timelinePulse?.restart();
+    });
   }
 
   /* ==========================================================
-     REPRODUCIR PANEL 2 SOLO UNA VEZ
+     PLAY PANEL 1
      ========================================================== */
 
-  function playPanelTwoOnce() {
+  const playPanelOne = (): void => {
     if (
+      prefersReducedMotion ||
+      panelOnePlayed ||
+      !panelOneTimeline
+    ) {
+      return;
+    }
+
+    panelOnePlayed = true;
+
+    panelOneTimeline.restart();
+  };
+
+  /* ==========================================================
+     PLAY PANEL 2
+     ========================================================== */
+
+  const playPanelTwo = (): void => {
+    if (
+      prefersReducedMotion ||
       panelTwoPlayed ||
       !panelTwoTimeline
     ) {
@@ -604,8 +678,80 @@ function initOrangeMindset() {
 
     panelTwoPlayed = true;
 
-    panelTwoTimeline.play();
-  }
+    timelinePulse?.pause(0);
+
+    panelTwoTimeline.restart();
+  };
+
+  /* ==========================================================
+     RESET PANEL 1
+     ========================================================== */
+
+  const resetPanelOne = (): void => {
+    if (
+      prefersReducedMotion ||
+      !panelOneTimeline
+    ) {
+      return;
+    }
+
+    panelOnePlayed = false;
+
+    /*
+     * No hacemos kill().
+     *
+     * La timeline debe permanecer viva
+     * para poder reproducirse después.
+     */
+    panelOneTimeline.pause(0);
+
+    setPanelOneInitialState();
+  };
+
+  /* ==========================================================
+     RESET PANEL 2
+     ========================================================== */
+
+  const resetPanelTwo = (): void => {
+    if (
+      prefersReducedMotion ||
+      !panelTwoTimeline
+    ) {
+      return;
+    }
+
+    panelTwoPlayed = false;
+
+    /*
+     * Primero detenemos el movimiento
+     * ambiental.
+     */
+    timelinePulse?.pause(0);
+
+    /*
+     * La timeline sigue existiendo.
+     */
+    panelTwoTimeline.pause(0);
+
+    setPanelTwoInitialState();
+  };
+
+  /* ==========================================================
+     RESET COMPLETO DE ORANGE MINDSET
+     ========================================================== */
+
+  const resetOrangeMindset =
+    (): void => {
+      if (
+        !panelOnePlayed &&
+        !panelTwoPlayed
+      ) {
+        return;
+      }
+
+      resetPanelOne();
+      resetPanelTwo();
+    };
 
   /* ==========================================================
      DESKTOP >= 769px
@@ -657,16 +803,27 @@ function initOrangeMindset() {
               true,
 
             /*
-             * Cuando el usuario supera
-             * la mitad del recorrido,
-             * entra el panel 2.
+             * Muy importante:
+             *
+             * el progreso horizontal decide
+             * qué panel está entrando.
+             *
+             * Si regresamos desde abajo:
+             * progress comienza cerca de 1,
+             * así que se reproduce Panel 2.
+             *
+             * Cuando seguimos subiendo y
+             * cruzamos hacia Panel 1,
+             * éste vuelve a reproducirse.
              */
 
             onUpdate: (self) => {
               if (
                 self.progress >= 0.5
               ) {
-                playPanelTwoOnce();
+                playPanelTwo();
+              } else {
+                playPanelOne();
               }
             },
           },
@@ -679,17 +836,14 @@ function initOrangeMindset() {
       const bgTween =
         bgLayer
           ? gsap.to(bgLayer, {
-              "--peel-x":
-                "-25%",
+              "--peel-x": "-25%",
 
               ease: "none",
 
               scrollTrigger: {
-                trigger:
-                  section,
+                trigger: section,
 
-                start:
-                  "top top",
+                start: "top top",
 
                 end: () =>
                   `+=${getTotalScroll()}`,
@@ -742,36 +896,239 @@ function initOrangeMindset() {
 
   /* ==========================================================
      MOBILE <= 768px
-     PANEL 2 POR SCROLL VERTICAL
      ========================================================== */
 
   mm.add(
     "(max-width: 768px)",
     () => {
-      if (!panel2) {
-        return;
-      }
+      /*
+       * En móvil no existe el slider
+       * horizontal.
+       *
+       * Cada panel entra cuando llega
+       * verticalmente al viewport.
+       */
 
-      const panelTwoTrigger =
+      const panelOneTrigger =
         ScrollTrigger.create({
           id:
-            "orange-mindset-panel2-mobile",
+            "orange-mindset-panel1-mobile",
 
-          trigger: panel2,
+          trigger: section,
 
           start: "top 75%",
 
-          once: true,
+          onEnter: playPanelOne,
 
-          onEnter:
-            playPanelTwoOnce,
+          onEnterBack: playPanelOne,
         });
 
+      let panelTwoTrigger:
+        ScrollTrigger | null = null;
+
+      if (panel2) {
+        panelTwoTrigger =
+          ScrollTrigger.create({
+            id:
+              "orange-mindset-panel2-mobile",
+
+            trigger: panel2,
+
+            start: "top 75%",
+
+            onEnter: playPanelTwo,
+
+            onEnterBack: playPanelTwo,
+          });
+      }
+
       return () => {
-        panelTwoTrigger.kill();
+        panelOneTrigger.kill();
+
+        panelTwoTrigger?.kill();
       };
     }
   );
+
+  /* ==========================================================
+     DETECCIÓN GLOBAL DE ENTRADA / SALIDA
+     ========================================================== */
+
+  const checkOrangePosition =
+    (): void => {
+      const rect =
+        section.getBoundingClientRect();
+
+      const viewportHeight =
+        window.innerHeight;
+
+      /* =====================================
+         RESET AL SALIR HACIA ABAJO
+         ===================================== */
+
+      /*
+       * Orange quedó arriba.
+       *
+       * Esto ocurre cuando seguimos
+       * hacia Solutions.
+       */
+      const leftThroughTop =
+        rect.bottom <=
+        viewportHeight * 0.05;
+
+      /* =====================================
+         RESET AL SALIR HACIA ARRIBA
+         ===================================== */
+
+      /*
+       * Orange quedó debajo.
+       *
+       * Esto ocurre cuando regresamos
+       * hacia About.
+       */
+      const leftThroughBottom =
+        rect.top >=
+        viewportHeight * 0.95;
+
+      if (
+        leftThroughTop ||
+        leftThroughBottom
+      ) {
+        resetOrangeMindset();
+        return;
+      }
+
+      /* =====================================
+         MOBILE
+         ===================================== */
+
+      if (
+        window.innerWidth <= 768
+      ) {
+        return;
+      }
+
+      /* =====================================
+         DESKTOP — QUÉ PANEL ESTÁ VISIBLE
+         ===================================== */
+
+      /*
+       * Antes de que comience el pin,
+       * ScrollTrigger.progress todavía
+       * puede ser 0.
+       *
+       * Durante el pin usamos su
+       * progreso real para saber cuál
+       * panel debe entrar.
+       */
+
+      const pinTrigger =
+        ScrollTrigger.getById(
+          "orange-mindset-pin"
+        );
+
+      const progress =
+        pinTrigger?.progress ?? 0;
+
+      /* =====================================
+         ALTURA VISIBLE
+         ===================================== */
+
+      const visibleTop =
+        Math.max(
+          rect.top,
+          0
+        );
+
+      const visibleBottom =
+        Math.min(
+          rect.bottom,
+          viewportHeight
+        );
+
+      const visibleHeight =
+        Math.max(
+          0,
+          visibleBottom -
+            visibleTop
+        );
+
+      const minimumVisible =
+        Math.min(
+          120,
+          viewportHeight * 0.12
+        );
+
+      const isVisibleEnough =
+        visibleHeight >=
+        minimumVisible;
+
+      /*
+       * Activamos Orange antes de llegar
+       * al pin completo, aproximadamente
+       * como el antiguo:
+       *
+       * start: "top 75%"
+       */
+      const reachedActivationZone =
+        rect.top <
+          viewportHeight * 0.78 &&
+        rect.bottom >
+          viewportHeight * 0.05;
+
+      if (
+        !isVisibleEnough ||
+        !reachedActivationZone
+      ) {
+        return;
+      }
+
+      /*
+       * Si venimos de About:
+       *
+       * progress = 0
+       * -> Panel 1
+       *
+       * Si regresamos desde Solutions:
+       *
+       * progress ≈ 1
+       * -> Panel 2
+       */
+
+      if (progress >= 0.5) {
+        playPanelTwo();
+      } else {
+        playPanelOne();
+      }
+    };
+
+  /* ==========================================================
+     LISTENERS DE VISIBILIDAD
+     ========================================================== */
+
+  window.addEventListener(
+    "scroll",
+    checkOrangePosition,
+    {
+      passive: true,
+    }
+  );
+
+  window.addEventListener(
+    "resize",
+    checkOrangePosition,
+    {
+      passive: true,
+    }
+  );
+
+  /* ==========================================================
+     PRIMERA COMPROBACIÓN
+     ========================================================== */
+
+  requestAnimationFrame(() => {
+    checkOrangePosition();
+  });
 }
 
 /* ============================================================

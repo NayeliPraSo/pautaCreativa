@@ -4,9 +4,6 @@
  */
 
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /* =========================================
    DATOS DEL CÍRCULO DERECHO
@@ -32,7 +29,9 @@ const FINAL_ANGLE =
    MÁQUINA DE ESCRIBIR
    ========================================= */
 
-const splitTextIntoLetters = (element: HTMLElement) => {
+const splitTextIntoLetters = (
+  element: HTMLElement,
+): HTMLSpanElement[] => {
   const letters: HTMLSpanElement[] = [];
   const textNodes: Text[] = [];
 
@@ -49,10 +48,12 @@ const splitTextIntoLetters = (element: HTMLElement) => {
 
   textNodes.forEach((textNode) => {
     const text = textNode.textContent ?? "";
-    const fragment = document.createDocumentFragment();
+    const fragment =
+      document.createDocumentFragment();
 
     [...text].forEach((character) => {
-      const span = document.createElement("span");
+      const span =
+        document.createElement("span");
 
       span.classList.add("about-letter");
       span.textContent = character;
@@ -74,23 +75,41 @@ const splitTextIntoLetters = (element: HTMLElement) => {
    HOVER — SEPARACIÓN DE LETRAS
    ========================================= */
 
-const initLetterSpread = (element: HTMLElement) => {
-  if (element.dataset.letterSpread === "true") return;
+const initLetterSpread = (
+  element: HTMLElement,
+): void => {
+  if (
+    element.dataset.letterSpread === "true"
+  ) {
+    return;
+  }
 
   element.dataset.letterSpread = "true";
 
   const text = element.textContent ?? "";
 
-  element.setAttribute("aria-label", text);
+  element.setAttribute(
+    "aria-label",
+    text,
+  );
+
   element.textContent = "";
 
   const letters: HTMLSpanElement[] = [];
 
   [...text].forEach((character) => {
-    const span = document.createElement("span");
+    const span =
+      document.createElement("span");
 
-    span.classList.add("circle-title-letter");
-    span.setAttribute("aria-hidden", "true");
+    span.classList.add(
+      "circle-title-letter",
+    );
+
+    span.setAttribute(
+      "aria-hidden",
+      "true",
+    );
+
     span.textContent = character;
 
     element.appendChild(span);
@@ -98,51 +117,57 @@ const initLetterSpread = (element: HTMLElement) => {
   });
 
   letters.forEach((letter, index) => {
-    letter.addEventListener("mouseenter", () => {
-      const previous = letters[index - 1];
-      const next = letters[index + 1];
+    letter.addEventListener(
+      "mouseenter",
+      () => {
+        const previous =
+          letters[index - 1];
 
-      /* Letra sobre la que está el mouse */
-      gsap.to(letter, {
-        x: 0,
-        y: -6,
-        scale: 1.12,
-        duration: 0.3,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
+        const next =
+          letters[index + 1];
 
-      /* Empuja ligeramente la anterior */
-      if (previous) {
-        gsap.to(previous, {
-          x: -6,
+        gsap.to(letter, {
+          x: 0,
+          y: -6,
+          scale: 1.12,
           duration: 0.3,
           ease: "power2.out",
           overwrite: "auto",
         });
-      }
 
-      /* Empuja ligeramente la siguiente */
-      if (next) {
-        gsap.to(next, {
-          x: 6,
-          duration: 0.3,
+        if (previous) {
+          gsap.to(previous, {
+            x: -6,
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+
+        if (next) {
+          gsap.to(next, {
+            x: 6,
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+      },
+    );
+
+    letter.addEventListener(
+      "mouseleave",
+      () => {
+        gsap.to(letters, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 0.4,
           ease: "power2.out",
           overwrite: "auto",
         });
-      }
-    });
-
-    letter.addEventListener("mouseleave", () => {
-      gsap.to(letters, {
-        x: 0,
-        y: 0,
-        scale: 1,
-        duration: 0.4,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    });
+      },
+    );
   });
 };
 
@@ -150,32 +175,52 @@ const initLetterSpread = (element: HTMLElement) => {
    ANIMACIÓN ABOUT
    ========================================= */
 
-const initAboutAnimation = () => {
+const initAboutAnimation = (): void => {
   const section =
-    document.querySelector<HTMLElement>("#somos");
+    document.querySelector<HTMLElement>(
+      "#somos",
+    );
 
   if (!section) return;
 
+  /* =========================================
+     ELEMENTOS
+     ========================================= */
+
   const intro =
-    section.querySelector<HTMLElement>(".about-intro");
+    section.querySelector<HTMLElement>(
+      ".about-intro",
+    );
 
   const copy =
-    section.querySelector<HTMLElement>(".about-copy");
+    section.querySelector<HTMLElement>(
+      ".about-copy",
+    );
 
   const leftCircle =
-    section.querySelector<SVGGElement>(".venn-left");
+    section.querySelector<SVGGElement>(
+      ".venn-left",
+    );
 
   const rightCircle =
-    section.querySelector<SVGGElement>(".venn-right");
+    section.querySelector<SVGGElement>(
+      ".venn-right",
+    );
 
   const overlap =
-    section.querySelector<SVGGElement>(".venn-overlap");
+    section.querySelector<SVGGElement>(
+      ".venn-overlap",
+    );
 
   const pointer =
-    section.querySelector<SVGGElement>(".venn-pointer");
+    section.querySelector<SVGGElement>(
+      ".venn-pointer",
+    );
 
   const dot =
-    section.querySelector<SVGGElement>(".venn-dot");
+    section.querySelector<SVGGElement>(
+      ".venn-dot",
+    );
 
   const dotCircle =
     section.querySelector<SVGCircleElement>(
@@ -193,7 +238,9 @@ const initAboutAnimation = () => {
     );
 
   const plus =
-    section.querySelector<HTMLElement>(".about-plus");
+    section.querySelector<HTMLElement>(
+      ".about-plus",
+    );
 
   if (
     !intro ||
@@ -211,14 +258,27 @@ const initAboutAnimation = () => {
   }
 
   /* =========================================
+     REDUCED MOTION
+     ========================================= */
+
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+  /* =========================================
      TÍTULOS DE LOS CÍRCULOS
      ========================================= */
 
   const leftTitle =
-    leftContent.querySelector<HTMLElement>("h3");
+    leftContent.querySelector<HTMLElement>(
+      "h3",
+    );
 
   const rightTitle =
-    rightContent.querySelector<HTMLElement>("h3");
+    rightContent.querySelector<HTMLElement>(
+      "h3",
+    );
 
   if (leftTitle) {
     initLetterSpread(leftTitle);
@@ -228,80 +288,27 @@ const initAboutAnimation = () => {
     initLetterSpread(rightTitle);
   }
 
+  if (prefersReducedMotion) {
+    return;
+  }
+
   /* =========================================
      PREPARAR TEXTO INTRO
      ========================================= */
 
-  /*
-   * Evita volver a dividir el texto si
-   * Astro ejecuta init() más de una vez.
-   */
   let letters: HTMLElement[];
 
   if (copy.dataset.split === "true") {
     letters = Array.from(
-      copy.querySelectorAll<HTMLElement>(".about-letter"),
+      copy.querySelectorAll<HTMLElement>(
+        ".about-letter",
+      ),
     );
   } else {
-    letters = splitTextIntoLetters(copy);
+    letters =
+      splitTextIntoLetters(copy);
+
     copy.dataset.split = "true";
-  }
-
-  /* =========================================
-     ESTADO INICIAL
-     ========================================= */
-
-  gsap.set(intro, {
-    opacity: 1,
-  });
-
-  gsap.set(letters, {
-    opacity: 0,
-  });
-
-  gsap.set(leftCircle, {
-    x: -350,
-    opacity: 0,
-  });
-
-  gsap.set(leftContent, {
-    x: -350,
-    opacity: 0,
-  });
-
-  gsap.set(rightCircle, {
-    x: 350,
-    opacity: 0,
-  });
-
-  gsap.set(rightContent, {
-    x: 350,
-    opacity: 0,
-  });
-
-  gsap.set(overlap, {
-    opacity: 0,
-    filter: "brightness(0.6)",
-  });
-
-  gsap.set(pointer, {
-    opacity: 0,
-    y: -25,
-  });
-
-  if (plus) {
-    gsap.set(plus, {
-      opacity: 0,
-      transformOrigin: "50% 50%",
-    });
-
-    plus.addEventListener("mouseenter", () => {
-      gsap.to(plus, {
-        rotation: "+=180",
-        duration: 0.45,
-        ease: "back.out(1.7)",
-      });
-    });
   }
 
   /* =========================================
@@ -309,48 +316,243 @@ const initAboutAnimation = () => {
      ========================================= */
 
   const startRadians =
-    START_ANGLE * (Math.PI / 180);
+    START_ANGLE *
+    (Math.PI / 180);
 
   const startX =
     RIGHT_X +
-    Math.cos(startRadians) * RADIUS;
+    Math.cos(startRadians) *
+      RADIUS;
 
   const startY =
     CENTER_Y +
-    Math.sin(startRadians) * RADIUS;
-
-  gsap.set(dotCircle, {
-    attr: {
-      cx: startX,
-      cy: startY,
-    },
-  });
-
-  gsap.set(dot, {
-    opacity: 0,
-  });
+    Math.sin(startRadians) *
+      RADIUS;
 
   /* =========================================
-     TIMELINE
+     MOVIMIENTO DEL PUNTO
      ========================================= */
 
-  const timeline = gsap.timeline({
-    scrollTrigger: {
-      id: "about-diagram-animation",
-      trigger: section,
-      start: "top 65%",
-      once: true,
-    },
-  });
+  const dotMotion = {
+    angle: START_ANGLE,
+  };
+
+  const updateDotPosition = (): void => {
+    const radians =
+      dotMotion.angle *
+      (Math.PI / 180);
+
+    const x =
+      RIGHT_X +
+      Math.cos(radians) *
+        RADIUS;
+
+    const y =
+      CENTER_Y +
+      Math.sin(radians) *
+        RADIUS;
+
+    gsap.set(dotCircle, {
+      attr: {
+        cx: x,
+        cy: y,
+      },
+    });
+  };
+
+  /* =========================================
+     ESTADO INICIAL
+     ========================================= */
+
+  const setInitialState = (): void => {
+    gsap.set(intro, {
+      opacity: 1,
+    });
+
+    gsap.set(letters, {
+      opacity: 0,
+    });
+
+    gsap.set(leftCircle, {
+      x: -350,
+      opacity: 0,
+      scale: 1,
+      transformOrigin:
+        "center center",
+    });
+
+    gsap.set(leftContent, {
+      x: -350,
+      opacity: 0,
+    });
+
+    gsap.set(rightCircle, {
+      x: 350,
+      opacity: 0,
+      scale: 1,
+      transformOrigin:
+        "center center",
+    });
+
+    gsap.set(rightContent, {
+      x: 350,
+      opacity: 0,
+    });
+
+    gsap.set(overlap, {
+      opacity: 0,
+      scale: 1,
+      filter: "brightness(0.6)",
+      transformOrigin:
+        "center center",
+    });
+
+    gsap.set(pointer, {
+      opacity: 0,
+      y: -25,
+    });
+
+    gsap.set(dot, {
+      opacity: 0,
+    });
+
+    dotMotion.angle =
+      START_ANGLE;
+
+    gsap.set(dotCircle, {
+      attr: {
+        cx: startX,
+        cy: startY,
+      },
+    });
+
+    if (plus) {
+      gsap.set(plus, {
+        opacity: 0,
+        scale: 1,
+        y: 0,
+        transformOrigin:
+          "50% 50%",
+      });
+    }
+  };
+
+  setInitialState();
+
+  /* =========================================
+     PLUS — HOVER
+     ========================================= */
+
+  if (plus) {
+    plus.addEventListener(
+      "mouseenter",
+      () => {
+        gsap.to(plus, {
+          rotation: "+=180",
+          duration: 0.45,
+          ease: "back.out(1.7)",
+        });
+      },
+    );
+  }
+
+  /* =========================================
+     ANIMACIONES AMBIENTALES
+     ========================================= */
+
+  /* PLUS */
+
+  const plusPulse =
+    plus
+      ? gsap.fromTo(
+          plus,
+          {
+            scale: 1,
+            y: 0,
+          },
+          {
+            scale: 1.5,
+            y: -8,
+            duration: 0.8,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            paused: true,
+            immediateRender: false,
+          },
+        )
+      : null;
+
+  /* RESPIRACIÓN DEL DIAGRAMA */
+
+  const diagramBreathing =
+    gsap.fromTo(
+      [
+        leftCircle,
+        rightCircle,
+        overlap,
+      ],
+      {
+        scale: 1,
+      },
+      {
+        scale: 1.008,
+        duration: 2.2,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        paused: true,
+        transformOrigin:
+          "center center",
+        immediateRender: false,
+      },
+    );
+
+  /* MOVIMIENTO CONTINUO DE LA FLECHA */
+
+  const pointerFloat =
+    gsap.fromTo(
+      pointer,
+      {
+        y: 0,
+      },
+      {
+        y: 10,
+        duration: 0.9,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        paused: true,
+        immediateRender: false,
+      },
+    );
+
+  /* =========================================
+     TIMELINE DE ENTRADA
+     ========================================= */
+
+  const entranceTl =
+    gsap.timeline({
+      paused: true,
+
+      defaults: {
+        ease: "power3.out",
+      },
+    });
 
   /* =========================================
      INTRO — MÁQUINA DE ESCRIBIR
      ========================================= */
 
-  timeline.to(letters, {
+  entranceTl.to(letters, {
     opacity: 1,
     duration: 0.01,
-    stagger: 0.035,
+
+    stagger: {
+      each: 0.035,
+      from: "start",
+    },
+
     ease: "none",
   });
 
@@ -359,7 +561,7 @@ const initAboutAnimation = () => {
      ========================================= */
 
   if (plus) {
-    timeline.to(
+    entranceTl.to(
       plus,
       {
         opacity: 1,
@@ -369,15 +571,8 @@ const initAboutAnimation = () => {
       "-=0.2",
     );
 
-    timeline.call(() => {
-      gsap.to(plus, {
-        scale: 1.5,
-        y: -8,
-        duration: 0.8,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-      });
+    entranceTl.call(() => {
+      plusPulse?.restart();
     });
   }
 
@@ -385,8 +580,11 @@ const initAboutAnimation = () => {
      CÍRCULOS
      ========================================= */
 
-  timeline.to(
-    [leftCircle, leftContent],
+  entranceTl.to(
+    [
+      leftCircle,
+      leftContent,
+    ],
     {
       x: 0,
       opacity: 1,
@@ -396,8 +594,11 @@ const initAboutAnimation = () => {
     "+=0.15",
   );
 
-  timeline.to(
-    [rightCircle, rightContent],
+  entranceTl.to(
+    [
+      rightCircle,
+      rightContent,
+    ],
     {
       x: 0,
       opacity: 1,
@@ -411,18 +612,25 @@ const initAboutAnimation = () => {
      IMPACTO AL ENCONTRARSE
      ========================================= */
 
-  timeline.to(
-    [leftCircle, rightCircle],
+  entranceTl.to(
+    [
+      leftCircle,
+      rightCircle,
+    ],
     {
       scale: 1.018,
       duration: 0.14,
       ease: "power2.out",
-      transformOrigin: "center center",
+      transformOrigin:
+        "center center",
     },
   );
 
-  timeline.to(
-    [leftCircle, rightCircle],
+  entranceTl.to(
+    [
+      leftCircle,
+      rightCircle,
+    ],
     {
       scale: 1,
       duration: 0.22,
@@ -434,7 +642,7 @@ const initAboutAnimation = () => {
      INTERSECCIÓN
      ========================================= */
 
-  timeline.to(
+  entranceTl.to(
     overlap,
     {
       opacity: 1,
@@ -445,29 +653,15 @@ const initAboutAnimation = () => {
     "-=0.45",
   );
 
-  /* =========================================
-     RESPIRACIÓN DEL DIAGRAMA
-     ========================================= */
-
-  timeline.call(() => {
-    gsap.to(
-      [leftCircle, rightCircle, overlap],
-      {
-        scale: 1.008,
-        duration: 2.2,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-        transformOrigin: "center center",
-      },
-    );
+  entranceTl.call(() => {
+    diagramBreathing.restart();
   });
 
   /* =========================================
      FLECHA
      ========================================= */
 
-  timeline.to(
+  entranceTl.to(
     pointer,
     {
       opacity: 1,
@@ -478,22 +672,15 @@ const initAboutAnimation = () => {
     "-=0.1",
   );
 
-  /* Movimiento continuo de la flecha */
-  timeline.call(() => {
-    gsap.to(pointer, {
-      y: 10,
-      duration: 0.9,
-      ease: "sine.inOut",
-      repeat: -1,
-      yoyo: true,
-    });
+  entranceTl.call(() => {
+    pointerFloat.restart();
   });
 
   /* =========================================
      PUNTO
      ========================================= */
 
-  timeline.to(
+  entranceTl.to(
     dot,
     {
       opacity: 1,
@@ -503,34 +690,245 @@ const initAboutAnimation = () => {
     "-=0.05",
   );
 
-  const dotMotion = {
-    angle: START_ANGLE,
+  entranceTl.to(
+    dotMotion,
+    {
+      angle: FINAL_ANGLE,
+      duration: 1.25,
+      ease: "power1.inOut",
+
+      onUpdate: () => {
+        updateDotPosition();
+      },
+    },
+  );
+
+  /* =========================================
+     ESTADO DE REPLAY
+     ========================================= */
+
+  let hasPlayed = false;
+  let isArmedForReplay = true;
+
+  /* =========================================
+     PLAY
+     ========================================= */
+
+  const playAbout = (): void => {
+    if (!isArmedForReplay) {
+      return;
+    }
+
+    isArmedForReplay = false;
+    hasPlayed = true;
+
+    /*
+     * Solo pausamos los loops.
+     * No destruimos ningún tween.
+     */
+    plusPulse?.pause();
+
+    diagramBreathing.pause();
+
+    pointerFloat.pause();
+
+    /*
+     * Punto siempre desde arriba.
+     */
+    dotMotion.angle =
+      START_ANGLE;
+
+    updateDotPosition();
+
+    /*
+     * Timeline intacta.
+     */
+    entranceTl.restart();
   };
 
-  timeline.to(dotMotion, {
-    angle: FINAL_ANGLE,
-    duration: 1.25,
-    ease: "power1.inOut",
+  /* =========================================
+     RESET
+     ========================================= */
 
-    onUpdate: () => {
-      const radians =
-        dotMotion.angle * (Math.PI / 180);
+  const resetAbout = (): void => {
+    if (!hasPlayed) return;
+    if (isArmedForReplay) return;
 
-      const x =
-        RIGHT_X +
-        Math.cos(radians) * RADIUS;
+    isArmedForReplay = true;
+    hasPlayed = false;
 
-      const y =
-        CENTER_Y +
-        Math.sin(radians) * RADIUS;
+    /*
+     * Detenemos ambientales.
+     */
+    plusPulse?.pause();
 
-      gsap.set(dotCircle, {
-        attr: {
-          cx: x,
-          cy: y,
-        },
-      });
+    diagramBreathing.pause();
+
+    pointerFloat.pause();
+
+    /*
+     * Regresamos la timeline al inicio.
+     * NO usamos killTweensOf().
+     */
+    entranceTl.pause(0);
+
+    /*
+     * Estado visual inicial.
+     */
+    setInitialState();
+  };
+
+  /* =========================================
+     DETECCIÓN DE VISIBILIDAD
+     ========================================= */
+
+  const checkAboutPosition =
+    (): void => {
+      const rect =
+        section.getBoundingClientRect();
+
+      const viewportHeight =
+        window.innerHeight;
+
+      /* =====================================
+         RESET AL SALIR HACIA ABAJO
+         ===================================== */
+
+      /*
+       * About quedó prácticamente
+       * por encima de la pantalla.
+       *
+       * Esto ocurre al avanzar hacia
+       * Orange Mindset.
+       */
+      const leftThroughTop =
+        rect.bottom <=
+        viewportHeight * 0.05;
+
+      /* =====================================
+         RESET AL SALIR HACIA ARRIBA
+         ===================================== */
+
+      /*
+       * About quedó nuevamente debajo
+       * de la pantalla al regresar a Hero.
+       *
+       * Aquí está la corrección importante:
+       *
+       * antes esperábamos a:
+       *
+       * rect.top > viewportHeight + 80
+       *
+       * pero About normalmente queda
+       * alrededor del límite inferior
+       * del viewport.
+       */
+      const leftThroughBottom =
+        rect.top >=
+        viewportHeight * 0.95;
+
+      if (
+        leftThroughTop ||
+        leftThroughBottom
+      ) {
+        resetAbout();
+        return;
+      }
+
+      /* =====================================
+         ALTURA VISIBLE
+         ===================================== */
+
+      const visibleTop =
+        Math.max(
+          rect.top,
+          0,
+        );
+
+      const visibleBottom =
+        Math.min(
+          rect.bottom,
+          viewportHeight,
+        );
+
+      const visibleHeight =
+        Math.max(
+          0,
+          visibleBottom -
+            visibleTop,
+        );
+
+      /*
+       * No activamos por apenas
+       * unos píxeles visibles.
+       */
+      const minimumVisible =
+        Math.min(
+          120,
+          viewportHeight * 0.12,
+        );
+
+      const isVisibleEnough =
+        visibleHeight >=
+        minimumVisible;
+
+      /* =====================================
+         ZONA DE ACTIVACIÓN
+         ===================================== */
+
+      /*
+       * About comienza cuando su inicio
+       * alcanza aproximadamente el 78%
+       * del viewport.
+       *
+       * Tenemos así una zona neutra entre:
+       *
+       * RESET → 95%
+       * PLAY  → 78%
+       *
+       * para evitar parpadeos o
+       * reinicios cerca del límite.
+       */
+      const reachedActivationZone =
+        rect.top <
+          viewportHeight * 0.78 &&
+        rect.bottom >
+          viewportHeight * 0.05;
+
+      if (
+        isVisibleEnough &&
+        reachedActivationZone
+      ) {
+        playAbout();
+      }
+    };
+
+  /* =========================================
+     LISTENERS
+     ========================================= */
+
+  window.addEventListener(
+    "scroll",
+    checkAboutPosition,
+    {
+      passive: true,
     },
+  );
+
+  window.addEventListener(
+    "resize",
+    checkAboutPosition,
+    {
+      passive: true,
+    },
+  );
+
+  /* =========================================
+     PRIMERA COMPROBACIÓN
+     ========================================= */
+
+  requestAnimationFrame(() => {
+    checkAboutPosition();
   });
 };
 
@@ -538,26 +936,6 @@ const initAboutAnimation = () => {
    INIT
    ========================================= */
 
-const init = () => {
-  const about =
-    document.querySelector<HTMLElement>("#somos");
-
-  if (!about) return;
-
-  ScrollTrigger
-    .getById("about-diagram-animation")
-    ?.kill();
-
-  initAboutAnimation();
-};
-
-/* Primera carga */
-init();
-
-/* Astro View Transitions */
-document.addEventListener(
-  "astro:page-load",
-  init,
-);
+initAboutAnimation();
 
 export {};
