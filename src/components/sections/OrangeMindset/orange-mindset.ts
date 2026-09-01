@@ -249,9 +249,29 @@ function initOrangeMindset(): void {
       ".om-panel-1 .om-index"
     );
 
-  const p1Circle =
+  const p1Visual =
     section.querySelector<HTMLElement>(
-      ".om-panel-1 .om-circle"
+      ".om-panel-1 .om-visual"
+    );
+
+  const p1Fruit =
+    section.querySelector<HTMLElement>(
+      ".om-visual-fruit"
+    );
+
+  const p1OrangeTitle =
+    section.querySelector<HTMLElement>(
+      ".om-visual-orange-title"
+    );
+
+  const p1MindsetTitle =
+    section.querySelector<HTMLElement>(
+      ".om-visual-mindset-title"
+    );
+
+  const p1Vivimos =
+    section.querySelector<HTMLElement>(
+      ".om-visual-vivimos"
     );
 
   const p1Copy =
@@ -342,7 +362,11 @@ function initOrangeMindset(): void {
     (): void => {
       if (
         !p1Index ||
-        !p1Circle ||
+        !p1Visual ||
+        !p1Fruit ||
+        !p1OrangeTitle ||
+        !p1MindsetTitle ||
+        !p1Vivimos ||
         !p1Copy ||
         !p1Divider
       ) {
@@ -354,12 +378,40 @@ function initOrangeMindset(): void {
         y: 20,
       });
 
-      gsap.set(p1Circle, {
-        opacity: 0,
-        scale: 0.6,
+      gsap.set(p1Visual, {
+        opacity: 1,
+      });
 
-        transformOrigin:
-          "50% 50%",
+      /*
+       * IMPORTANTE:
+       * Las posiciones finales de estas imágenes viven en CSS.
+       * No usamos x, y, scale, rotation ni xPercent aquí porque
+       * GSAP escribiría sobre `transform` y podría romper los
+       * translateX(-50%) definidos en el stylesheet.
+       */
+
+      gsap.set(p1Fruit, {
+        autoAlpha: 0,
+        clipPath: "inset(0 100% 0 0)",
+        filter: "blur(6px)",
+      });
+
+      gsap.set(p1OrangeTitle, {
+        autoAlpha: 0,
+        clipPath: "inset(0 100% 0 0)",
+        filter: "blur(3px)",
+      });
+
+      gsap.set(p1MindsetTitle, {
+        autoAlpha: 0,
+        clipPath: "inset(0 0 0 100%)",
+        filter: "blur(3px)",
+      });
+
+      gsap.set(p1Vivimos, {
+        autoAlpha: 0,
+        clipPath: "inset(0 100% 0 0)",
+        filter: "blur(2px)",
       });
 
       /*
@@ -486,7 +538,11 @@ function initOrangeMindset(): void {
   if (
     !prefersReducedMotion &&
     p1Index &&
-    p1Circle &&
+    p1Visual &&
+    p1Fruit &&
+    p1OrangeTitle &&
+    p1MindsetTitle &&
+    p1Vivimos &&
     p1Copy &&
     p1Divider
   ) {
@@ -511,19 +567,80 @@ function initOrangeMindset(): void {
       }
     );
 
-    /* Círculo */
+    /* =========================================
+       COMPOSICIÓN ORANGE MINDSET
+       =========================================
+
+       Las cuatro piezas conservan SIEMPRE su top/left/bottom/
+       transform del CSS. La entrada se hace con máscara + blur
+       para no modificar las posiciones que ya ajustaste.
+    */
+
+    /* Naranja */
 
     panelOneTimeline.to(
-      p1Circle,
+      p1Fruit,
       {
-        opacity: 1,
-        scale: 1,
-
-        duration: 1,
-
-        ease: "back.out(1.6)",
+        autoAlpha: 1,
+        clipPath: "inset(0 0% 0 0)",
+        filter: "blur(0px)",
+        duration: 1.05,
+        ease: "power3.out",
       },
       "-=0.25"
+    );
+
+    /* ORANGE */
+
+    panelOneTimeline.to(
+      p1OrangeTitle,
+      {
+        autoAlpha: 1,
+        clipPath: "inset(0 0% 0 0)",
+        filter: "blur(0px)",
+        duration: 0.72,
+        ease: "power3.out",
+      },
+      "-=0.72"
+    );
+
+    /* MINDSET — revelado desde el lado contrario */
+
+    panelOneTimeline.to(
+      p1MindsetTitle,
+      {
+        autoAlpha: 1,
+        clipPath: "inset(0 0 0 0%)",
+        filter: "blur(0px)",
+        duration: 0.76,
+        ease: "power3.out",
+      },
+      "-=0.52"
+    );
+
+    /* VIVIMOS EL */
+
+    panelOneTimeline.to(
+      p1Vivimos,
+      {
+        autoAlpha: 1,
+        clipPath: "inset(0 0% 0 0)",
+        filter: "blur(0px)",
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "-=0.48"
+    );
+
+    /*
+     * Dejamos únicamente los valores de posicionamiento del CSS.
+     * No limpiamos `transform`, porque nunca lo tocamos desde GSAP.
+     */
+    panelOneTimeline.set(
+      [p1Fruit, p1OrangeTitle, p1MindsetTitle, p1Vivimos],
+      {
+        clearProps: "opacity,visibility,clipPath,filter",
+      }
     );
 
     /* Copy — máquina de escribir */

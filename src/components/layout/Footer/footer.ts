@@ -561,7 +561,6 @@ function elementHasReachedViewportPoint(
 
 function createMobileBlockAnimation(
   element: HTMLElement,
-  id: string,
   {
     y = 35,
     scale = 1,
@@ -570,6 +569,7 @@ function createMobileBlockAnimation(
   }: MobileBlockOptions = {}
 ): () => void {
   let hasPlayed = false;
+  let checkFrame = 0;
 
   gsap.set(element, {
     autoAlpha: 0,
@@ -597,46 +597,94 @@ function createMobileBlockAnimation(
       return;
     }
 
-    if (hasPlayed) return;
+    if (
+      hasPlayed &&
+      !tween.reversed()
+    ) {
+      return;
+    }
 
     hasPlayed = true;
-
     tween.play();
   };
 
-  const trigger =
-    ScrollTrigger.create({
-      id: `footer-mobile-${id}`,
+  const reset = (): void => {
+    if (!hasPlayed) return;
 
-      trigger: element,
+    hasPlayed = false;
+    tween.reverse();
+  };
 
-      start: `top ${
-        viewportRatio * 100
-      }%`,
+  const checkPosition = (): void => {
+    const rect =
+      element.getBoundingClientRect();
 
-      refreshPriority: -100,
+    const triggerPoint =
+      window.innerHeight *
+      viewportRatio;
 
-      invalidateOnRefresh: true,
+    if (rect.top <= triggerPoint) {
+      play();
+      return;
+    }
 
-      onEnter: () => {
-        play();
-      },
+    if (
+      hasPlayed &&
+      rect.top > triggerPoint
+    ) {
+      reset();
+    }
+  };
 
-      onEnterBack: () => {
-        play();
-      },
+  const scheduleCheck = (): void => {
+    if (checkFrame) return;
 
-      onLeaveBack: () => {
-        if (!hasPlayed) return;
+    checkFrame =
+      requestAnimationFrame(() => {
+        checkFrame = 0;
+        checkPosition();
+      });
+  };
 
-        hasPlayed = false;
+  window.addEventListener(
+    "scroll",
+    scheduleCheck,
+    {
+      passive: true,
+    }
+  );
 
-        tween.reverse();
-      },
-    });
+  window.addEventListener(
+    "resize",
+    scheduleCheck,
+    {
+      passive: true,
+    }
+  );
+
+  /*
+   * Sincronización inicial:
+   * si Footer ya está visible cuando se crea
+   * la animación, el bloque no se queda oculto.
+   */
+  scheduleCheck();
 
   return () => {
-    trigger.kill();
+    window.removeEventListener(
+      "scroll",
+      scheduleCheck
+    );
+
+    window.removeEventListener(
+      "resize",
+      scheduleCheck
+    );
+
+    if (checkFrame) {
+      cancelAnimationFrame(checkFrame);
+      checkFrame = 0;
+    }
+
     tween.kill();
   };
 }
@@ -665,7 +713,6 @@ function createMobileAnimations(
   cleanups.push(
     createMobileBlockAnimation(
       wordmark,
-      "wordmark",
       {
         y: 48,
         duration: 1,
@@ -681,7 +728,6 @@ function createMobileAnimations(
   cleanups.push(
     createMobileBlockAnimation(
       contact,
-      "contact",
       {
         y: 30,
         duration: 0.78,
@@ -697,7 +743,6 @@ function createMobileAnimations(
   cleanups.push(
     createMobileBlockAnimation(
       social,
-      "social",
       {
         y: 28,
         duration: 0.75,
@@ -711,11 +756,10 @@ function createMobileAnimations(
      -------------------------------------------------------------------------- */
 
   badgeGroups.forEach(
-    (group, index) => {
+    (group) => {
       cleanups.push(
         createMobileBlockAnimation(
           group,
-          `badge-${index}`,
           {
             y: 35,
             scale: 0.96,
@@ -863,56 +907,90 @@ function createMobileAnimations(
   };
 
   /* --------------------------------------------------------------------------
-     TRIGGER BADGE
+     CONTROL MOBILE DEL CÍRCULO PAUTA
      -------------------------------------------------------------------------- */
 
-  const badgeTrigger =
-    ScrollTrigger.create({
-      id: "footer-mobile-brand",
+  let badgeCheckFrame = 0;
 
-      trigger: brandBadge,
+  const resetBadge = (): void => {
+    if (!badgePlayed) return;
 
-      start: "top 84%",
+    badgePlayed = false;
 
-      refreshPriority: -100,
+    breathing.pause(0);
+    ambient.pause(0);
 
-      invalidateOnRefresh: true,
+    badgeTl.reverse();
+  };
 
-      onEnter: () => {
+  const checkBadgePosition =
+    (): void => {
+      const rect =
+        brandBadge.getBoundingClientRect();
+
+      const triggerPoint =
+        window.innerHeight * 0.84;
+
+      if (rect.top <= triggerPoint) {
         playBadge();
-      },
+        return;
+      }
 
-      onEnterBack: () => {
-        if (
-          badgePlayed &&
-          badgeTl.progress() >= 0.98
-        ) {
-          breathing.play();
-          ambient.play();
+      if (
+        badgePlayed &&
+        rect.top > triggerPoint
+      ) {
+        resetBadge();
+      }
+    };
 
-          return;
-        }
+  const scheduleBadgeCheck =
+    (): void => {
+      if (badgeCheckFrame) return;
 
-        playBadge();
-      },
+      badgeCheckFrame =
+        requestAnimationFrame(() => {
+          badgeCheckFrame = 0;
+          checkBadgePosition();
+        });
+    };
 
-      onLeaveBack: () => {
-        /**
-         * Mismo criterio que desktop:
-         * regresamos los movimientos ambientales
-         * exactamente a cero antes del reverse.
-         */
-        breathing.pause(0);
-        ambient.pause(0);
+  window.addEventListener(
+    "scroll",
+    scheduleBadgeCheck,
+    {
+      passive: true,
+    }
+  );
 
-        if (badgePlayed) {
-          badgeTl.reverse();
-        }
-      },
-    });
+  window.addEventListener(
+    "resize",
+    scheduleBadgeCheck,
+    {
+      passive: true,
+    }
+  );
+
+  scheduleBadgeCheck();
 
   cleanups.push(() => {
-    badgeTrigger.kill();
+    window.removeEventListener(
+      "scroll",
+      scheduleBadgeCheck
+    );
+
+    window.removeEventListener(
+      "resize",
+      scheduleBadgeCheck
+    );
+
+    if (badgeCheckFrame) {
+      cancelAnimationFrame(
+        badgeCheckFrame
+      );
+
+      badgeCheckFrame = 0;
+    }
 
     badgeTl.kill();
     breathing.kill();
@@ -926,7 +1004,6 @@ function createMobileAnimations(
   cleanups.push(
     createMobileBlockAnimation(
       copy,
-      "copy",
       {
         y: 22,
         duration: 0.7,

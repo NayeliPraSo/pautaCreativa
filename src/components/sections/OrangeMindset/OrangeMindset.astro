@@ -3,7 +3,10 @@ import "./orange-mindset.css";
 import Section from "../../ui/Section/Section.astro";
 import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
 
-import naranja from "../../../assets/images/naranja_orange.png";
+import naranja from "../../../assets/images/orange-mindset/naranja.png";
+import vivimosEl from "../../../assets/images/orange-mindset/vivimos-el.png";
+import orangeTitle from "../../../assets/images/orange-mindset/orange.png";
+import mindsetTitle from "../../../assets/images/orange-mindset/mindset.png";
 const mindsetValues: string[] = [
   "Colaborativa",
   "Valiente",
@@ -25,8 +28,20 @@ const mindsetValues: string[] = [
       </div>
 
       <div class="om-content">
-        <div class="om-circle">
-          <img src={naranja.src} alt="" class="om-circle-img" />
+        <div class="om-visual" aria-hidden="true">
+          <img src={vivimosEl.src} alt="" class="om-visual-vivimos" />
+
+          <div class="om-orange-lockup">
+            <img src={orangeTitle.src} alt="" class="om-visual-orange-title" />
+
+            <img src={naranja.src} alt="" class="om-visual-fruit" />
+
+            <img
+              src={mindsetTitle.src}
+              alt=""
+              class="om-visual-mindset-title"
+            />
+          </div>
         </div>
 
         <p class="om-copy">
