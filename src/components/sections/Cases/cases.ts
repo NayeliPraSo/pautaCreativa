@@ -171,6 +171,11 @@ function initCasesIntroAnimation():
       ".case-card__inner"
     );
 
+  const caseCardImages =
+    casesSection.querySelectorAll<HTMLElement>(
+      ".case-card__image"
+    );
+
   if (
     !counter ||
     !intro ||
@@ -259,6 +264,21 @@ function initCasesIntroAnimation():
           y: 55,
         }
       );
+
+      /*
+       * Reveal tipo "cortina" en la
+       * imagen: arranca completamente
+       * recortada por la derecha y se
+       * descubre de izquierda a derecha.
+       *
+       * Se resetea aquí también porque
+       * setInitialState() se reutiliza
+       * en el replay (playCases/resetCases).
+       */
+      gsap.set(caseCardImages, {
+        clipPath:
+          "inset(0% 100% 0% 0%)",
+      });
     };
 
   setInitialState();
@@ -435,6 +455,28 @@ function initCasesIntroAnimation():
           }
         );
       },
+    },
+    "<"
+  );
+
+  /* ----------------------------------------------------------
+     CARDS — REVEAL DE IMAGEN (clip-path)
+     ---------------------------------------------------------- */
+
+  tl.to(
+    caseCardImages,
+    {
+      clipPath:
+        "inset(0% 0% 0% 0%)",
+
+      duration: 0.9,
+
+      stagger: {
+        each: 0.12,
+        from: "start",
+      },
+
+      ease: "power3.out",
     },
     "<"
   );

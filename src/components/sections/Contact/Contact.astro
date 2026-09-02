@@ -41,15 +41,27 @@ import ContactForm from "./ContactForm.astro";
         </div>
 
         <nav class="contact-selector" aria-label="Tipo de contacto">
-          <button type="button" class="contact-option" data-form="clientes">
+          <button
+            type="button"
+            class="contact-option magnetic"
+            data-form="clientes"
+          >
             Clientes
           </button>
 
-          <button type="button" class="contact-option" data-form="trabajo">
+          <button
+            type="button"
+            class="contact-option magnetic"
+            data-form="trabajo"
+          >
             Bolsa de trabajo
           </button>
 
-          <button type="button" class="contact-option" data-form="proveedores">
+          <button
+            type="button"
+            class="contact-option magnetic"
+            data-form="proveedores"
+          >
             Proveedores
           </button>
         </nav>
@@ -82,4 +94,6 @@ import ContactForm from "./ContactForm.astro";
 
 <script>
   import "./contact";
+  import { initMagneticButtons } from "../../../utils/magnetic";
+  initMagneticButtons();
 </script>

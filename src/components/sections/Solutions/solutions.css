@@ -5,7 +5,7 @@
 .solutions {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   background: var(--color-bg);
 }
@@ -381,6 +381,20 @@
   /* Diseño Estratégico */
   .solutions-background[data-solution="strategic-design"] {
     background-position: 70% center;
+  }
+}
+
+@media (max-height: 700px) {
+  .solutions-container {
+    padding-bottom: 16px;
+  }
+ 
+  .solutions-header {
+    padding-top: 8px;
+  }
+ 
+  .solutions-content {
+    transform: translateY(0);
   }
 }
 
