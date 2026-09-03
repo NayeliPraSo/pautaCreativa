@@ -6,9 +6,25 @@ import ScrollIndicator from "../../ui/ScrollIndicator/ScrollIndicator.astro";
 
 import somosTitle from "../../../assets/images/header_somos.png";
 import creadoresTitle from "../../../assets/images/head_creadores_de_soluciones.png";
+import heroImage from "../../../assets/images/jumper-website.avif";
+
+import heroVideo from "../../../assets/videos/home_high.webm";
 ---
 
 <Section id="hero" class="hero">
+  <!-- VIDEO DE FONDO -->
+  <video
+    class="hero-bg"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster={heroImage.src}
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src={heroVideo} type="video/webm" />
+  </video>
   <div class="hero-content">
     <p class="hero-index">01/06</p>
     <img src={somosTitle.src} alt="Somos" class="hero-title-small" />
