@@ -41,7 +41,7 @@
 .header-menu a {
   font-family: var(--font-heading);
   font-size: var(--fs-lg);
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--color-bg);
   transition: color var(--transition-fast);

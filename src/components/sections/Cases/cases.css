@@ -20,7 +20,7 @@
   text-transform: uppercase;
 }
 
-.cases-counter .current {
+/*.cases-counter .current {
   color: var(--color-primary);
 }
 
@@ -28,9 +28,13 @@
 .cases-counter .total,
 .cases-counter .label {
   color: rgba(255, 255, 255, 0.8);
+}*/
+.cases-counter .current, .separator, .total {
+  display:none;
 }
 
 .cases-counter .label {
+  color: rgba(255, 255, 255, 0.8);
   margin-left: var(--space-3);
 }
 

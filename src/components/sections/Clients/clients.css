@@ -25,6 +25,12 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.clientes-counter .current,
+.clientes-counter .separator,
+.clientes-counter .total {
+  display: none;
+}
+
 .clientes-counter .label {
   margin-left: var(--space-3);
 }

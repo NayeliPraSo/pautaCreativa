@@ -214,7 +214,7 @@
 .recognition__timeline {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   padding-top: 2.5rem;
 }
 
@@ -734,7 +734,7 @@
     width: 80%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     column-gap: 1.3rem;
     row-gap: 2rem;
     padding-top: 0;
@@ -855,9 +855,9 @@
     width: 80%;
     margin: 0 auto;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 
-    column-gap: var(--space-2);
+    column-gap: var(--space-4);
     row-gap: 1.5rem;
 
     padding-top: 0;

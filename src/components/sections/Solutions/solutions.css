@@ -74,9 +74,12 @@
   text-transform: uppercase;
 }
 
-.solutions-index-number {
+/*.solutions-index-number {
   color: var(--color-primary);
   font-weight: 300;
+}*/
+.solutions-index-number {
+  display:none;
 }
 
 .solutions-index-label {

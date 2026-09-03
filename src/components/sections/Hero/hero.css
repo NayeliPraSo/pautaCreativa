@@ -34,13 +34,16 @@
   padding-bottom: var(--space-6);
 }
 
-.hero-index {
+/*.hero-index {
   font-family: var(--font-heading);
   font-size: var(--fs-xl);
   font-weight: 200;
   letter-spacing: 0.15em;
   color: #fff;
   margin-bottom: -0.75rem;
+}*/
+.hero-index {
+  display: none;
 }
 
 .hero-title-small {

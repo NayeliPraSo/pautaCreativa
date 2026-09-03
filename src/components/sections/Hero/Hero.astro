@@ -9,6 +9,7 @@ import creadoresTitle from "../../../assets/images/head_creadores_de_soluciones.
 import heroImage from "../../../assets/images/jumper-website.avif";
 
 import heroVideo from "../../../assets/videos/home_high.webm";
+import heroVideoMp4 from "../../../assets/videos/home_high.mp4";
 ---
 
 <Section id="hero" class="hero">
@@ -20,10 +21,11 @@ import heroVideo from "../../../assets/videos/home_high.webm";
     loop
     playsinline
     poster={heroImage.src}
-    preload="auto"
+    preload="metadata"
     aria-hidden="true"
   >
     <source src={heroVideo} type="video/webm" />
+    <source src={heroVideoMp4} type="video/mp4" />
   </video>
   <div class="hero-content">
     <p class="hero-index">01/06</p>
