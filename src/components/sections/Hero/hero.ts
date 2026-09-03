@@ -59,6 +59,7 @@ if (hero) {
      ============================================================ */
 
   if (!prefersReducedMotion) {
+
     /* ============================================================
        MÁQUINA DE ESCRIBIR
        ============================================================ */
@@ -150,7 +151,7 @@ if (hero) {
         () => {
           gsap.to(plus, {
             rotation: "+=180",
-            duration: 0.45,
+            duration: 0.4,
             ease: "back.out(1.7)",
           });
         }
@@ -169,39 +170,45 @@ if (hero) {
     if (titleSmall) {
       gsap.set(titleSmall, {
         autoAlpha: 0,
-        y: 30,
+        y: 25,
       });
     }
 
     if (titleMain) {
       gsap.set(titleMain, {
         autoAlpha: 0,
-        scale: 0.5,
+        scale: 0.65,
         transformOrigin: "left center",
       });
     }
 
     gsap.set(subtitleLetters, {
       autoAlpha: 0,
-      y: 20,
+      y: 16,
     });
 
     gsap.set(plusGroups, {
       autoAlpha: 0,
-      y: 16,
+      y: 14,
     });
 
     if (scroll) {
       gsap.set(scroll, {
         autoAlpha: 0,
-        y: 10,
+        y: 8,
       });
     }
 
+    /*
+     * El fondo ahora es video.
+     *
+     * Ya no hacemos scale animado porque
+     * el propio video aporta movimiento
+     * y evitamos trabajo adicional al navegador.
+     */
     if (heroBg) {
       gsap.set(heroBg, {
-        scale: 1.28,
-        transformOrigin: "50% 50%",
+        scale: 1,
       });
     }
 
@@ -250,23 +257,12 @@ if (hero) {
       });
 
     /*
-     * Fondo.
+     * IMPORTANTE:
      *
-     * Ahora forma parte de la entrada,
-     * por lo que también puede repetirse
-     * al volver al Hero.
+     * Ya no animamos el video de fondo.
+     * La entrada comienza directamente
+     * con los elementos gráficos.
      */
-    if (heroBg) {
-      entranceTl.to(
-        heroBg,
-        {
-          scale: 1,
-          duration: 3.5,
-          ease: "power1.out",
-        },
-        0
-      );
-    }
 
     /* ----------------------------------------------------------
        ÍNDICE
@@ -278,10 +274,10 @@ if (hero) {
         autoAlpha: 1,
         y: 0,
 
-        duration: 0.4,
+        duration: 0.3,
 
         stagger: {
-          each: 0.04,
+          each: 0.025,
           from: "start",
         },
       },
@@ -298,9 +294,9 @@ if (hero) {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.7,
+          duration: 0.45,
         },
-        "-=0.2"
+        "-=0.15"
       );
     }
 
@@ -314,10 +310,12 @@ if (hero) {
         {
           autoAlpha: 1,
           scale: 1,
-          duration: 1.4,
+
+          duration: 0.9,
+
           ease: "power3.out",
         },
-        "-=0.25"
+        "-=0.15"
       );
     }
 
@@ -331,16 +329,16 @@ if (hero) {
         autoAlpha: 1,
         y: 0,
 
-        duration: 0.35,
+        duration: 0.25,
 
         stagger: {
-          each: 0.06,
+          each: 0.025,
           from: "start",
         },
 
         ease: "power3.out",
       },
-      "-=0.35"
+      "-=0.25"
     );
 
     /* ----------------------------------------------------------
@@ -353,14 +351,14 @@ if (hero) {
         autoAlpha: 1,
         y: 0,
 
-        duration: 0.5,
+        duration: 0.4,
 
         stagger: {
-          each: 0.1,
+          each: 0.08,
           from: "start",
         },
       },
-      "-=0.15"
+      "-=0.2"
     );
 
     /* ----------------------------------------------------------
@@ -373,7 +371,8 @@ if (hero) {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.5,
+
+          duration: 0.4,
         },
         "-=0.2"
       );
