@@ -5,17 +5,17 @@ import fantaGrid from "../../../assets/images/cases/caso3.jpg";
 import kelloggsGrid from "../../../assets/images/cases/caso4.jpg";
 import hotsaleGrid from "../../../assets/images/cases/caso5.jpg";
 import eggoGrid from "../../../assets/images/cases/caso6.jpg";
-import mezcladitoGrid from "../../../assets/images/cases/caso7.jpg";
-import baitGrid from "../../../assets/images/cases/caso8.jpg"
+/*import mezcladitoGrid from "../../../assets/images/cases/caso7.jpg";
+import baitGrid from "../../../assets/images/cases/caso8.jpg"*/
 
 import kelloggsDetail from "../../../assets/images/cases/kelloggs.jpg";
-import mezcladitoDetail from "../../../assets/images/cases/MEZCLADITO.jpg";
+/*import mezcladitoDetail from "../../../assets/images/cases/MEZCLADITO.jpg";*/
 import eggoPoster from "../../../assets/images/cases/waffles.jpg";
 import hotsalePoster from "../../../assets/images/cases/hotsale.jpg";
 import walmartPoster from "../../../assets/images/cases/maestros.jpg";
 import fantaPoster from "../../../assets/images/cases/fanta.webp";
 import capistranoPoster from "../../../assets/images/cases/capis.jpg"
-import baitDetail from "../../../assets/images/cases/bait.jpg"
+/*import baitDetail from "../../../assets/images/cases/bait.jpg"*/
 
 export interface Case {
   id: string;
