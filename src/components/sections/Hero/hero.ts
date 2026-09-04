@@ -19,10 +19,14 @@ if (hero) {
     ).matches;
 
   const heroBg =
-    hero.querySelector<HTMLElement>(".hero-bg");
+    hero.querySelector<HTMLElement>(
+      ".hero-bg"
+    );
 
   const index =
-    hero.querySelector<HTMLElement>(".hero-index");
+    hero.querySelector<HTMLElement>(
+      ".hero-index"
+    );
 
   const titleSmall =
     hero.querySelector<HTMLElement>(
@@ -59,7 +63,6 @@ if (hero) {
      ============================================================ */
 
   if (!prefersReducedMotion) {
-
     /* ============================================================
        MÁQUINA DE ESCRIBIR
        ============================================================ */
@@ -73,7 +76,9 @@ if (hero) {
        * Si ya fue dividido, reutilizamos
        * las letras existentes.
        */
-      if (element.dataset.split === "true") {
+      if (
+        element.dataset.split === "true"
+      ) {
         return Array.from(
           element.querySelectorAll<HTMLElement>(
             ".hero-letter"
@@ -84,6 +89,10 @@ if (hero) {
       const text =
         element.textContent ?? "";
 
+      /*
+       * Conservamos el texto completo
+       * para lectores de pantalla.
+       */
       element.setAttribute(
         "aria-label",
         text
@@ -91,31 +100,124 @@ if (hero) {
 
       element.textContent = "";
 
-      const letters: HTMLSpanElement[] = [];
+      const letters:
+        HTMLSpanElement[] = [];
 
-      [...text].forEach((character) => {
-        const span =
-          document.createElement("span");
+      /*
+       * Separamos palabras y espacios.
+       *
+       * Ejemplo:
+       *
+       * "TRANSFORMAMOS RETOS EN"
+       *
+       * →
+       *
+       * [
+       *   "TRANSFORMAMOS",
+       *   " ",
+       *   "RETOS",
+       *   " ",
+       *   "EN"
+       * ]
+       *
+       * Los espacios permanecen como
+       * nodos de texto normales.
+       *
+       * Así el navegador puede hacer
+       * salto de línea ENTRE palabras,
+       * pero nunca dentro de una palabra.
+       */
+      const parts =
+        text.split(/(\s+)/);
 
-        span.classList.add("hero-letter");
+      parts.forEach((part) => {
+        /*
+         * Espacios.
+         *
+         * No los convertimos en spans
+         * ni utilizamos &nbsp;.
+         *
+         * Esto permite los saltos de
+         * línea naturales.
+         */
+        if (/^\s+$/.test(part)) {
+          element.appendChild(
+            document.createTextNode(
+              part
+            )
+          );
 
-        span.setAttribute(
+          return;
+        }
+
+        if (!part) return;
+
+        /*
+         * Cada palabra queda agrupada
+         * dentro de .hero-word.
+         *
+         * CSS:
+         *
+         * .hero-word {
+         *   display: inline-block;
+         *   white-space: nowrap;
+         * }
+         */
+        const word =
+          document.createElement(
+            "span"
+          );
+
+        word.classList.add(
+          "hero-word"
+        );
+
+        word.setAttribute(
           "aria-hidden",
           "true"
         );
 
-        if (character === " ") {
-          span.innerHTML = "&nbsp;";
-        } else {
-          span.textContent = character;
-        }
+        /*
+         * Dentro de cada palabra,
+         * cada letra continúa siendo
+         * independiente.
+         *
+         * Por eso GSAP puede seguir
+         * haciendo el efecto máquina
+         * de escribir letra por letra.
+         */
+        [...part].forEach(
+          (character) => {
+            const span =
+              document.createElement(
+                "span"
+              );
 
-        element.appendChild(span);
+            span.classList.add(
+              "hero-letter"
+            );
 
-        letters.push(span);
+            span.setAttribute(
+              "aria-hidden",
+              "true"
+            );
+
+            span.textContent =
+              character;
+
+            word.appendChild(
+              span
+            );
+
+            letters.push(span);
+          }
+        );
+
+        element.appendChild(word);
       });
 
-      element.dataset.split = "true";
+      element.dataset.split =
+        "true";
 
       return letters;
     };
@@ -128,7 +230,9 @@ if (hero) {
       splitTextIntoLetters(index);
 
     const subtitleLetters =
-      splitTextIntoLetters(subtitle);
+      splitTextIntoLetters(
+        subtitle
+      );
 
     /* ============================================================
        PLUS — CONFIGURACIÓN
@@ -136,7 +240,8 @@ if (hero) {
 
     plusIcons.forEach((plus) => {
       gsap.set(plus, {
-        transformOrigin: "50% 50%",
+        transformOrigin:
+          "50% 50%",
       });
 
       /*
@@ -151,8 +256,11 @@ if (hero) {
         () => {
           gsap.to(plus, {
             rotation: "+=180",
+
             duration: 0.4,
-            ease: "back.out(1.7)",
+
+            ease:
+              "back.out(1.7)",
           });
         }
       );
@@ -162,41 +270,62 @@ if (hero) {
        ESTADO INICIAL
        ============================================================ */
 
-    gsap.set(indexLetters, {
-      autoAlpha: 0,
-      y: 15,
-    });
+    gsap.set(
+      indexLetters,
+      {
+        autoAlpha: 0,
+        y: 15,
+      }
+    );
 
     if (titleSmall) {
-      gsap.set(titleSmall, {
-        autoAlpha: 0,
-        y: 25,
-      });
+      gsap.set(
+        titleSmall,
+        {
+          autoAlpha: 0,
+          y: 25,
+        }
+      );
     }
 
     if (titleMain) {
-      gsap.set(titleMain, {
-        autoAlpha: 0,
-        scale: 0.65,
-        transformOrigin: "left center",
-      });
+      gsap.set(
+        titleMain,
+        {
+          autoAlpha: 0,
+
+          scale: 0.65,
+
+          transformOrigin:
+            "left center",
+        }
+      );
     }
 
-    gsap.set(subtitleLetters, {
-      autoAlpha: 0,
-      y: 16,
-    });
+    gsap.set(
+      subtitleLetters,
+      {
+        autoAlpha: 0,
+        y: 16,
+      }
+    );
 
-    gsap.set(plusGroups, {
-      autoAlpha: 0,
-      y: 14,
-    });
+    gsap.set(
+      plusGroups,
+      {
+        autoAlpha: 0,
+        y: 14,
+      }
+    );
 
     if (scroll) {
-      gsap.set(scroll, {
-        autoAlpha: 0,
-        y: 8,
-      });
+      gsap.set(
+        scroll,
+        {
+          autoAlpha: 0,
+          y: 8,
+        }
+      );
     }
 
     /*
@@ -204,12 +333,16 @@ if (hero) {
      *
      * Ya no hacemos scale animado porque
      * el propio video aporta movimiento
-     * y evitamos trabajo adicional al navegador.
+     * y evitamos trabajo adicional
+     * al navegador.
      */
     if (heroBg) {
-      gsap.set(heroBg, {
-        scale: 1,
-      });
+      gsap.set(
+        heroBg,
+        {
+          scale: 1,
+        }
+      );
     }
 
     /* ============================================================
@@ -219,7 +352,9 @@ if (hero) {
     const plusPulse =
       gsap.timeline({
         paused: true,
+
         repeat: -1,
+
         yoyo: true,
       });
 
@@ -227,17 +362,26 @@ if (hero) {
       (plus, index) => {
         plusPulse.fromTo(
           plus,
+
           {
             scale: 1,
             y: 0,
           },
+
           {
             scale: 1.5,
+
             y: -8,
+
             duration: 0.8,
-            ease: "sine.inOut",
-            immediateRender: false,
+
+            ease:
+              "sine.inOut",
+
+            immediateRender:
+              false,
           },
+
           index * 0.2
         );
       }
@@ -252,16 +396,20 @@ if (hero) {
         paused: true,
 
         defaults: {
-          ease: "power3.out",
+          ease:
+            "power3.out",
         },
       });
 
     /*
      * IMPORTANTE:
      *
-     * Ya no animamos el video de fondo.
-     * La entrada comienza directamente
-     * con los elementos gráficos.
+     * Ya no animamos el video
+     * de fondo.
+     *
+     * La entrada comienza
+     * directamente con los
+     * elementos gráficos.
      */
 
     /* ----------------------------------------------------------
@@ -270,17 +418,21 @@ if (hero) {
 
     entranceTl.to(
       indexLetters,
+
       {
         autoAlpha: 1,
+
         y: 0,
 
         duration: 0.3,
 
         stagger: {
           each: 0.025,
+
           from: "start",
         },
       },
+
       0
     );
 
@@ -291,11 +443,15 @@ if (hero) {
     if (titleSmall) {
       entranceTl.to(
         titleSmall,
+
         {
           autoAlpha: 1,
+
           y: 0,
+
           duration: 0.45,
         },
+
         "-=0.15"
       );
     }
@@ -307,14 +463,18 @@ if (hero) {
     if (titleMain) {
       entranceTl.to(
         titleMain,
+
         {
           autoAlpha: 1,
+
           scale: 1,
 
           duration: 0.9,
 
-          ease: "power3.out",
+          ease:
+            "power3.out",
         },
+
         "-=0.15"
       );
     }
@@ -325,19 +485,24 @@ if (hero) {
 
     entranceTl.to(
       subtitleLetters,
+
       {
         autoAlpha: 1,
+
         y: 0,
 
         duration: 0.25,
 
         stagger: {
           each: 0.025,
+
           from: "start",
         },
 
-        ease: "power3.out",
+        ease:
+          "power3.out",
       },
+
       "-=0.25"
     );
 
@@ -347,17 +512,21 @@ if (hero) {
 
     entranceTl.to(
       plusGroups,
+
       {
         autoAlpha: 1,
+
         y: 0,
 
         duration: 0.4,
 
         stagger: {
           each: 0.08,
+
           from: "start",
         },
       },
+
       "-=0.2"
     );
 
@@ -368,12 +537,15 @@ if (hero) {
     if (scroll) {
       entranceTl.to(
         scroll,
+
         {
           autoAlpha: 1,
+
           y: 0,
 
           duration: 0.4,
         },
+
         "-=0.2"
       );
     }
@@ -384,10 +556,13 @@ if (hero) {
 
     entranceTl.eventCallback(
       "onComplete",
+
       () => {
         /*
-         * Una vez terminada la entrada,
-         * comienzan los movimientos permanentes.
+         * Una vez terminada
+         * la entrada,
+         * comienzan los movimientos
+         * permanentes.
          */
         plusPulse.restart();
       }
@@ -400,111 +575,142 @@ if (hero) {
     let hasPlayed = false;
 
     /*
-     * Evita rearmar el Hero apenas cruza
-     * unos pocos píxeles.
+     * Evita rearmar el Hero
+     * apenas cruza unos pocos
+     * píxeles.
      *
-     * Solo lo hacemos cuando realmente
-     * ha salido de pantalla.
+     * Solo lo hacemos cuando
+     * realmente ha salido
+     * de pantalla.
      */
-    let isArmedForReplay = true;
+    let isArmedForReplay =
+      true;
 
     /* ============================================================
        PLAY
        ============================================================ */
 
-    const playHero = (): void => {
-      if (!isArmedForReplay) return;
+    const playHero =
+      (): void => {
+        if (
+          !isArmedForReplay
+        ) {
+          return;
+        }
 
-      isArmedForReplay = false;
-      hasPlayed = true;
+        isArmedForReplay =
+          false;
 
-      /*
-       * Primero detenemos el movimiento
-       * ambiental para garantizar que
-       * la entrada empiece limpia.
-       */
-      plusPulse.pause(0);
+        hasPlayed = true;
 
-      entranceTl.restart();
-    };
+        /*
+         * Primero detenemos el
+         * movimiento ambiental
+         * para garantizar que la
+         * entrada empiece limpia.
+         */
+        plusPulse.pause(0);
+
+        entranceTl.restart();
+      };
 
     /* ============================================================
        RESET
        ============================================================ */
 
-    const resetHero = (): void => {
-      if (!hasPlayed) return;
-      if (isArmedForReplay) return;
+    const resetHero =
+      (): void => {
+        if (!hasPlayed) {
+          return;
+        }
 
-      isArmedForReplay = true;
-      hasPlayed = false;
+        if (
+          isArmedForReplay
+        ) {
+          return;
+        }
 
-      /*
-       * Detenemos animaciones ambientales.
-       */
-      plusPulse.pause(0);
+        isArmedForReplay =
+          true;
 
-      /*
-       * Regresamos la timeline al segundo 0.
-       *
-       * Como utilizamos gsap.set + .to()
-       * en lugar de .from(), el estado
-       * inicial es completamente controlado.
-       */
-      entranceTl.pause(0);
-    };
+        hasPlayed = false;
+
+        /*
+         * Detenemos animaciones
+         * ambientales.
+         */
+        plusPulse.pause(0);
+
+        /*
+         * Regresamos la timeline
+         * al segundo 0.
+         *
+         * Como utilizamos gsap.set
+         * + .to() en lugar de
+         * .from(), el estado inicial
+         * es completamente controlado.
+         */
+        entranceTl.pause(0);
+      };
 
     /* ============================================================
        DETECCIÓN DE VISIBILIDAD
        ============================================================ */
 
-    const checkHeroPosition = (): void => {
-      const rect =
-        hero.getBoundingClientRect();
+    const checkHeroPosition =
+      (): void => {
+        const rect =
+          hero.getBoundingClientRect();
 
-      const viewportHeight =
-        window.innerHeight;
+        const viewportHeight =
+          window.innerHeight;
 
-      /*
-       * Hero está completamente por encima
-       * de la pantalla.
-       *
-       * Damos un pequeño margen para evitar
-       * resets justo en el límite.
-       */
-      const completelyAbove =
-        rect.bottom < -80;
+        /*
+         * Hero está completamente
+         * por encima de la pantalla.
+         *
+         * Damos un pequeño margen
+         * para evitar resets justo
+         * en el límite.
+         */
+        const completelyAbove =
+          rect.bottom < -80;
 
-      /*
-       * Por si en algún momento pudiera
-       * llegarse al Hero desde arriba.
-       */
-      const completelyBelow =
-        rect.top > viewportHeight + 80;
+        /*
+         * Por si en algún momento
+         * pudiera llegarse al Hero
+         * desde arriba.
+         */
+        const completelyBelow =
+          rect.top >
+          viewportHeight + 80;
 
-      if (
-        completelyAbove ||
-        completelyBelow
-      ) {
-        resetHero();
-        return;
-      }
+        if (
+          completelyAbove ||
+          completelyBelow
+        ) {
+          resetHero();
 
-      /*
-       * Entrada.
-       *
-       * Para Hero no necesitamos esperar
-       * hasta 75%-80% del viewport porque
-       * es la primera sección.
-       */
-      const isVisible =
-        rect.bottom > 0 &&
-        rect.top < viewportHeight;
+          return;
+        }
 
-      if (isVisible) {
-        playHero();
-      }
-    };
+        /*
+         * Entrada.
+         *
+         * Para Hero no necesitamos
+         * esperar hasta 75%-80%
+         * del viewport porque es
+         * la primera sección.
+         */
+        const isVisible =
+          rect.bottom > 0 &&
+          rect.top <
+            viewportHeight;
+
+        if (isVisible) {
+          playHero();
+        }
+      };
 
     /* ============================================================
        LISTENERS
@@ -512,7 +718,9 @@ if (hero) {
 
     window.addEventListener(
       "scroll",
+
       checkHeroPosition,
+
       {
         passive: true,
       }
@@ -520,7 +728,9 @@ if (hero) {
 
     window.addEventListener(
       "resize",
+
       checkHeroPosition,
+
       {
         passive: true,
       }
@@ -530,9 +740,11 @@ if (hero) {
        PRIMERA CARGA
        ============================================================ */
 
-    requestAnimationFrame(() => {
-      checkHeroPosition();
-    });
+    requestAnimationFrame(
+      () => {
+        checkHeroPosition();
+      }
+    );
   }
 }
 

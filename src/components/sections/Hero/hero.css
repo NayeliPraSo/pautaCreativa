@@ -72,6 +72,15 @@
   white-space: nowrap;
 }
 
+.hero-word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .hero-letter {
+    display: inline-block;
+  }
+
 /* Plus decorativos */
 .hero-plus-group {
   display: flex;
@@ -262,7 +271,10 @@
     max-width: 100%;
     font-size: var(--fs-lg);
     line-height: 1.2;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.03rem;
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: normal;
   }
 
   /* Los + debajo del subtítulo permanecen */
