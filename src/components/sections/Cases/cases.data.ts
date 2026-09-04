@@ -113,7 +113,7 @@ export const cases: Case[] = [
       "shopper-connections"
         ]
   },
-  {
+  /*{
     id: "mezcladito",
     title: "MEZCLADITO",
     client: "KELLOGG'S",
@@ -135,5 +135,5 @@ export const cases: Case[] = [
       "advertising",
         "total-promotion"
         ]
-  },
+  },*/
 ];
