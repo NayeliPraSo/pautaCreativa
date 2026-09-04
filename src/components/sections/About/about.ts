@@ -4,6 +4,7 @@
  */
 
 import gsap from "gsap";
+import { getTypewriterStagger } from "../../../utils/typewriter";
 
 /* =========================================
    DATOS DEL CÍRCULO DERECHO
@@ -549,7 +550,7 @@ const initAboutAnimation = (): void => {
     duration: 0.01,
 
     stagger: {
-      each: 0.035,
+      each: getTypewriterStagger(letters.length),
       from: "start",
     },
 
@@ -793,14 +794,6 @@ const initAboutAnimation = (): void => {
       /* =====================================
          RESET AL SALIR HACIA ABAJO
          ===================================== */
-
-      /*
-       * About quedó prácticamente
-       * por encima de la pantalla.
-       *
-       * Esto ocurre al avanzar hacia
-       * Orange Mindset.
-       */
       const leftThroughTop =
         rect.bottom <=
         viewportHeight * 0.05;
@@ -808,21 +801,6 @@ const initAboutAnimation = (): void => {
       /* =====================================
          RESET AL SALIR HACIA ARRIBA
          ===================================== */
-
-      /*
-       * About quedó nuevamente debajo
-       * de la pantalla al regresar a Hero.
-       *
-       * Aquí está la corrección importante:
-       *
-       * antes esperábamos a:
-       *
-       * rect.top > viewportHeight + 80
-       *
-       * pero About normalmente queda
-       * alrededor del límite inferior
-       * del viewport.
-       */
       const leftThroughBottom =
         rect.top >=
         viewportHeight * 0.95;
@@ -875,20 +853,6 @@ const initAboutAnimation = (): void => {
       /* =====================================
          ZONA DE ACTIVACIÓN
          ===================================== */
-
-      /*
-       * About comienza cuando su inicio
-       * alcanza aproximadamente el 78%
-       * del viewport.
-       *
-       * Tenemos así una zona neutra entre:
-       *
-       * RESET → 95%
-       * PLAY  → 78%
-       *
-       * para evitar parpadeos o
-       * reinicios cerca del límite.
-       */
       const reachedActivationZone =
         rect.top <
           viewportHeight * 0.78 &&

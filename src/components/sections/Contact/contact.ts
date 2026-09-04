@@ -14,6 +14,7 @@
 
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
+import { getTypewriterStagger } from "../../../utils/typewriter";
 
 gsap.registerPlugin(Flip);
 
@@ -1171,7 +1172,7 @@ function initContact() {
       {
         autoAlpha: 1,
         duration: 0.01,
-        stagger: 0.025,
+        stagger: getTypewriterStagger(letters.length),
         ease: "none",
       },
       "-=0.15",

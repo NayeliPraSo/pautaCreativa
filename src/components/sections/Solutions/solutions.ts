@@ -10,6 +10,7 @@ import {
   solutions,
   solutionsById,
 } from "./solutions.data";
+import { getTypewriterStagger } from "../../../utils/typewriter";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -297,7 +298,7 @@ function initEntryAnimation(
 
         duration: 0.01,
 
-        stagger: 0.025,
+        stagger: getTypewriterStagger(introLetters.length),
 
         ease: "none",
       },

@@ -1,5 +1,9 @@
 import gsap from "gsap";
 
+import {
+  getTypewriterStagger,
+} from "../../../utils/typewriter";
+
 let cleanupRecognition: (() => void) | null = null;
 
 /* ============================================================
@@ -192,9 +196,9 @@ function animateCounter(
   element.textContent = "#1";
 
   const duration = gsap.utils.clamp(
-    0.65,
-    1.35,
-    0.55 + target * 0.04,
+    0.4,
+    0.8,
+    0.32 + target * 0.025,
   );
 
   return gsap.to(state, {
@@ -488,7 +492,7 @@ function initRecognition(): void {
     if (topLine) {
       clientsTimeline.to(topLine, {
         scaleX: 1,
-        duration: 0.8,
+        duration: 0.45,
         ease: "power2.inOut",
       });
     }
@@ -500,7 +504,7 @@ function initRecognition(): void {
           autoAlpha: 1,
           scale: 1,
           y: 0,
-          duration: 0.75,
+          duration: 0.5,
           ease: "back.out(1.35)",
         },
         "-=0.15",
@@ -516,7 +520,7 @@ function initRecognition(): void {
           scaleX: 1,
           scaleY: 1,
           y: 0,
-          duration: 0.75,
+          duration: 0.5,
           ease: "back.out(1.55)",
         },
         "-=0.2",
@@ -526,58 +530,79 @@ function initRecognition(): void {
     if (verticalLine) {
       clientsTimeline.to(verticalLine, {
         scaleY: 1,
-        duration: 0.65,
+        duration: 0.4,
         ease: "power2.inOut",
       });
     }
 
     categoryLetters.forEach((letters) => {
-      clientsTimeline.to(letters, {
-        autoAlpha: 1,
-        duration: 0.01,
-        stagger: 0.024,
-        ease: "none",
-      });
+      clientsTimeline.to(
+        letters,
+        {
+          autoAlpha: 1,
+          duration: 0.02,
+          stagger: {
+            each: getTypewriterStagger(letters.length),
+            from: "start",
+          },
+          ease: "none",
+        },
+        "-=0.1",
+      );
     });
 
     if (rankingLine) {
       clientsTimeline.to(rankingLine, {
         scaleX: 1,
-        duration: 0.7,
+        duration: 0.4,
         ease: "power2.inOut",
       });
     }
 
     statementLetters.forEach((letters) => {
-      clientsTimeline.to(letters, {
-        autoAlpha: 1,
-        duration: 0.01,
-        stagger: 0.014,
-        ease: "none",
-      });
+      clientsTimeline.to(
+        letters,
+        {
+          autoAlpha: 1,
+          duration: 0.02,
+          stagger: {
+            each: getTypewriterStagger(letters.length),
+            from: "start",
+          },
+          ease: "none",
+        },
+        "-=0.1",
+      );
     });
 
     if (statementsLine) {
       clientsTimeline.to(statementsLine, {
         scaleX: 1,
-        duration: 0.65,
+        duration: 0.4,
         ease: "power2.inOut",
       });
     }
 
     if (integratedLetters.length) {
-      clientsTimeline.to(integratedLetters, {
-        autoAlpha: 1,
-        duration: 0.01,
-        stagger: 0.02,
-        ease: "none",
-      });
+      clientsTimeline.to(
+        integratedLetters,
+        {
+          autoAlpha: 1,
+          duration: 0.02,
+          stagger: {
+            each: getTypewriterStagger(integratedLetters.length),
+            from: "start",
+          },
+          ease: "none",
+        },
+        "-=0.1",
+      );
     }
 
     if (sectionLine) {
       clientsTimeline.to(sectionLine, {
         clipPath: "inset(0 0% 0 0)",
-        duration: 0.95,
+        duration: 0.55,
         ease: "power2.inOut",
       });
 
@@ -876,7 +901,7 @@ function initRecognition(): void {
       industryTimeline.to(industryTitle, {
         autoAlpha: 1,
         y: 0,
-        duration: 0.8,
+        duration: 0.5,
         ease: "power3.out",
       });
     }
@@ -887,8 +912,8 @@ function initRecognition(): void {
         autoAlpha: 1,
         y: 0,
         scale: 1,
-        duration: 0.7,
-        stagger: 0.18,
+        duration: 0.45,
+        stagger: 0.1,
         ease: "back.out(1.35)",
       },
       "-=0.2",
@@ -900,7 +925,7 @@ function initRecognition(): void {
     ) {
       industryTimeline.to(timeline, {
         clipPath: "inset(0 0% 0 0)",
-        duration: 1.15,
+        duration: 0.65,
         ease: "power2.inOut",
       });
 
@@ -916,7 +941,7 @@ function initRecognition(): void {
         industryTimeline.to(number, {
           autoAlpha: 1,
           y: 0,
-          duration: 0.3,
+          duration: 0.2,
           ease: "power2.out",
         });
 
@@ -934,9 +959,9 @@ function initRecognition(): void {
 
         const counterDuration =
           gsap.utils.clamp(
-            0.65,
-            1.35,
-            0.55 + target * 0.04,
+            0.4,
+            0.8,
+            0.32 + target * 0.025,
           );
 
         industryTimeline.to(
@@ -953,8 +978,11 @@ function initRecognition(): void {
             {
               opacity: 1,
               filter: "blur(0px)",
-              duration: 0.16,
-              stagger: 0.018,
+              duration: 0.1,
+              stagger: {
+                each: getTypewriterStagger(letters.length),
+                from: "start",
+              },
               ease: "power1.out",
             },
             "-=0.15",

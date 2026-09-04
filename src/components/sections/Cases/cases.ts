@@ -5,6 +5,10 @@
 
 import gsap from "gsap";
 
+import {
+  getTypewriterStagger,
+} from "../../../utils/typewriter";
+
 /* ============================================================
    ELEMENTOS BASE
    ============================================================ */
@@ -207,6 +211,18 @@ function initCasesIntroAnimation():
   const letters =
     getTextLetters(introText);
 
+  /*
+   * El stagger ya no es fijo.
+   *
+   * typewriter.ts calcula automáticamente
+   * la separación entre letras dependiendo
+   * de la longitud del texto.
+   */
+  const typewriterStagger =
+    getTypewriterStagger(
+      letters.length
+    );
+
   /* ==========================================================
      ESTADO INICIAL
      ========================================================== */
@@ -267,13 +283,7 @@ function initCasesIntroAnimation():
 
       /*
        * Reveal tipo "cortina" en la
-       * imagen: arranca completamente
-       * recortada por la derecha y se
-       * descubre de izquierda a derecha.
-       *
-       * Se resetea aquí también porque
-       * setInitialState() se reutiliza
-       * en el replay (playCases/resetCases).
+       * imagen.
        */
       gsap.set(caseCardImages, {
         clipPath:
@@ -333,7 +343,7 @@ function initCasesIntroAnimation():
     autoAlpha: 1,
     x: 0,
 
-    duration: 1,
+    duration: 0.55,
 
     ease: "power3.out",
   });
@@ -350,7 +360,7 @@ function initCasesIntroAnimation():
         scale: 1,
         rotation: 0,
 
-        duration: 0.8,
+        duration: 0.45,
 
         ease:
           "back.out(1.8)",
@@ -369,16 +379,25 @@ function initCasesIntroAnimation():
       autoAlpha: 1,
       y: 0,
 
-      duration: 0.04,
+      /*
+       * Duración de la animación
+       * individual de cada letra.
+       */
+      duration: 0.02,
 
+      /*
+       * La separación entre letras
+       * ahora se calcula desde
+       * typewriter.ts.
+       */
       stagger: {
-        each: 0.035,
+        each: typewriterStagger,
         from: "start",
       },
 
       ease: "none",
     },
-    "-=0.08"
+    "-=0.18"
   );
 
   /* ----------------------------------------------------------
@@ -391,11 +410,11 @@ function initCasesIntroAnimation():
       autoAlpha: 1,
       y: 0,
 
-      duration: 1.2,
+      duration: 0.65,
 
       ease: "power3.out",
     },
-    "-=0.15"
+    "-=0.2"
   );
 
   /* ----------------------------------------------------------
@@ -407,16 +426,16 @@ function initCasesIntroAnimation():
     {
       autoAlpha: 1,
 
-      duration: 0.9,
+      duration: 0.5,
 
       stagger: {
-        each: 0.18,
+        each: 0.1,
         from: "start",
       },
 
       ease: "power3.out",
     },
-    "-=0.35"
+    "-=0.3"
   );
 
   /* ----------------------------------------------------------
@@ -428,19 +447,17 @@ function initCasesIntroAnimation():
     {
       y: 0,
 
-      duration: 0.75,
+      duration: 0.5,
 
       stagger: {
-        each: 0.12,
+        each: 0.08,
         from: "start",
       },
 
       ease: "power3.out",
 
       /*
-       * Muy importante:
-       *
-       * después de la entrada
+       * Después de la entrada
        * quitamos el transform inline.
        *
        * Así el hover de las cards
@@ -460,7 +477,7 @@ function initCasesIntroAnimation():
   );
 
   /* ----------------------------------------------------------
-     CARDS — REVEAL DE IMAGEN (clip-path)
+     CARDS — REVEAL DE IMAGEN
      ---------------------------------------------------------- */
 
   tl.to(
@@ -469,10 +486,10 @@ function initCasesIntroAnimation():
       clipPath:
         "inset(0% 0% 0% 0%)",
 
-      duration: 0.9,
+      duration: 0.55,
 
       stagger: {
-        each: 0.12,
+        each: 0.08,
         from: "start",
       },
 
@@ -526,9 +543,6 @@ function initCasesIntroAnimation():
        * Si el usuario dejó un caso
        * abierto y regresó a la sección,
        * conservamos exactamente esa vista.
-       *
-       * No escondemos cards, detalle,
-       * video ni contenido.
        */
       if (isDetailOpen()) {
         return;
@@ -563,19 +577,11 @@ function initCasesIntroAnimation():
       /*
        * Si existe un detalle abierto,
        * NO llevamos la timeline a cero.
-       *
-       * Esto es importante porque al
-       * cerrar posteriormente el detalle
-       * queremos encontrar el grid en su
-       * estado final visible.
        */
       if (isDetailOpen()) {
         return;
       }
 
-      /*
-       * La timeline permanece viva.
-       */
       tl.pause(0);
 
       setInitialState();
@@ -597,10 +603,6 @@ function initCasesIntroAnimation():
          SALIÓ HACIA ABAJO
          ===================================== */
 
-      /*
-       * Cases quedó arriba al continuar
-       * hacia Recognition.
-       */
       const leftThroughTop =
         rect.bottom <=
         viewportHeight * 0.05;
@@ -609,10 +611,6 @@ function initCasesIntroAnimation():
          SALIÓ HACIA ARRIBA
          ===================================== */
 
-      /*
-       * Cases quedó debajo al regresar
-       * hacia Solutions.
-       */
       const leftThroughBottom =
         rect.top >=
         viewportHeight * 0.95;
@@ -700,15 +698,6 @@ function initCasesIntroAnimation():
   /* ==========================================================
      INTERSECTION OBSERVER
      ========================================================== */
-
-  /*
-   * Lo conservamos porque Cases está
-   * después de secciones con lógica
-   * compleja de scroll.
-   *
-   * Pero ya NO lo desconectamos tras
-   * la primera ejecución.
-   */
 
   const observer =
     new IntersectionObserver(
@@ -959,7 +948,7 @@ function getYouTubeVideoId(
 
     if (
       parsedUrl.hostname ===
-      "youtu.be"
+        "youtu.be"
     ) {
       return parsedUrl.pathname.substring(
         1

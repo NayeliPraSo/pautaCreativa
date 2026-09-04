@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { getTypewriterStagger } from "../../../utils/typewriter";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -653,7 +654,7 @@ function initOrangeMindset(): void {
         duration: 0.01,
 
         stagger: {
-          each: 0.025,
+          each: getTypewriterStagger(p1CopyLetters.length),
           from: "start",
         },
 
@@ -707,7 +708,7 @@ function initOrangeMindset(): void {
         duration: 0.01,
 
         stagger: {
-          each: 0.025,
+          each: getTypewriterStagger(p2IntroLetters.length),
           from: "start",
         },
 
@@ -743,7 +744,7 @@ function initOrangeMindset(): void {
         duration: 0.01,
 
         stagger: {
-          each: 0.022,
+          each: getTypewriterStagger(p2DescriptionLetters.length),
           from: "start",
         },
 

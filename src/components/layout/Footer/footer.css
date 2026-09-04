@@ -64,7 +64,7 @@
   text-decoration-thickness: 0.5px; /* Ajusta el grosor de la línea de subrayado */
   text-underline-offset: 3px; /* Ajusta la distancia entre el texto y la línea de subrayado */
   transition: opacity var(--transition-fast);
-  font-weight: 100;
+  font-weight: 300;
 }
 
 .footer-link:hover {
