@@ -233,7 +233,22 @@
 .recognition__timeline-item {
   position: relative;
   min-height: 180px;
-  padding: 0 2.5rem;
+  padding: 0 2.1rem;
+}
+
+.recognition__timeline-number--top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15em;
+}
+
+.recognition__timeline-prefix {
+  font-size: 0.62em;
+  font-weight: inherit;
+}
+
+.recognition__timeline-value {
+  font-size: 1em;
 }
 
 /* Punto sobre la línea */
@@ -427,6 +442,10 @@
 
   .recognition__ranking-number {
     width: 130px;
+  }
+
+  .recognition__ranking-number img  {
+    height: auto;
   }
 
   .recognition__ranking-categories p {

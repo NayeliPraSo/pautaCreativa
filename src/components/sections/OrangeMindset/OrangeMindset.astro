@@ -66,20 +66,20 @@ const mindsetValues: string[] = [
           de pensar:
         </p>
 
+        <div class="om-timeline-hint" aria-hidden="true">
+          <span class="om-timeline-hint__arrow"> ← </span>
+          <span class="om-timeline-hint__arrow"> → </span>
+        </div>
+
         <div
           class="om-timeline"
           style={`--timeline-count: ${mindsetValues.length}`}
         >
           {
-            mindsetValues.map((value, index) => (
+            mindsetValues.map((value) => (
               <div class="om-timeline-item">
                 <span class="om-timeline-label">{value}</span>
-                <span
-                  class:list={[
-                    "om-timeline-dot",
-                    { "om-timeline-dotactive": index === 1 },
-                  ]}
-                />
+                <span class="om-timeline-dot" />
               </div>
             ))
           }

@@ -214,6 +214,10 @@
   color: var(--color-primary);
 }
 
+.om-timeline-hint {
+  display: none;
+}
+
 .om-timeline {
   position: relative;
   width: 100%;
@@ -537,6 +541,54 @@
      TIMELINE
      ESTE ES EL ÚNICO SCROLL HORIZONTAL
      ===================================== */
+  .om-timeline-hint {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: -20px;
+    padding-left: 12px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .om-timeline-hint__arrow {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-primary);
+  }
+
+  .om-timeline-hint__arrow:first-child {
+    animation: om-arrow-left 1.4s ease-in-out infinite;
+  }
+
+  .om-timeline-hint__arrow:last-child {
+    animation: om-arrow-right 1.4s ease-in-out infinite;
+  }
+
+  @keyframes om-arrow-left {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-10px);
+    }
+  }
+
+  @keyframes om-arrow-right {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(10px);
+    }
+  }
+
   .om-timeline {
     position: relative;
     --timeline-item-width: 180px;

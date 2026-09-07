@@ -182,7 +182,35 @@
   }
 
   .footer-badges {
-    gap: 2.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 1.75rem;
+    margin-top: 1rem;
+  }
+
+  .footer-badges-group {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .footer-badges-group img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+  }
+
+  /* Asociaciones */
+  .footer-badges-group:first-child img {
+    width: 330px;
+  }
+
+  /* Certificaciones */
+  .footer-badges-group:last-child img {
+    width: 290px;
   }
 
   .footer-brand-badge {

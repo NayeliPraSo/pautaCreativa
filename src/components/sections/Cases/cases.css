@@ -127,6 +127,10 @@
     max-width: 1400px;
   }
 
+  .cases-title {
+    width: min(90%, 1050px);
+  }
+
   .cases-intro {
     font-size: var(--fs-lg);
     max-width: 1000px;
@@ -138,6 +142,10 @@
     width: calc(100% - 64px);
     max-width: 1100px;
     gap: 2rem;
+  }
+
+  .cases-title {
+    width: min(86%, 900px);
   }
 
   .cases-intro {
@@ -154,6 +162,10 @@
 
   .cases-counter {
     left: var(--space-5);
+  }
+
+  .cases-title {
+    width: min(82%, 720px);
   }
 
   .cases-intro {

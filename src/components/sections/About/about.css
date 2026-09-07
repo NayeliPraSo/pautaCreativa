@@ -155,6 +155,25 @@
   .about-diagram {
     max-width: 950px;
   }
+
+  .circle-content p {
+    font-size: 2rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .circle-content h3 {
+    font-size: 2.6rem;
+  }
+
+  .left {
+    left: 16%;
+    width: 250px;
+  }
+
+  .right {
+    right: 16%;
+    width: 250px;
+  }
 }
 
 /* ≤ 1200px — Tablet landscape */
@@ -209,20 +228,21 @@
   }
 
   .circle-content p {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
   }
 
   .circle-content h3 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .left {
-    left: 10%;
+    left: 14%;
     width: 200px;
   }
 
   .right {
-    right: 10%;
+    right: 14%;
     width: 200px;
   }
 }

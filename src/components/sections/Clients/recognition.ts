@@ -23,7 +23,9 @@ function splitTextIntoLetters(
 
       [...text].forEach((char) => {
         if (/\s/.test(char)) {
-          fragment.appendChild(document.createTextNode(char));
+          fragment.appendChild(
+            document.createTextNode(char),
+          );
           return;
         }
 
@@ -36,14 +38,21 @@ function splitTextIntoLetters(
         letters.push(span);
       });
 
-      node.parentNode?.replaceChild(fragment, node);
+      node.parentNode?.replaceChild(
+        fragment,
+        node,
+      );
+
       return;
     }
 
-    Array.from(node.childNodes).forEach(processNode);
+    Array.from(node.childNodes).forEach(
+      processNode,
+    );
   };
 
   processNode(element);
+
   return letters;
 }
 
@@ -51,39 +60,81 @@ function getLetters(
   element: HTMLElement,
   className = "recognition-letter",
 ): HTMLElement[] {
-  const splitKey = `split${className.replace(/[^a-zA-Z0-9]/g, "")}`;
+  const splitKey =
+    `split${className.replace(
+      /[^a-zA-Z0-9]/g,
+      "",
+    )}`;
 
   if (element.dataset[splitKey] === "true") {
     return Array.from(
-      element.querySelectorAll<HTMLElement>(`.${className}`),
+      element.querySelectorAll<HTMLElement>(
+        `.${className}`,
+      ),
     );
   }
 
-  const letters = splitTextIntoLetters(element, className);
+  const letters =
+    splitTextIntoLetters(
+      element,
+      className,
+    );
+
   element.dataset[splitKey] = "true";
 
   return letters;
 }
 
-function isActuallyVisible(element: HTMLElement): boolean {
-  const rect = element.getBoundingClientRect();
+function isActuallyVisible(
+  element: HTMLElement,
+): boolean {
+  const rect =
+    element.getBoundingClientRect();
 
-  if (rect.bottom <= 0 || rect.top >= window.innerHeight) {
+  if (
+    rect.bottom <= 0 ||
+    rect.top >= window.innerHeight
+  ) {
     return false;
   }
 
-  const visibleTop = Math.max(rect.top, 0);
-  const visibleBottom = Math.min(rect.bottom, window.innerHeight);
-  const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+  const visibleTop =
+    Math.max(rect.top, 0);
 
-  if (visibleHeight < Math.min(80, rect.height * 0.08)) {
+  const visibleBottom =
+    Math.min(
+      rect.bottom,
+      window.innerHeight,
+    );
+
+  const visibleHeight =
+    Math.max(
+      0,
+      visibleBottom - visibleTop,
+    );
+
+  if (
+    visibleHeight <
+    Math.min(
+      80,
+      rect.height * 0.08,
+    )
+  ) {
     return false;
   }
 
-  const sampleY = Math.min(
-    Math.max(visibleTop + Math.min(80, visibleHeight * 0.35), 0),
-    window.innerHeight - 1,
-  );
+  const sampleY =
+    Math.min(
+      Math.max(
+        visibleTop +
+          Math.min(
+            80,
+            visibleHeight * 0.35,
+          ),
+        0,
+      ),
+      window.innerHeight - 1,
+    );
 
   const sampleXs = [
     window.innerWidth * 0.2,
@@ -92,11 +143,18 @@ function isActuallyVisible(element: HTMLElement): boolean {
   ];
 
   return sampleXs.some((x) => {
-    const topElement = document.elementFromPoint(x, sampleY);
+    const topElement =
+      document.elementFromPoint(
+        x,
+        sampleY,
+      );
 
     return Boolean(
       topElement &&
-        (topElement === element || element.contains(topElement)),
+        (
+          topElement === element ||
+          element.contains(topElement)
+        ),
     );
   });
 }
@@ -112,19 +170,31 @@ function createRealVisibilityTrigger(
   let checkFrame = 0;
 
   const checkPosition = (): void => {
-    const rect = element.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
+    const rect =
+      element.getBoundingClientRect();
+
+    const viewportHeight =
+      window.innerHeight;
 
     const leftThroughTop =
-      rect.bottom <= viewportHeight * 0.05;
+      rect.bottom <=
+      viewportHeight * 0.05;
 
     const leftThroughBottom =
-      rect.top >= viewportHeight * 0.95;
+      rect.top >=
+      viewportHeight * 0.95;
 
-    if (leftThroughTop || leftThroughBottom) {
-      if (hasPlayed && !isArmedForReplay) {
+    if (
+      leftThroughTop ||
+      leftThroughBottom
+    ) {
+      if (
+        hasPlayed &&
+        !isArmedForReplay
+      ) {
         hasPlayed = false;
         isArmedForReplay = true;
+
         onLeave();
       }
 
@@ -134,82 +204,129 @@ function createRealVisibilityTrigger(
     if (!isArmedForReplay) return;
     if (!isActuallyVisible(element)) return;
 
-    const activationLine = viewportHeight * 0.85;
-    if (rect.top > activationLine) return;
+    const activationLine =
+      viewportHeight * 0.85;
+
+    if (
+      rect.top > activationLine
+    ) {
+      return;
+    }
 
     isArmedForReplay = false;
     hasPlayed = true;
+
     onEnter();
   };
 
   const scheduleCheck = (): void => {
     if (checkFrame) return;
 
-    checkFrame = requestAnimationFrame(() => {
-      checkFrame = 0;
-      checkPosition();
-    });
+    checkFrame =
+      requestAnimationFrame(() => {
+        checkFrame = 0;
+        checkPosition();
+      });
   };
 
-  const observer = new IntersectionObserver(
-    () => {
-      scheduleCheck();
-    },
-    {
-      root: null,
-      threshold: [0, 0.05, 0.1, 0.2],
-      rootMargin,
-    },
-  );
+  const observer =
+    new IntersectionObserver(
+      () => {
+        scheduleCheck();
+      },
+      {
+        root: null,
+        threshold: [
+          0,
+          0.05,
+          0.1,
+          0.2,
+        ],
+        rootMargin,
+      },
+    );
 
   observer.observe(element);
 
-  window.addEventListener("scroll", scheduleCheck, {
-    passive: true,
-  });
+  window.addEventListener(
+    "scroll",
+    scheduleCheck,
+    {
+      passive: true,
+    },
+  );
 
-  window.addEventListener("resize", scheduleCheck, {
-    passive: true,
-  });
+  window.addEventListener(
+    "resize",
+    scheduleCheck,
+    {
+      passive: true,
+    },
+  );
 
-  requestAnimationFrame(scheduleCheck);
+  requestAnimationFrame(
+    scheduleCheck,
+  );
 
   return () => {
     observer.disconnect();
 
-    window.removeEventListener("scroll", scheduleCheck);
-    window.removeEventListener("resize", scheduleCheck);
+    window.removeEventListener(
+      "scroll",
+      scheduleCheck,
+    );
+
+    window.removeEventListener(
+      "resize",
+      scheduleCheck,
+    );
 
     if (checkFrame) {
-      cancelAnimationFrame(checkFrame);
+      cancelAnimationFrame(
+        checkFrame,
+      );
+
       checkFrame = 0;
     }
   };
 }
 
+/* ============================================================
+   CONTADOR DE RANKINGS
+   ============================================================ */
+
 function animateCounter(
   element: HTMLElement,
   target: number,
 ): gsap.core.Tween {
-  const state = { value: 1 };
+  const state = {
+    value: 1,
+  };
 
-  element.textContent = "#1";
+  element.textContent = "1";
 
-  const duration = gsap.utils.clamp(
-    0.4,
-    0.8,
-    0.32 + target * 0.025,
-  );
+  const duration =
+    gsap.utils.clamp(
+      0.4,
+      0.8,
+      0.32 + target * 0.025,
+    );
 
   return gsap.to(state, {
     value: target,
     duration,
     ease: "none",
+
     onUpdate: () => {
-      element.textContent = `#${Math.round(state.value)}`;
+      element.textContent =
+        `${Math.round(
+          state.value,
+        )}`;
     },
+
     onComplete: () => {
-      element.textContent = `#${target}`;
+      element.textContent =
+        `${target}`;
     },
   });
 }
@@ -220,10 +337,13 @@ function animateCounter(
 
 function initRecognition(): void {
   cleanupRecognition?.();
+
   cleanupRecognition = null;
 
   const section =
-    document.querySelector<HTMLElement>("#recognition");
+    document.querySelector<HTMLElement>(
+      "#recognition",
+    );
 
   if (!section) return;
 
@@ -237,18 +357,32 @@ function initRecognition(): void {
       ".recognition__industry",
     );
 
-  if (!clientsBlock || !industryBlock) return;
+  if (
+    !clientsBlock ||
+    !industryBlock
+  ) {
+    return;
+  }
 
   const prefersReducedMotion =
     window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-  const cleanupFns: Array<() => void> = [];
-  const counterTweens: gsap.core.Tween[] = [];
-  const timelines: gsap.core.Timeline[] = [];
-  const ambientTweens: gsap.core.Tween[] = [];
-  const ambientTimelines: gsap.core.Timeline[] = [];
+  const cleanupFns:
+    Array<() => void> = [];
+
+  const counterTweens:
+    gsap.core.Tween[] = [];
+
+  const timelines:
+    gsap.core.Timeline[] = [];
+
+  const ambientTweens:
+    gsap.core.Tween[] = [];
+
+  const ambientTimelines:
+    gsap.core.Timeline[] = [];
 
   /* ==========================================================
      BLOQUE 1 — LO DICEN NUESTROS CLIENTES
@@ -274,22 +408,24 @@ function initRecognition(): void {
       ".recognition__line--vertical",
     );
 
-  const categoryParagraphs = Array.from(
-    clientsBlock.querySelectorAll<HTMLElement>(
-      ".recognition__ranking-categories p",
-    ),
-  );
+  const categoryParagraphs =
+    Array.from(
+      clientsBlock.querySelectorAll<HTMLElement>(
+        ".recognition__ranking-categories p",
+      ),
+    );
 
   const rankingLine =
     clientsBlock.querySelector<HTMLElement>(
       ".recognition__line--ranking",
     );
 
-  const statementParagraphs = Array.from(
-    clientsBlock.querySelectorAll<HTMLElement>(
-      ".recognition__statements p",
-    ),
-  );
+  const statementParagraphs =
+    Array.from(
+      clientsBlock.querySelectorAll<HTMLElement>(
+        ".recognition__statements p",
+      ),
+    );
 
   const statementsLine =
     clientsBlock.querySelector<HTMLElement>(
@@ -306,107 +442,138 @@ function initRecognition(): void {
       ".recognition__line--section",
     );
 
-  const categoryLetters = categoryParagraphs.map(
-    (paragraph) =>
-      getLetters(
-        paragraph,
-        "recognition-type-letter",
-      ),
-  );
+  const categoryLetters =
+    categoryParagraphs.map(
+      (paragraph) =>
+        getLetters(
+          paragraph,
+          "recognition-type-letter",
+        ),
+    );
 
-  const statementLetters = statementParagraphs.map(
-    (paragraph) =>
-      getLetters(
-        paragraph,
-        "recognition-type-letter",
-      ),
-  );
+  const statementLetters =
+    statementParagraphs.map(
+      (paragraph) =>
+        getLetters(
+          paragraph,
+          "recognition-type-letter",
+        ),
+    );
 
-  const integratedLetters = integratedParagraph
-    ? getLetters(
-        integratedParagraph,
-        "recognition-type-letter",
-      )
-    : [];
+  const integratedLetters =
+    integratedParagraph
+      ? getLetters(
+          integratedParagraph,
+          "recognition-type-letter",
+        )
+      : [];
 
-  const setClientsInitialState = (): void => {
-    if (topLine) {
-      gsap.set(topLine, {
-        scaleX: 0,
-        transformOrigin: "left center",
-      });
-    }
+  const setClientsInitialState =
+    (): void => {
+      if (topLine) {
+        gsap.set(topLine, {
+          scaleX: 0,
+          transformOrigin:
+            "left center",
+        });
+      }
 
-    if (badge) {
-      gsap.set(badge, {
-        autoAlpha: 0,
-        scale: 0.88,
-        y: 18,
-        rotation: 0,
-        transformOrigin: "center center",
-      });
-    }
+      if (badge) {
+        gsap.set(badge, {
+          autoAlpha: 0,
+          scale: 0.88,
+          y: 18,
+          rotation: 0,
+          transformOrigin:
+            "center center",
+        });
+      }
 
-    if (numberOne) {
-      gsap.set(numberOne, {
-        autoAlpha: 0,
-        x: 0,
-        y: 0,
-        scale: 0.82,
-        scaleX: 1,
-        scaleY: 1,
-        rotation: 0,
-        transformOrigin: "center bottom",
-      });
-    }
+      if (numberOne) {
+        gsap.set(numberOne, {
+          autoAlpha: 0,
+          x: 0,
+          y: 0,
+          scale: 0.82,
+          scaleX: 1,
+          scaleY: 1,
+          rotation: 0,
+          transformOrigin:
+            "center bottom",
+        });
+      }
 
-    if (verticalLine) {
-      gsap.set(verticalLine, {
-        scaleY: 0,
-        transformOrigin: "top center",
-      });
-    }
+      if (verticalLine) {
+        gsap.set(
+          verticalLine,
+          {
+            scaleY: 0,
+            transformOrigin:
+              "top center",
+          },
+        );
+      }
 
-    categoryLetters.flat().forEach((letter) => {
-      gsap.set(letter, {
-        autoAlpha: 0,
-      });
-    });
+      categoryLetters
+        .flat()
+        .forEach((letter) => {
+          gsap.set(letter, {
+            autoAlpha: 0,
+          });
+        });
 
-    if (rankingLine) {
-      gsap.set(rankingLine, {
-        scaleX: 0,
-        transformOrigin: "left center",
-      });
-    }
+      if (rankingLine) {
+        gsap.set(
+          rankingLine,
+          {
+            scaleX: 0,
+            transformOrigin:
+              "left center",
+          },
+        );
+      }
 
-    statementLetters.flat().forEach((letter) => {
-      gsap.set(letter, {
-        autoAlpha: 0,
-      });
-    });
+      statementLetters
+        .flat()
+        .forEach((letter) => {
+          gsap.set(letter, {
+            autoAlpha: 0,
+          });
+        });
 
-    if (statementsLine) {
-      gsap.set(statementsLine, {
-        scaleX: 0,
-        transformOrigin: "left center",
-      });
-    }
+      if (statementsLine) {
+        gsap.set(
+          statementsLine,
+          {
+            scaleX: 0,
+            transformOrigin:
+              "left center",
+          },
+        );
+      }
 
-    integratedLetters.forEach((letter) => {
-      gsap.set(letter, {
-        autoAlpha: 0,
-      });
-    });
+      integratedLetters.forEach(
+        (letter) => {
+          gsap.set(letter, {
+            autoAlpha: 0,
+          });
+        },
+      );
 
-    if (sectionLine) {
-      sectionLine.classList.remove("is-alive");
+      if (sectionLine) {
+        sectionLine.classList.remove(
+          "is-alive",
+        );
 
-      gsap.set(sectionLine, {
-        clipPath: "inset(0 100% 0 0)",
-      });
-    }
-  };
+        gsap.set(
+          sectionLine,
+          {
+            clipPath:
+              "inset(0 100% 0 0)",
+          },
+        );
+      }
+    };
 
   if (!prefersReducedMotion) {
     setClientsInitialState();
@@ -414,22 +581,24 @@ function initRecognition(): void {
 
   /* ==========================================================
      AMBIENTAL — #1
-     Golpe vertical + squash/stretch + salto + aterrizaje
      ========================================================== */
 
   const numberOneBounce =
-    numberOne && !prefersReducedMotion
-      ? gsap.timeline({
-          repeat: -1,
-          repeatDelay: 3,
-          paused: true,
-        })
+    numberOne &&
+    !prefersReducedMotion
+      ? gsap
+          .timeline({
+            repeat: -1,
+            repeatDelay: 3,
+            paused: true,
+          })
           .to(numberOne, {
             scaleX: 1.04,
             scaleY: 0.96,
             duration: 0.16,
             ease: "power2.in",
-            transformOrigin: "center bottom",
+            transformOrigin:
+              "center bottom",
           })
           .to(numberOne, {
             y: -9,
@@ -448,7 +617,8 @@ function initRecognition(): void {
       : null;
 
   const badgeFloat =
-    badge && !prefersReducedMotion
+    badge &&
+    !prefersReducedMotion
       ? gsap.fromTo(
           badge,
           {
@@ -464,37 +634,52 @@ function initRecognition(): void {
             yoyo: true,
             paused: true,
             immediateRender: false,
-            transformOrigin: "center center",
+            transformOrigin:
+              "center center",
           },
         )
       : null;
 
   if (numberOneBounce) {
-    ambientTimelines.push(numberOneBounce);
+    ambientTimelines.push(
+      numberOneBounce,
+    );
   }
 
   if (badgeFloat) {
-    ambientTweens.push(badgeFloat);
+    ambientTweens.push(
+      badgeFloat,
+    );
   }
 
-  const clientsTimeline = gsap.timeline({
-    paused: true,
-    onComplete: () => {
-      numberOneBounce?.restart();
-      badgeFloat?.restart();
-      sectionLine?.classList.add("is-alive");
-    },
-  });
+  const clientsTimeline =
+    gsap.timeline({
+      paused: true,
 
-  timelines.push(clientsTimeline);
+      onComplete: () => {
+        numberOneBounce?.restart();
+        badgeFloat?.restart();
+
+        sectionLine?.classList.add(
+          "is-alive",
+        );
+      },
+    });
+
+  timelines.push(
+    clientsTimeline,
+  );
 
   if (!prefersReducedMotion) {
     if (topLine) {
-      clientsTimeline.to(topLine, {
-        scaleX: 1,
-        duration: 0.45,
-        ease: "power2.inOut",
-      });
+      clientsTimeline.to(
+        topLine,
+        {
+          scaleX: 1,
+          duration: 0.45,
+          ease: "power2.inOut",
+        },
+      );
     }
 
     if (badge) {
@@ -505,7 +690,8 @@ function initRecognition(): void {
           scale: 1,
           y: 0,
           duration: 0.5,
-          ease: "back.out(1.35)",
+          ease:
+            "back.out(1.35)",
         },
         "-=0.15",
       );
@@ -521,76 +707,104 @@ function initRecognition(): void {
           scaleY: 1,
           y: 0,
           duration: 0.5,
-          ease: "back.out(1.55)",
+          ease:
+            "back.out(1.55)",
         },
         "-=0.2",
       );
     }
 
     if (verticalLine) {
-      clientsTimeline.to(verticalLine, {
-        scaleY: 1,
-        duration: 0.4,
-        ease: "power2.inOut",
-      });
+      clientsTimeline.to(
+        verticalLine,
+        {
+          scaleY: 1,
+          duration: 0.4,
+          ease:
+            "power2.inOut",
+        },
+      );
     }
 
-    categoryLetters.forEach((letters) => {
-      clientsTimeline.to(
-        letters,
-        {
-          autoAlpha: 1,
-          duration: 0.02,
-          stagger: {
-            each: getTypewriterStagger(letters.length),
-            from: "start",
+    categoryLetters.forEach(
+      (letters) => {
+        clientsTimeline.to(
+          letters,
+          {
+            autoAlpha: 1,
+            duration: 0.02,
+            stagger: {
+              each:
+                getTypewriterStagger(
+                  letters.length,
+                ),
+              from: "start",
+            },
+            ease: "none",
           },
-          ease: "none",
-        },
-        "-=0.1",
-      );
-    });
+          "-=0.1",
+        );
+      },
+    );
 
     if (rankingLine) {
-      clientsTimeline.to(rankingLine, {
-        scaleX: 1,
-        duration: 0.4,
-        ease: "power2.inOut",
-      });
+      clientsTimeline.to(
+        rankingLine,
+        {
+          scaleX: 1,
+          duration: 0.4,
+          ease:
+            "power2.inOut",
+        },
+      );
     }
 
-    statementLetters.forEach((letters) => {
-      clientsTimeline.to(
-        letters,
-        {
-          autoAlpha: 1,
-          duration: 0.02,
-          stagger: {
-            each: getTypewriterStagger(letters.length),
-            from: "start",
+    statementLetters.forEach(
+      (letters) => {
+        clientsTimeline.to(
+          letters,
+          {
+            autoAlpha: 1,
+            duration: 0.02,
+            stagger: {
+              each:
+                getTypewriterStagger(
+                  letters.length,
+                ),
+              from: "start",
+            },
+            ease: "none",
           },
-          ease: "none",
-        },
-        "-=0.1",
-      );
-    });
+          "-=0.1",
+        );
+      },
+    );
 
     if (statementsLine) {
-      clientsTimeline.to(statementsLine, {
-        scaleX: 1,
-        duration: 0.4,
-        ease: "power2.inOut",
-      });
+      clientsTimeline.to(
+        statementsLine,
+        {
+          scaleX: 1,
+          duration: 0.4,
+          ease:
+            "power2.inOut",
+        },
+      );
     }
 
-    if (integratedLetters.length) {
+    if (
+      integratedLetters.length
+    ) {
       clientsTimeline.to(
         integratedLetters,
         {
           autoAlpha: 1,
           duration: 0.02,
           stagger: {
-            each: getTypewriterStagger(integratedLetters.length),
+            each:
+              getTypewriterStagger(
+                integratedLetters.length,
+              ),
             from: "start",
           },
           ease: "none",
@@ -600,37 +814,58 @@ function initRecognition(): void {
     }
 
     if (sectionLine) {
-      clientsTimeline.to(sectionLine, {
-        clipPath: "inset(0 0% 0 0)",
-        duration: 0.55,
-        ease: "power2.inOut",
-      });
+      clientsTimeline.to(
+        sectionLine,
+        {
+          clipPath:
+            "inset(0 0% 0 0)",
+          duration: 0.55,
+          ease:
+            "power2.inOut",
+        },
+      );
 
-      clientsTimeline.set(sectionLine, {
-        clearProps: "clipPath",
-      });
+      clientsTimeline.set(
+        sectionLine,
+        {
+          clearProps:
+            "clipPath",
+        },
+      );
     }
   }
 
-  const playClients = (): void => {
-    if (prefersReducedMotion) return;
+  const playClients =
+    (): void => {
+      if (
+        prefersReducedMotion
+      ) {
+        return;
+      }
 
-    numberOneBounce?.pause();
-    badgeFloat?.pause();
+      numberOneBounce?.pause();
+      badgeFloat?.pause();
 
-    setClientsInitialState();
-    clientsTimeline.restart();
-  };
+      setClientsInitialState();
 
-  const resetClients = (): void => {
-    if (prefersReducedMotion) return;
+      clientsTimeline.restart();
+    };
 
-    numberOneBounce?.pause(0);
-    badgeFloat?.pause(0);
+  const resetClients =
+    (): void => {
+      if (
+        prefersReducedMotion
+      ) {
+        return;
+      }
 
-    clientsTimeline.pause(0);
-    setClientsInitialState();
-  };
+      numberOneBounce?.pause(0);
+      badgeFloat?.pause(0);
+
+      clientsTimeline.pause(0);
+
+      setClientsInitialState();
+    };
 
   /* ==========================================================
      BLOQUE 2 — RECONOCIMIENTOS DE LA INDUSTRIA
@@ -641,200 +876,354 @@ function initRecognition(): void {
       ".recognition__industry-title",
     );
 
-  const awards = Array.from(
-    industryBlock.querySelectorAll<HTMLElement>(
-      ".recognition__award",
-    ),
-  );
+  const awards =
+    Array.from(
+      industryBlock.querySelectorAll<HTMLElement>(
+        ".recognition__award",
+      ),
+    );
 
   const timeline =
     industryBlock.querySelector<HTMLElement>(
       ".recognition__timeline",
     );
 
-  const timelineItems = Array.from(
-    industryBlock.querySelectorAll<HTMLElement>(
-      ".recognition__timeline-item",
-    ),
-  );
-
-  const rankings = timelineItems.map((item) => {
-    const number =
-      item.querySelector<HTMLElement>(
-        ".recognition__timeline-number",
-      );
-
-    const label =
-      item.querySelector<HTMLElement>(
-        ".recognition__timeline-label",
-      );
-
-    const rawTarget =
-      number?.textContent?.replace(/[^0-9]/g, "") ?? "0";
-
-    const target =
-      Number.parseInt(rawTarget, 10) || 0;
-
-    const letters = label
-      ? getLetters(
-          label,
-          "recognition-glow-letter",
-        )
-      : [];
-
-    return {
-      item,
-      number,
-      label,
-      target,
-      letters,
-    };
-  });
-
-  const awardIcons = awards
-    .map((award) =>
-      award.querySelector<HTMLElement>(
-        ".recognition__award-icon",
+  const timelineItems =
+    Array.from(
+      industryBlock.querySelectorAll<HTMLElement>(
+        ".recognition__timeline-item",
       ),
-    )
-    .filter(
-      (icon): icon is HTMLElement =>
-        Boolean(icon),
     );
 
-  const rankingAccentTexts = rankings
-    .map(({ label }) =>
-      label?.querySelector<HTMLElement>("strong") ?? null,
-    )
-    .filter(
-      (element): element is HTMLElement =>
-        Boolean(element),
-    );
+  /*
+   * Cada ranking puede tener:
+   *
+   * #3
+   * #6
+   *
+   * o:
+   *
+   * TOP 10
+   * TOP 15
+   *
+   * En los TOP animamos únicamente
+   * .recognition__timeline-value.
+   */
 
-  const stopCounterAnimations = (): void => {
-    counterTweens.forEach((tween) => {
-      tween.kill();
+  const rankings =
+    timelineItems.map((item) => {
+      const number =
+        item.querySelector<HTMLElement>(
+          ".recognition__timeline-number",
+        );
+
+      const label =
+        item.querySelector<HTMLElement>(
+          ".recognition__timeline-label",
+        );
+
+      const valueElement =
+        number?.querySelector<HTMLElement>(
+          ".recognition__timeline-value",
+        ) ?? null;
+
+      const isTop =
+        Boolean(valueElement);
+
+      /*
+       * Si es TOP tomamos únicamente
+       * el contenido del span del número.
+       *
+       * Si es # tomamos el contenido
+       * completo del elemento.
+       */
+      const rawText =
+        isTop
+          ? valueElement?.textContent ?? ""
+          : number?.textContent ?? "";
+
+      const rawTarget =
+        rawText.replace(
+          /[^0-9]/g,
+          "",
+        );
+
+      const target =
+        Number.parseInt(
+          rawTarget,
+          10,
+        ) || 0;
+
+      /*
+       * Para TOP:
+       *   counterElement = span del número
+       *
+       * Para #:
+       *   counterElement = span principal
+       */
+      const counterElement =
+        valueElement ?? number;
+
+      const letters =
+        label
+          ? getLetters(
+              label,
+              "recognition-glow-letter",
+            )
+          : [];
+
+      return {
+        item,
+        number,
+        counterElement,
+        label,
+        target,
+        isTop,
+        letters,
+      };
     });
 
-    counterTweens.length = 0;
-  };
+  const awardIcons =
+    awards
+      .map((award) =>
+        award.querySelector<HTMLElement>(
+          ".recognition__award-icon",
+        ),
+      )
+      .filter(
+        (
+          icon,
+        ): icon is HTMLElement =>
+          Boolean(icon),
+      );
 
-  const setIndustryInitialState = (): void => {
-    stopCounterAnimations();
+  const rankingAccentTexts =
+    rankings
+      .map(
+        ({ label }) =>
+          label?.querySelector<HTMLElement>(
+            "strong",
+          ) ?? null,
+      )
+      .filter(
+        (
+          element,
+        ): element is HTMLElement =>
+          Boolean(element),
+      );
 
-    if (industryTitle) {
-      gsap.set(industryTitle, {
-        autoAlpha: 0,
-        y: 28,
-      });
-    }
+  const stopCounterAnimations =
+    (): void => {
+      counterTweens.forEach(
+        (tween) => {
+          tween.kill();
+        },
+      );
 
-    if (awards.length) {
-      gsap.set(awards, {
-        autoAlpha: 0,
-        y: 22,
-        scale: 0.9,
-        transformOrigin: "center center",
-      });
-    }
+      counterTweens.length = 0;
+    };
 
-    awardIcons.forEach((icon) => {
-      gsap.set(icon, {
-        scale: 1,
-        y: 0,
-      });
-    });
+  const setIndustryInitialState =
+    (): void => {
+      stopCounterAnimations();
 
-    rankings.forEach(
-      ({ number, target, letters, item }) => {
-        if (number) {
-          number.textContent =
-            target > 0
-              ? "#1"
-              : number.textContent;
-
-          gsap.set(number, {
+      if (industryTitle) {
+        gsap.set(
+          industryTitle,
+          {
             autoAlpha: 0,
-            y: 18,
+            y: 28,
+          },
+        );
+      }
+
+      if (awards.length) {
+        gsap.set(
+          awards,
+          {
+            autoAlpha: 0,
+            y: 22,
+            scale: 0.9,
+            transformOrigin:
+              "center center",
+          },
+        );
+      }
+
+      awardIcons.forEach(
+        (icon) => {
+          gsap.set(icon, {
             scale: 1,
+            y: 0,
           });
-        }
+        },
+      );
 
-        gsap.set(item, {
-          x: 0,
-        });
+      rankings.forEach(
+        ({
+          number,
+          counterElement,
+          target,
+          isTop,
+          letters,
+          item,
+        }) => {
+          if (
+            number &&
+            counterElement
+          ) {
+            if (target > 0) {
+              /*
+               * TOP:
+               * cambiamos solo:
+               *
+               * <span class="...value">
+               *
+               * Por eso "TOP" permanece
+               * intacto en el DOM.
+               */
+              if (isTop) {
+                counterElement.textContent =
+                  "1";
+              } else {
+                /*
+                 * Ranking tradicional.
+                 */
+                counterElement.textContent =
+                  "#1";
+              }
+            }
 
-        letters.forEach((letter) => {
-          gsap.set(letter, {
-            opacity: 0.12,
-            filter: "blur(0.8px)",
+            gsap.set(
+              number,
+              {
+                autoAlpha: 0,
+                y: 18,
+                scale: 1,
+              },
+            );
+          }
+
+          gsap.set(item, {
+            x: 0,
           });
-        });
-      },
-    );
 
-    rankingAccentTexts.forEach((accent) => {
-      gsap.set(accent, {
-        opacity: 1,
-      });
-    });
+          letters.forEach(
+            (letter) => {
+              gsap.set(
+                letter,
+                {
+                  opacity: 0.12,
+                  filter:
+                    "blur(0.8px)",
+                },
+              );
+            },
+          );
+        },
+      );
 
-    if (
-      timeline &&
-      window.innerWidth > 768
-    ) {
-      gsap.set(timeline, {
-        clipPath: "inset(0 100% 0 0)",
-      });
-    }
-  };
+      rankingAccentTexts.forEach(
+        (accent) => {
+          gsap.set(
+            accent,
+            {
+              opacity: 1,
+            },
+          );
+        },
+      );
+
+      if (
+        timeline &&
+        window.innerWidth > 768
+      ) {
+        gsap.set(
+          timeline,
+          {
+            clipPath:
+              "inset(0 100% 0 0)",
+          },
+        );
+      }
+    };
 
   if (!prefersReducedMotion) {
     setIndustryInitialState();
   }
 
-  const ambientWave = gsap.timeline({
-    repeat: -1,
-    repeatDelay: 1.8,
-    paused: true,
-  });
+  /* ==========================================================
+     ANIMACIÓN AMBIENTAL
+     ========================================================== */
+
+  const ambientWave =
+    gsap.timeline({
+      repeat: -1,
+      repeatDelay: 1.8,
+      paused: true,
+    });
 
   if (!prefersReducedMotion) {
-    awardIcons.forEach((icon) => {
-      ambientWave.to(icon, {
-        scale: 1.065,
-        y: -3,
-        duration: 0.42,
-        ease: "sine.out",
-        transformOrigin: "center center",
-      });
+    awardIcons.forEach(
+      (icon) => {
+        ambientWave.to(
+          icon,
+          {
+            scale: 1.065,
+            y: -3,
+            duration: 0.42,
+            ease: "sine.out",
+            transformOrigin:
+              "center center",
+          },
+        );
 
-      ambientWave.to(icon, {
-        scale: 1,
-        y: 0,
-        duration: 0.52,
-        ease: "sine.inOut",
-      });
-    });
+        ambientWave.to(
+          icon,
+          {
+            scale: 1,
+            y: 0,
+            duration: 0.52,
+            ease:
+              "sine.inOut",
+          },
+        );
+      },
+    );
 
-    ambientWave.to({}, {
-      duration: 0.45,
-    });
+    ambientWave.to(
+      {},
+      {
+        duration: 0.45,
+      },
+    );
 
     rankings.forEach(
-      ({ number, item }, index) => {
+      (
+        {
+          number,
+          item,
+        },
+        index,
+      ) => {
         if (!number) return;
 
         const accent =
-          rankingAccentTexts[index];
+          rankingAccentTexts[
+            index
+          ];
 
-        ambientWave.to(number, {
-          scale: 1.07,
-          y: -2,
-          duration: 0.34,
-          ease: "sine.out",
-          transformOrigin: "left center",
-        });
+        ambientWave.to(
+          number,
+          {
+            scale: 1.07,
+            y: -2,
+            duration: 0.34,
+            ease: "sine.out",
+            transformOrigin:
+              "left center",
+          },
+        );
 
         if (accent) {
           ambientWave.to(
@@ -848,12 +1237,16 @@ function initRecognition(): void {
           );
         }
 
-        ambientWave.to(number, {
-          scale: 1,
-          y: 0,
-          duration: 0.46,
-          ease: "sine.inOut",
-        });
+        ambientWave.to(
+          number,
+          {
+            scale: 1,
+            y: 0,
+            duration: 0.46,
+            ease:
+              "sine.inOut",
+          },
+        );
 
         if (accent) {
           ambientWave.to(
@@ -861,7 +1254,8 @@ function initRecognition(): void {
             {
               opacity: 1,
               duration: 0.38,
-              ease: "sine.inOut",
+              ease:
+                "sine.inOut",
             },
             "<",
           );
@@ -877,7 +1271,8 @@ function initRecognition(): void {
             duration: 0.16,
             yoyo: true,
             repeat: 1,
-            ease: "sine.inOut",
+            ease:
+              "sine.inOut",
           },
           "-=0.36",
         );
@@ -885,25 +1280,39 @@ function initRecognition(): void {
     );
   }
 
-  ambientTimelines.push(ambientWave);
+  ambientTimelines.push(
+    ambientWave,
+  );
 
-  const industryTimeline = gsap.timeline({
-    paused: true,
-    onComplete: () => {
-      ambientWave.restart();
-    },
-  });
+  /* ==========================================================
+     TIMELINE PRINCIPAL — INDUSTRIA
+     ========================================================== */
 
-  timelines.push(industryTimeline);
+  const industryTimeline =
+    gsap.timeline({
+      paused: true,
+
+      onComplete: () => {
+        ambientWave.restart();
+      },
+    });
+
+  timelines.push(
+    industryTimeline,
+  );
 
   if (!prefersReducedMotion) {
     if (industryTitle) {
-      industryTimeline.to(industryTitle, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.5,
-        ease: "power3.out",
-      });
+      industryTimeline.to(
+        industryTitle,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.5,
+          ease:
+            "power3.out",
+        },
+      );
     }
 
     industryTimeline.to(
@@ -914,7 +1323,8 @@ function initRecognition(): void {
         scale: 1,
         duration: 0.45,
         stagger: 0.1,
-        ease: "back.out(1.35)",
+        ease:
+          "back.out(1.35)",
       },
       "-=0.2",
     );
@@ -923,45 +1333,126 @@ function initRecognition(): void {
       timeline &&
       window.innerWidth > 768
     ) {
-      industryTimeline.to(timeline, {
-        clipPath: "inset(0 0% 0 0)",
-        duration: 0.65,
-        ease: "power2.inOut",
-      });
+      industryTimeline.to(
+        timeline,
+        {
+          clipPath:
+            "inset(0 0% 0 0)",
+          duration: 0.65,
+          ease:
+            "power2.inOut",
+        },
+      );
 
-      industryTimeline.set(timeline, {
-        clearProps: "clipPath",
-      });
+      industryTimeline.set(
+        timeline,
+        {
+          clearProps:
+            "clipPath",
+        },
+      );
     }
 
     rankings.forEach(
-      ({ number, target, letters }) => {
-        if (!number || target <= 0) return;
+      ({
+        number,
+        counterElement,
+        target,
+        isTop,
+        letters,
+      }) => {
+        if (
+          !number ||
+          !counterElement ||
+          target <= 0
+        ) {
+          return;
+        }
 
-        industryTimeline.to(number, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.2,
-          ease: "power2.out",
-        });
+        industryTimeline.to(
+          number,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.2,
+            ease:
+              "power2.out",
+          },
+        );
 
-        industryTimeline.add(() => {
-          const counterTween =
-            animateCounter(
-              number,
-              target,
-            );
+        industryTimeline.add(
+          () => {
+            /*
+             * Para TOP animamos solo el número.
+             *
+             * Para # usamos un contador auxiliar
+             * que mantiene el símbolo.
+             */
+            if (isTop) {
+              const counterTween =
+                animateCounter(
+                  counterElement,
+                  target,
+                );
 
-          counterTweens.push(
-            counterTween,
-          );
-        });
+              counterTweens.push(
+                counterTween,
+              );
+            } else {
+              const state = {
+                value: 1,
+              };
+
+              counterElement.textContent =
+                "#1";
+
+              const duration =
+                gsap.utils.clamp(
+                  0.4,
+                  0.8,
+                  0.32 +
+                    target *
+                      0.025,
+                );
+
+              const counterTween =
+                gsap.to(
+                  state,
+                  {
+                    value:
+                      target,
+                    duration,
+                    ease: "none",
+
+                    onUpdate:
+                      () => {
+                        counterElement.textContent =
+                          `#${Math.round(
+                            state.value,
+                          )}`;
+                      },
+
+                    onComplete:
+                      () => {
+                        counterElement.textContent =
+                          `#${target}`;
+                      },
+                  },
+                );
+
+              counterTweens.push(
+                counterTween,
+              );
+            }
+          },
+        );
 
         const counterDuration =
           gsap.utils.clamp(
             0.4,
             0.8,
-            0.32 + target * 0.025,
+            0.32 +
+              target * 0.025,
           );
 
         industryTimeline.to(
@@ -972,18 +1463,26 @@ function initRecognition(): void {
           },
         );
 
-        if (letters.length) {
+        if (
+          letters.length
+        ) {
           industryTimeline.to(
             letters,
             {
               opacity: 1,
-              filter: "blur(0px)",
+              filter:
+                "blur(0px)",
               duration: 0.1,
               stagger: {
-                each: getTypewriterStagger(letters.length),
-                from: "start",
+                each:
+                  getTypewriterStagger(
+                    letters.length,
+                  ),
+                from:
+                  "start",
               },
-              ease: "power1.out",
+              ease:
+                "power1.out",
             },
             "-=0.15",
           );
@@ -992,28 +1491,44 @@ function initRecognition(): void {
     );
   }
 
-  const playIndustry = (): void => {
-    if (prefersReducedMotion) return;
+  const playIndustry =
+    (): void => {
+      if (
+        prefersReducedMotion
+      ) {
+        return;
+      }
 
-    ambientWave.pause(0);
-    setIndustryInitialState();
-    industryTimeline.restart();
-  };
+      ambientWave.pause(0);
 
-  const resetIndustry = (): void => {
-    if (prefersReducedMotion) return;
+      setIndustryInitialState();
 
-    ambientWave.pause(0);
-    industryTimeline.pause(0);
-    setIndustryInitialState();
-  };
+      industryTimeline.restart();
+    };
+
+  const resetIndustry =
+    (): void => {
+      if (
+        prefersReducedMotion
+      ) {
+        return;
+      }
+
+      ambientWave.pause(0);
+
+      industryTimeline.pause(0);
+
+      setIndustryInitialState();
+    };
 
   /* ==========================================================
      DISPARADORES POR VISIBILIDAD REAL
      ========================================================== */
 
   if (prefersReducedMotion) {
-    cleanupRecognition = () => {};
+    cleanupRecognition =
+      () => {};
+
     return;
   }
 
@@ -1038,25 +1553,36 @@ function initRecognition(): void {
     stopIndustryTrigger,
   );
 
-  cleanupRecognition = () => {
-    cleanupFns.forEach((fn) => fn());
+  cleanupRecognition =
+    () => {
+      cleanupFns.forEach(
+        (fn) => fn(),
+      );
 
-    stopCounterAnimations();
+      stopCounterAnimations();
 
-    timelines.forEach((tl) => {
-      tl.kill();
-    });
+      timelines.forEach(
+        (tl) => {
+          tl.kill();
+        },
+      );
 
-    ambientTweens.forEach((tween) => {
-      tween.kill();
-    });
+      ambientTweens.forEach(
+        (tween) => {
+          tween.kill();
+        },
+      );
 
-    ambientTimelines.forEach((tl) => {
-      tl.kill();
-    });
+      ambientTimelines.forEach(
+        (tl) => {
+          tl.kill();
+        },
+      );
 
-    sectionLine?.classList.remove("is-alive");
-  };
+      sectionLine?.classList.remove(
+        "is-alive",
+      );
+    };
 }
 
 /* ============================================================

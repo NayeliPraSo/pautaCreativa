@@ -107,6 +107,24 @@ function createTimelinePulse(
     return null;
   }
 
+  /*
+   * Resolvemos las variables CSS a colores reales.
+   * Así GSAP interpola el color de forma continua
+   * y evitamos pequeños saltos visuales.
+   */
+  const rootStyles =
+    getComputedStyle(document.documentElement);
+
+  const black =
+    rootStyles
+      .getPropertyValue("--color-black")
+      .trim() || "#000000";
+
+  const teal =
+    rootStyles
+      .getPropertyValue("--color-teal2")
+      .trim() || "#00b4ac";
+
   const timeline =
     gsap.timeline({
       repeat: -1,
@@ -128,19 +146,45 @@ function createTimelinePulse(
     if (!dot) return;
 
     /* =========================================
+       INICIO DEL PULSO ACTUAL
+       ========================================= */
+
+    const pulseStart =
+      timeline.duration();
+
+    /* =========================================
        DOT — CRECE
        ========================================= */
 
-    timeline.to(dot, {
-      scale: 1.45,
-      opacity: 0.7,
+    timeline.to(
+      dot,
+      {
+        scale: 1.45,
 
-      duration: 0.4,
+        duration: 0.5,
 
-      ease: "sine.inOut",
+        ease: "power2.inOut",
 
-      transformOrigin: "50% 50%",
-    });
+        transformOrigin: "50% 50%",
+      },
+      pulseStart
+    );
+
+    /* =========================================
+       DOT — CAMBIO DE COLOR SUAVE
+       ========================================= */
+
+    timeline.to(
+      dot,
+      {
+        backgroundColor: teal,
+
+        duration: 0.5,
+
+        ease: "none",
+      },
+      pulseStart
+    );
 
     /* =========================================
        LABEL — ACOMPAÑA
@@ -150,41 +194,67 @@ function createTimelinePulse(
       timeline.to(
         label,
         {
-          scale: 1.06,
+          scale: 1.05,
 
-          duration: 0.4,
+          duration: 0.5,
 
-          ease: "sine.inOut",
+          ease: "power2.inOut",
 
           transformOrigin: "50% 50%",
         },
-        "<"
+        pulseStart
       );
     }
 
     /* =========================================
-       PEQUEÑA PAUSA
+       PEQUEÑA PAUSA ACTIVO
        ========================================= */
 
     timeline.to(
       {},
       {
-        duration: 0.25,
+        duration: 0.35,
       }
     );
+
+    /* =========================================
+       INICIO DEL REGRESO
+       ========================================= */
+
+    const returnStart =
+      timeline.duration();
 
     /* =========================================
        DOT — REGRESA
        ========================================= */
 
-    timeline.to(dot, {
-      scale: 1,
-      opacity: 1,
+    timeline.to(
+      dot,
+      {
+        scale: 1,
 
-      duration: 0.45,
+        duration: 0.5,
 
-      ease: "sine.inOut",
-    });
+        ease: "power2.inOut",
+      },
+      returnStart
+    );
+
+    /* =========================================
+       DOT — COLOR REGRESA
+       ========================================= */
+
+    timeline.to(
+      dot,
+      {
+        backgroundColor: black,
+
+        duration: 0.5,
+
+        ease: "none",
+      },
+      returnStart
+    );
 
     /* =========================================
        LABEL — REGRESA
@@ -196,11 +266,11 @@ function createTimelinePulse(
         {
           scale: 1,
 
-          duration: 0.45,
+          duration: 0.5,
 
-          ease: "sine.inOut",
+          ease: "power2.inOut",
         },
-        "<"
+        returnStart
       );
     }
 
@@ -211,7 +281,7 @@ function createTimelinePulse(
     timeline.to(
       {},
       {
-        duration: 0.15,
+        duration: 0.12,
       }
     );
   });
@@ -244,6 +314,11 @@ function initOrangeMindset(): void {
   /* ==========================================================
      PANEL 1 — REFS
      ========================================================== */
+
+  const panel1 =
+    section.querySelector<HTMLElement>(
+      ".om-panel-1"
+    );
 
   const p1Index =
     section.querySelector<HTMLElement>(
@@ -511,6 +586,7 @@ function initOrangeMindset(): void {
             gsap.set(dot, {
               scale: 1,
               opacity: 1,
+              backgroundColor: "var(--color-black)",
             });
           }
 
@@ -1020,29 +1096,39 @@ function initOrangeMindset(): void {
     "(max-width: 768px)",
     () => {
       /*
-       * En móvil no existe el slider
-       * horizontal.
-       *
-       * Cada panel entra cuando llega
-       * verticalmente al viewport.
+       * En móvil no existe el slider horizontal.
+       * Cada panel usa su propio elemento como trigger.
+       * Esto evita que el Panel 1 dependa de la altura
+       * completa de Orange Mindset.
        */
 
-      const panelOneTrigger =
-        ScrollTrigger.create({
-          id:
-            "orange-mindset-panel1-mobile",
-
-          trigger: section,
-
-          start: "top 75%",
-
-          onEnter: playPanelOne,
-
-          onEnterBack: playPanelOne,
-        });
+      let panelOneTrigger:
+        ScrollTrigger | null = null;
 
       let panelTwoTrigger:
         ScrollTrigger | null = null;
+
+      if (panel1) {
+        panelOneTrigger =
+          ScrollTrigger.create({
+            id:
+              "orange-mindset-panel1-mobile",
+
+            trigger: panel1,
+
+            start: "top 75%",
+
+            end: "bottom 25%",
+
+            onEnter: () => {
+              playPanelOne();
+            },
+
+            onEnterBack: () => {
+              playPanelOne();
+            },
+          });
+      }
 
       if (panel2) {
         panelTwoTrigger =
@@ -1054,14 +1140,20 @@ function initOrangeMindset(): void {
 
             start: "top 75%",
 
-            onEnter: playPanelTwo,
+            end: "bottom 25%",
 
-            onEnterBack: playPanelTwo,
+            onEnter: () => {
+              playPanelTwo();
+            },
+
+            onEnterBack: () => {
+              playPanelTwo();
+            },
           });
       }
 
       return () => {
-        panelOneTrigger.kill();
+        panelOneTrigger?.kill();
 
         panelTwoTrigger?.kill();
       };
@@ -1081,32 +1173,31 @@ function initOrangeMindset(): void {
         window.innerHeight;
 
       /* =====================================
-         RESET AL SALIR HACIA ABAJO
+         RESET AL SALIR COMPLETAMENTE
          ===================================== */
 
       /*
-       * Orange quedó arriba.
-       *
-       * Esto ocurre cuando seguimos
-       * hacia Solutions.
+       * Dejamos un pequeño margen fuera del viewport.
+       * Antes se reseteaba demasiado pronto y el reset
+       * podía competir con onEnterBack al regresar desde
+       * Solutions, dejando el Panel 1 en blanco.
+       */
+      const RESET_BUFFER = 30;
+
+      /*
+       * Orange salió completamente hacia arriba.
+       * Estamos avanzando hacia Solutions.
        */
       const leftThroughTop =
-        rect.bottom <=
-        viewportHeight * 0.05;
-
-      /* =====================================
-         RESET AL SALIR HACIA ARRIBA
-         ===================================== */
+        rect.bottom < -RESET_BUFFER;
 
       /*
-       * Orange quedó debajo.
-       *
-       * Esto ocurre cuando regresamos
-       * hacia About.
+       * Orange salió completamente hacia abajo.
+       * Estamos regresando hacia About.
        */
       const leftThroughBottom =
-        rect.top >=
-        viewportHeight * 0.95;
+        rect.top >
+        viewportHeight + RESET_BUFFER;
 
       if (
         leftThroughTop ||
