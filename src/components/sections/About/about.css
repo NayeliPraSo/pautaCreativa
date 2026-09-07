@@ -1,4 +1,4 @@
-.about {
+/*.about {
   position: relative;
   min-height: 130vh;
   display: flex;
@@ -21,7 +21,57 @@
     align-items:center;
     margin-left:62vh;
     gap:var(--space-8);
+}*/
+
+.about {
+  position: relative;
+  min-height: 130vh;
+  display: flex;
+  align-items: flex-end;
+  padding-top: calc(var(--space-5) * 2);
+  background-color: #383838;
+  overflow-x: clip;
+  /* Evita que el fondo invada Hero */
+  clip-path: inset(0);
+  isolation: isolate;
+
 }
+
+.about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../../../assets/images/BG_GRIS.avif");
+  background-size: auto 108%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1);
+  transform-origin: center center;
+  animation: about-kenburns 18s ease-in-out infinite alternate;
+  z-index: -1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+@keyframes about-kenburns {
+ 0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.1) translate3d(-2%, 0, 0);
+  }
+}
+
+.about-container{
+    width:min(1200px,92%);
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-left:62vh;
+    gap:var(--space-8);
+  }
 
 .about-intro{
     display:flex;
@@ -252,9 +302,24 @@
   .about {
     min-height: 100svh;
     padding: var(--space-8) 0 var(--space-6);
+  }
+
+  .about::before {
     background-size: auto 110%;
     background-position: 100% center;
+    animation-name: about-kenburns-mobile;
+    animation-duration: 14s;
   }
+
+  @keyframes about-kenburns-mobile {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.18) translate3d(-4%, -2%, 0);
+  }
+}
 
   .about-container {
     width: 94%;
@@ -332,8 +397,13 @@
     min-height: 100svh;
     padding-top: var(--space-7);
     padding-bottom: var(--space-5);
+  }
+
+  .about::before {
     background-size: auto 110%;
     background-position: 100% center;
+    animation-name: about-kenburns-mobile;
+    animation-duration: 11s;
   }
 
   .about-container {
@@ -375,6 +445,6 @@
   }
 
   .circle-content h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }

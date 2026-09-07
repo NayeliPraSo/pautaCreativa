@@ -240,16 +240,17 @@
 /* ==========================================================================
    Button
    ========================================================================== */
-.case-detail__close-wrapper {
+.case-detail-wrapper {
   position: relative;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
 }
-
+ 
 .case-detail__close {
     position: absolute;
-    left: 80%;
+    top: 0;
+    left: 50%;
     width: 72px;
     height: 72px;
     display: flex;
@@ -261,10 +262,11 @@
     background: #fff;
     color: #000;
     cursor: pointer;
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, -50%);
     z-index: 20;
     transition: transform var(--transition-fast);
 }
+
 
 .case-detail__close span {
   display: block;
