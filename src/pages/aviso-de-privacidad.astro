@@ -1,0 +1,245 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container/Container.astro";
+import "../components/sections/Legal/privacy-notice.css";
+
+const sections = [
+  { id: "autorizacion", label: "Autorización" },
+  { id: "identidad", label: "1. Identidad del responsable" },
+  { id: "datos-recabados", label: "2. Datos que se recaban" },
+  { id: "finalidades", label: "3. Finalidades del tratamiento" },
+  { id: "transferencia", label: "4. Transferencia de datos" },
+  { id: "derechos-arco", label: "5. Derechos ARCO" },
+  { id: "seguridad", label: "6. Medidas de seguridad" },
+  { id: "cambios", label: "7. Cambios al aviso" },
+  { id: "autoridad", label: "8. Autoridad competente" },
+];
+---
+
+<BaseLayout
+  title="Aviso de Privacidad | Pauta Creativa"
+  description="Aviso de privacidad de Grupo Pauta Creativa, S.A. de C.V., conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)."
+>
+  <section class="privacy-hero">
+    <Container>
+      <span class="privacy-hero-kicker">Legal</span>
+      <h1 class="privacy-hero-title">Aviso de Privacidad</h1>
+      <p class="privacy-hero-updated">
+        Grupo Pauta Creativa, S.A. de C.V. — vigente a partir de 2026.
+      </p>
+    </Container>
+  </section>
+
+  <section class="privacy-body">
+    <Container>
+      <div class="privacy-layout">
+        <nav class="privacy-toc" aria-label="Contenido del aviso de privacidad">
+          <p class="privacy-toc-title">Contenido</p>
+          <ul class="privacy-toc-list">
+            {
+              sections.map((item) => (
+                <li>
+                  <a href={`#${item.id}`}>{item.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <div class="privacy-content">
+          <article id="autorizacion" class="privacy-section">
+            <h2 class="privacy-section-title">Autorización</h2>
+            <p>
+              Autorizo de manera expresa e irrevocable a Grupo Pauta Creativa,
+              S.A. de C.V., y/o cualquier otra empresa que ésta determine, a
+              utilizar, reproducir, publicar y difundir, por cualquier medio que
+              consideren pertinente, mi nombre completo, país y ciudad de
+              origen, así como otros datos necesarios para la promoción,
+              ejecución y/o difusión de campañas promocionales, sin que ello
+              implique derecho a compensación económica, remuneración, regalía o
+              retribución alguna.
+            </p>
+            <p>
+              Esta autorización se otorga desde el momento en que acepto las
+              bases de participación de la promoción correspondiente.
+            </p>
+          </article>
+
+          <article id="identidad" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">1.</span> Identidad del responsable
+              del tratamiento
+            </h2>
+            <p>
+              En cumplimiento con la Ley Federal de Protección de Datos
+              Personales en Posesión de los Particulares (LFPDPPP) y su
+              reglamento, se informa que el responsable del tratamiento de tus
+              datos personales es Grupo Pauta Creativa, S.A. de C.V. (en
+              adelante "PAUTA CREATIVA"), con domicilio en Berlín No. 318,
+              Colonia Del Carmen, Alcaldía Coyoacán, Ciudad de México, C.P.
+              04100.
+            </p>
+          </article>
+
+          <article id="datos-recabados" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">2.</span> Datos personales que
+              se recaban
+            </h2>
+            <p>Los datos personales que serán recabados incluyen:</p>
+            <ul>
+              <li>Nombre completo</li>
+              <li>Correo electrónico</li>
+              <li>Número de teléfono celular</li>
+            </ul>
+            <p>
+              En caso de requerirse, también podrán recabarse datos adicionales,
+              siempre con apego a lo dispuesto por la ley.
+            </p>
+          </article>
+
+          <article id="finalidades" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">3.</span> Finalidades del tratamiento
+              de datos
+            </h2>
+            <p>
+              Los datos personales que recabamos serán utilizados para las
+              siguientes finalidades:
+            </p>
+            <ul>
+              <li>
+                Gestionar tu participación en promociones, concursos y
+                actividades organizadas por PAUTA CREATIVA.
+              </li>
+              <li>
+                Contactarte en caso de resultar ganador o para cualquier
+                comunicación relacionada con la promoción.
+              </li>
+              <li>
+                Enviarte información sobre futuras promociones, concursos,
+                campañas publicitarias o productos de interés.
+              </li>
+              <li>
+                Realizar análisis internos con fines estadísticos y de mejora
+                continua de nuestros servicios.
+              </li>
+            </ul>
+            <p>
+              Si no deseas que tus datos sean utilizados para finalidades
+              secundarias, puedes manifestarlo enviando un correo a &nbsp;
+              <a href="mailto:privacidad@pautacreativa.com.mx">
+                privacidad@pautacreativa.com.mx
+              </a>.
+            </p>
+          </article>
+
+          <article id="transferencia" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">4.</span> Transferencia y/o remisión
+              de datos personales
+            </h2>
+            <p>Tus datos podrán ser transferidos y/o remitidos a:</p>
+            <ul>
+              <li>
+                Empresas afiliadas, subsidiarias, patrocinadores o aliados
+                comerciales.
+              </li>
+              <li>
+                Terceros prestadores de servicios relacionados con la promoción.
+              </li>
+            </ul>
+            <p>
+              Estas transferencias se realizarán únicamente cuando sean
+              necesarias para cumplir con las finalidades mencionadas. Conforme
+              al artículo 37 de la LFPDPPP, no será necesario tu consentimiento
+              para realizar dichas transferencias cuando:
+            </p>
+            <ul>
+              <li>Estén previstas en la ley;</li>
+              <li>
+                Sean necesarias para la ejecución de un contrato celebrado o por
+                celebrar en interés del titular;
+              </li>
+              <li>Sean requeridas por autoridades competentes.</li>
+            </ul>
+          </article>
+
+          <article id="derechos-arco" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">5.</span> Ejercicio de derechos
+              ARCO y revocación del consentimiento
+            </h2>
+            <p>
+              Tienes derecho a acceder, rectificar, cancelar u oponerte
+              (derechos ARCO) al tratamiento de tus datos personales, así como a
+              revocar tu consentimiento en cualquier momento.
+            </p>
+            <p>
+              Puedes ejercer estos derechos enviando una solicitud al
+              correo&nbsp;
+              <a href="mailto:privacidad@pautacreativa.com.mx">
+                privacidad@pautacreativa.com.mx
+              </a>, incluyendo:
+            </p>
+            <ul>
+              <li>Nombre completo del titular</li>
+              <li>Medio para comunicar la respuesta (correo electrónico)</li>
+              <li>Identificación oficial (INE o equivalente)</li>
+              <li>
+                Descripción clara de los datos respecto de los que buscas
+                ejercer alguno de los derechos mencionados.
+              </li>
+            </ul>
+          </article>
+
+          <article id="seguridad" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">6.</span> Medidas de seguridad
+            </h2>
+            <p>
+              PAUTA CREATIVA implementará las medidas de seguridad
+              administrativas, técnicas y físicas necesarias para proteger tus
+              datos personales contra daño, pérdida, alteración, destrucción o
+              el uso, acceso o tratamiento no autorizado.
+            </p>
+          </article>
+
+          <article id="cambios" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">7.</span> Cambios al aviso de privacidad
+            </h2>
+            <p>
+              PAUTA CREATIVA se reserva el derecho de modificar o actualizar el
+              presente aviso de privacidad en cualquier momento. Las
+              modificaciones serán comunicadas a través del correo electrónico
+              proporcionado por el titular o mediante publicación en el sitio
+              web oficial.
+            </p>
+          </article>
+
+          <article id="autoridad" class="privacy-section">
+            <h2 class="privacy-section-title">
+              <span class="privacy-section-number">8.</span> Autoridad competente
+            </h2>
+            <p>
+              En caso de considerar que tu derecho a la protección de datos
+              personales ha sido vulnerado, puedes acudir ante la autoridad
+              competente:
+            </p>
+            <p class="privacy-note">
+              Transparencia para el Pueblo — sitio web:&nbsp;
+              <a
+                href="https://transparencia.gob.mx"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                transparencia.gob.mx
+              </a>
+            </p>
+          </article>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

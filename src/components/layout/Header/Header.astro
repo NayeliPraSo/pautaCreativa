@@ -2,12 +2,14 @@
 import "./header.css";
 import logo from "../../../assets/images/LOGO-PAUTACREATIVA.png";
 import PautaBadge from "../../ui/PautaBadge/PautaBadge.astro";
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <header id="site-header" data-header>
   <nav class="header-nav">
     <!-- Logo principal: desktop -->
-    <a href="#hero" class="header-logo">
+    <a href={base} class="header-logo">
       <img src={logo.src} alt="Pauta Creativa" />
     </a>
 

@@ -4,6 +4,8 @@ import creadoresLogo from "../../../assets/images/footer_creadores.png";
 
 import asociaciones from "../../../assets/images/footer/asociaciones/icon_asociaciones.png";
 import certificaciones from "../../../assets/images/footer/certificaciones/icon_certificaciones.png";
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <footer id="site-footer" data-footer>
@@ -63,7 +65,9 @@ import certificaciones from "../../../assets/images/footer/certificaciones/icon_
 
       <p class="footer-copy">
         <strong>©Grupo Pauta Creativa, S.A. de C.V.</strong> Todos los derechos reservados.
-        <a href="#" class="footer-aviso"> Aviso de privacidad</a>.
+        <a href={`${base}aviso-de-privacidad`} class="footer-aviso">
+          Aviso de privacidad</a
+        >.
       </p>
     </div>
 

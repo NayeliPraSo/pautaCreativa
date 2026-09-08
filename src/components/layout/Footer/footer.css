@@ -4,7 +4,7 @@
   background-color: var(--color-primary);
   color: var(--color-black);
   padding: var(--space-9) var(--space-10) var(--space-6);
-  border-top: 3px solid var(--color-teal);
+
 }
 
 .footer-inner {
