@@ -51,7 +51,7 @@
 .case-detail__title {
   margin-top: 1rem;
   font-family: var(--font-heading);
-  font-size: clamp(2.8rem, 5vw, 5rem);
+  font-size: clamp(2rem, 3.5vw, 3.8rem);
   font-weight: 700;
   line-height: .95;
   text-transform: uppercase;
@@ -293,7 +293,7 @@
   }
 
   .case-detail__title {
-    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    font-size: clamp(2rem, 3vw, 3.3rem);
   }
 }
 
@@ -305,6 +305,10 @@
   .case-detail__header {
     padding: 2.5rem;
     gap: var(--space-6);
+  }
+
+  .case-detail__title {
+    font-size: clamp(1.9rem, 3.2vw, 3rem);
   }
 
   .case-detail__solutions {
@@ -373,7 +377,7 @@
   }
 
   .case-detail__title {
-    font-size: clamp(2rem, 6vw, 3rem);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
   }
 
   .case-detail__divider {
@@ -405,7 +409,7 @@
   }
 
   .case-detail__title {
-    font-size: clamp(1.6rem, 8vw, 2.2rem);
+    font-size: clamp(1.5rem, 5vw, 2rem);
     margin-top: 0.5rem;
   }
 
@@ -491,7 +495,7 @@
   }
 
   .case-detail__title {
-    font-size: clamp(1.4rem, 9vw, 1.9rem);
+    font-size: clamp(1.3rem, 6vw, 1.7rem);
   }
 
   .case-detail__solution {
