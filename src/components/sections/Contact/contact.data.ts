@@ -1,6 +1,6 @@
-import titleClientes from "../../../assets/images/contact/titulo_clientes.png"
-import titleBolsa from "../../../assets/images/contact/titulo_bolsa.png"
-import titleProveedor from "../../../assets/images/contact/titulo_proveedores.png"
+import titleClientes from "../../../assets/images/contact/titulo_cuentanos.png"
+import titleBolsa from "../../../assets/images/contact/titulo_unete.png"
+import titleProveedor from "../../../assets/images/contact/titulo_trabajemos.png"
 export type ContactFormType =
   | "clientes"
   | "trabajo"

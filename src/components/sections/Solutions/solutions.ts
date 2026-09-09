@@ -601,6 +601,10 @@ function initEntryAnimation(
     isArmedForReplay = true;
     hasPlayed = false;
 
+    /*
+     * El callback de reset se encarga también
+     * de cerrar cualquier solución activa.
+     */
     onReset?.();
 
     plusPulse?.kill();
@@ -609,13 +613,9 @@ function initEntryAnimation(
     timeline.pause(0);
 
     /*
-     * Una solución seleccionada no se borra
-     * ni se devuelve al diagrama general.
+     * Dejamos preparada nuevamente la vista
+     * inicial para la siguiente entrada.
      */
-    if (activeSolutionId) {
-      return;
-    }
-
     setEntryInitialState();
   };
 
@@ -2334,10 +2334,20 @@ function initSolutions() {
         attentionDelay?.kill();
         attentionDelay = null;
 
+        /*
+         * Si salimos de la sección estando en
+         * la vista de una solución, regresamos
+         * siempre a la vista general.
+         */
         if (activeSolutionId) {
-          return;
+          hideSolution();
         }
 
+        /*
+         * hideSolution() reactiva las animaciones
+         * ambientales, pero como la sección ya
+         * salió del viewport las dejamos pausadas.
+         */
         nodeAttention.pause();
         diagramBreathing.pause();
       },
