@@ -43,10 +43,10 @@
 
 .solutions-diagram-orange {
   position: absolute;
-  width: 75%;
+  width: 76%;
   height: auto;
-  top: 0;
-  left: 1%;
+  top: -2px;
+  left: 0%;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
