@@ -1,21 +1,21 @@
 import type { ImageMetadata } from "astro";
 import capistranoGrid from "../../../assets/images/cases/caso1.jpg";
-import walmartGrid from "../../../assets/images/cases/caso2.jpg";
-import fantaGrid from "../../../assets/images/cases/caso3.jpg";
-import kelloggsGrid from "../../../assets/images/cases/caso4.jpg";
-import hotsaleGrid from "../../../assets/images/cases/caso5.jpg";
+import walmartGrid from "../../../assets/images/cases/THUMB_maestros.avif";
+import fantaGrid from "../../../assets/images/cases/THUMB_fanta.avif";
+import kelloggsGrid from "../../../assets/images/cases/THUMB_ventas.avif";
+/*import hotsaleGrid from "../../../assets/images/cases/caso5.jpg";*/
 import eggoGrid from "../../../assets/images/cases/caso6.jpg";
-/*import mezcladitoGrid from "../../../assets/images/cases/caso7.jpg";
-import baitGrid from "../../../assets/images/cases/caso8.jpg"*/
+/*import mezcladitoGrid from "../../../assets/images/cases/caso7.jpg";*/
+import baitGrid from "../../../assets/images/cases/THUMB_bait.avif";
 
 import kelloggsDetail from "../../../assets/images/cases/kelloggs.jpg";
 /*import mezcladitoDetail from "../../../assets/images/cases/MEZCLADITO.jpg";*/
 import eggoPoster from "../../../assets/images/cases/waffles.jpg";
-import hotsalePoster from "../../../assets/images/cases/hotsale.jpg";
+/*import hotsalePoster from "../../../assets/images/cases/hotsale.jpg";*/
 import walmartPoster from "../../../assets/images/cases/maestros.jpg";
 import fantaPoster from "../../../assets/images/cases/fanta.webp";
 import capistranoPoster from "../../../assets/images/cases/capis.jpg"
-/*import baitDetail from "../../../assets/images/cases/bait.jpg"*/
+import baitDetail from "../../../assets/images/cases/bait.jpg"
 
 export interface Case {
   id: string;
@@ -86,7 +86,7 @@ export const cases: Case[] = [
         "total-promotion"
         ]
   },
-  {
+  /*{
     id: "hotsale",
     title: "CONCIERTO HOT SALE",
     client: "BODEGA AURRERA",
@@ -99,7 +99,7 @@ export const cases: Case[] = [
         "total-promotion",
         "influencer"
         ]
-  },
+  },*/
   {
     id: "eggo",
     title: "EGGO WAFFLES",
@@ -123,7 +123,7 @@ export const cases: Case[] = [
     solutionIds: [
       "strategic-design",
         ]
-  },
+  },*/
   {
     id: "bait",
     title: "DILE BAIT A LOS LÍMITES",
@@ -135,5 +135,5 @@ export const cases: Case[] = [
       "advertising",
         "total-promotion"
         ]
-  },*/
+  },
 ];
