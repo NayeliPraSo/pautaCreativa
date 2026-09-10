@@ -19,6 +19,27 @@ const mindsetValues: string[] = [
 
 <Section id="orange-mindset" class="orange-mindset">
   <div class="om-bg-peel" aria-hidden="true"></div>
+  <div class="om-anchor" aria-hidden="true">
+    <div class="om-index">
+      <span class="om-index-number">02 / 06</span>
+      <span class="om-index-label">Orange Mindset</span>
+    </div>
+
+    <div class="om-content">
+      <div class="om-visual">
+        <img src={vivimosEl.src} alt="" class="om-visual-vivimos" />
+
+        <div class="om-orange-lockup">
+          <img src={orangeTitle.src} alt="" class="om-visual-orange-title" />
+          <img src={naranja.src} alt="" class="om-visual-fruit" />
+          <img src={mindsetTitle.src} alt="" class="om-visual-mindset-title" />
+        </div>
+      </div>
+    </div>
+
+    <div class="om-divider"></div>
+  </div>
+
   <div class="om-slider">
     <!-- Panel 1 -->
     <div class="om-panel om-panel-1">
@@ -28,14 +49,18 @@ const mindsetValues: string[] = [
       </div>
 
       <div class="om-content">
+        <!--
+          Copia SOLO para mobile. En desktop se oculta con
+          visibility:hidden (conserva el espacio para que
+          .om-copy quede alineada donde siempre) y la versión
+          visible es la del .om-anchor de arriba.
+        -->
         <div class="om-visual" aria-hidden="true">
           <img src={vivimosEl.src} alt="" class="om-visual-vivimos" />
 
           <div class="om-orange-lockup">
             <img src={orangeTitle.src} alt="" class="om-visual-orange-title" />
-
             <img src={naranja.src} alt="" class="om-visual-fruit" />
-
             <img
               src={mindsetTitle.src}
               alt=""
@@ -50,16 +75,12 @@ const mindsetValues: string[] = [
         </p>
       </div>
 
+      <!-- Divider solo para mobile (ver nota arriba) -->
       <div class="om-divider" aria-hidden="true"></div>
     </div>
 
     <!-- Panel 2 -->
     <div class="om-panel om-panel-2">
-      <div class="om-index">
-        <span class="om-index-number">02 / 06</span>
-        <span class="om-index-label">Orange Mindset</span>
-      </div>
-
       <div class="om-panel-2-content">
         <p class="om-intro">
           Por eso reunimos equipos multidisciplinarios con una forma particular

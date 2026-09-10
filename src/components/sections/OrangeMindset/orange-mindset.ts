@@ -6,10 +6,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const mm = gsap.matchMedia();
 
-const prefersReducedMotion =
-  window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+const isMobileViewport = (): boolean =>
+  window.innerWidth <= 768;
 
 /* ============================================================
    MÁQUINA DE ESCRIBIR
@@ -21,11 +23,10 @@ function splitTextIntoLetters(
   const letters: HTMLElement[] = [];
   const textNodes: Text[] = [];
 
-  const walker =
-    document.createTreeWalker(
-      element,
-      NodeFilter.SHOW_TEXT
-    );
+  const walker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT
+  );
 
   let node: Node | null;
 
@@ -34,9 +35,7 @@ function splitTextIntoLetters(
   }
 
   textNodes.forEach((textNode) => {
-    const text =
-      textNode.textContent ?? "";
-
+    const text = textNode.textContent ?? "";
     const fragment =
       document.createDocumentFragment();
 
@@ -46,13 +45,6 @@ function splitTextIntoLetters(
 
       span.classList.add("om-letter");
       span.textContent = character;
-
-      /*
-       * Inline mantiene:
-       * - saltos naturales
-       * - responsive
-       * - estilos internos como <strong>
-       */
       span.style.display = "inline";
 
       fragment.appendChild(span);
@@ -67,10 +59,6 @@ function splitTextIntoLetters(
 
   return letters;
 }
-
-/* ============================================================
-   OBTENER / CREAR LETRAS
-   ============================================================ */
 
 function getTextLetters(
   element: HTMLElement | null
@@ -107,13 +95,10 @@ function createTimelinePulse(
     return null;
   }
 
-  /*
-   * Resolvemos las variables CSS a colores reales.
-   * Así GSAP interpola el color de forma continua
-   * y evitamos pequeños saltos visuales.
-   */
   const rootStyles =
-    getComputedStyle(document.documentElement);
+    getComputedStyle(
+      document.documentElement
+    );
 
   const black =
     rootStyles
@@ -125,12 +110,11 @@ function createTimelinePulse(
       .getPropertyValue("--color-teal2")
       .trim() || "#00b4ac";
 
-  const timeline =
-    gsap.timeline({
-      repeat: -1,
-      repeatDelay: 0.7,
-      paused: true,
-    });
+  const timeline = gsap.timeline({
+    repeat: -1,
+    repeatDelay: 0.7,
+    paused: true,
+  });
 
   items.forEach((item) => {
     const dot =
@@ -145,70 +129,42 @@ function createTimelinePulse(
 
     if (!dot) return;
 
-    /* =========================================
-       INICIO DEL PULSO ACTUAL
-       ========================================= */
-
     const pulseStart =
       timeline.duration();
-
-    /* =========================================
-       DOT — CRECE
-       ========================================= */
 
     timeline.to(
       dot,
       {
         scale: 1.45,
-
         duration: 0.5,
-
         ease: "power2.inOut",
-
         transformOrigin: "50% 50%",
       },
       pulseStart
     );
 
-    /* =========================================
-       DOT — CAMBIO DE COLOR SUAVE
-       ========================================= */
-
     timeline.to(
       dot,
       {
         backgroundColor: teal,
-
         duration: 0.5,
-
         ease: "none",
       },
       pulseStart
     );
-
-    /* =========================================
-       LABEL — ACOMPAÑA
-       ========================================= */
 
     if (label) {
       timeline.to(
         label,
         {
           scale: 1.05,
-
           duration: 0.5,
-
           ease: "power2.inOut",
-
           transformOrigin: "50% 50%",
         },
         pulseStart
       );
     }
-
-    /* =========================================
-       PEQUEÑA PAUSA ACTIVO
-       ========================================= */
 
     timeline.to(
       {},
@@ -217,66 +173,40 @@ function createTimelinePulse(
       }
     );
 
-    /* =========================================
-       INICIO DEL REGRESO
-       ========================================= */
-
     const returnStart =
       timeline.duration();
-
-    /* =========================================
-       DOT — REGRESA
-       ========================================= */
 
     timeline.to(
       dot,
       {
         scale: 1,
-
         duration: 0.5,
-
         ease: "power2.inOut",
       },
       returnStart
     );
 
-    /* =========================================
-       DOT — COLOR REGRESA
-       ========================================= */
-
     timeline.to(
       dot,
       {
         backgroundColor: black,
-
         duration: 0.5,
-
         ease: "none",
       },
       returnStart
     );
-
-    /* =========================================
-       LABEL — REGRESA
-       ========================================= */
 
     if (label) {
       timeline.to(
         label,
         {
           scale: 1,
-
           duration: 0.5,
-
           ease: "power2.inOut",
         },
         returnStart
       );
     }
-
-    /* =========================================
-       PAUSA ANTES DEL SIGUIENTE
-       ========================================= */
 
     timeline.to(
       {},
@@ -285,6 +215,369 @@ function createTimelinePulse(
       }
     );
   });
+
+  return timeline;
+}
+
+/* ============================================================
+   COMPOSICIÓN VISUAL
+   ============================================================ */
+
+type VisualScope = {
+  index: HTMLElement | null;
+  visual: HTMLElement | null;
+  fruit: HTMLElement | null;
+  orangeTitle: HTMLElement | null;
+  mindsetTitle: HTMLElement | null;
+  vivimos: HTMLElement | null;
+  divider: HTMLElement | null;
+};
+
+function queryVisualScope(
+  root: HTMLElement | null
+): VisualScope {
+  return {
+    index:
+      root?.querySelector<HTMLElement>(
+        ".om-index"
+      ) ?? null,
+
+    visual:
+      root?.querySelector<HTMLElement>(
+        ".om-visual"
+      ) ?? null,
+
+    fruit:
+      root?.querySelector<HTMLElement>(
+        ".om-visual-fruit"
+      ) ?? null,
+
+    orangeTitle:
+      root?.querySelector<HTMLElement>(
+        ".om-visual-orange-title"
+      ) ?? null,
+
+    mindsetTitle:
+      root?.querySelector<HTMLElement>(
+        ".om-visual-mindset-title"
+      ) ?? null,
+
+    vivimos:
+      root?.querySelector<HTMLElement>(
+        ".om-visual-vivimos"
+      ) ?? null,
+
+    divider:
+      root?.querySelector<HTMLElement>(
+        ".om-divider"
+      ) ?? null,
+  };
+}
+
+function isVisualScopeComplete(
+  scope: VisualScope
+): scope is Required<VisualScope> {
+  return Boolean(
+    scope.index &&
+      scope.visual &&
+      scope.fruit &&
+      scope.orangeTitle &&
+      scope.mindsetTitle &&
+      scope.vivimos &&
+      scope.divider
+  );
+}
+
+function setVisualInitialState(
+  scope: VisualScope
+): void {
+  if (
+    !isVisualScopeComplete(scope)
+  ) {
+    return;
+  }
+
+  const {
+    index,
+    visual,
+    fruit,
+    orangeTitle,
+    mindsetTitle,
+    vivimos,
+    divider,
+  } = scope;
+
+  gsap.set(index, {
+    opacity: 0,
+    y: 20,
+  });
+
+  gsap.set(visual, {
+    opacity: 1,
+  });
+
+  gsap.set(fruit, {
+    autoAlpha: 0,
+    clipPath: "inset(0 100% 0 0)",
+    filter: "blur(6px)",
+  });
+
+  gsap.set(orangeTitle, {
+    autoAlpha: 0,
+    clipPath: "inset(0 100% 0 0)",
+    filter: "blur(3px)",
+  });
+
+  gsap.set(mindsetTitle, {
+    autoAlpha: 0,
+    clipPath: "inset(0 0 0 100%)",
+    filter: "blur(3px)",
+  });
+
+  gsap.set(vivimos, {
+    autoAlpha: 0,
+    clipPath: "inset(0 100% 0 0)",
+    filter: "blur(2px)",
+  });
+
+  gsap.set(divider, {
+    scaleX: 0,
+    transformOrigin: "left center",
+  });
+}
+
+/* ============================================================
+   ENTRADA VISUAL DESKTOP
+   ============================================================ */
+
+function buildVisualEntranceTimeline(
+  scope: VisualScope
+): gsap.core.Timeline | null {
+  if (
+    !isVisualScopeComplete(scope)
+  ) {
+    return null;
+  }
+
+  const {
+    index,
+    fruit,
+    orangeTitle,
+    mindsetTitle,
+    vivimos,
+    divider,
+  } = scope;
+
+  const timeline = gsap.timeline({
+    paused: true,
+    defaults: {
+      ease: "power3.out",
+    },
+  });
+
+  timeline.to(index, {
+    opacity: 1,
+    y: 0,
+    duration: 0.7,
+  });
+
+  timeline.to(
+    fruit,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0% 0 0)",
+      filter: "blur(0px)",
+      duration: 1.05,
+      ease: "power3.out",
+    },
+    "-=0.25"
+  );
+
+  timeline.to(
+    orangeTitle,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0% 0 0)",
+      filter: "blur(0px)",
+      duration: 0.72,
+      ease: "power3.out",
+    },
+    "-=0.72"
+  );
+
+  timeline.to(
+    mindsetTitle,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0 0 0%)",
+      filter: "blur(0px)",
+      duration: 0.76,
+      ease: "power3.out",
+    },
+    "-=0.52"
+  );
+
+  timeline.to(
+    vivimos,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0% 0 0)",
+      filter: "blur(0px)",
+      duration: 0.6,
+      ease: "power2.out",
+    },
+    "-=0.48"
+  );
+
+  timeline.set(
+    [
+      fruit,
+      orangeTitle,
+      mindsetTitle,
+      vivimos,
+    ],
+    {
+      clearProps:
+        "opacity,visibility,clipPath,filter",
+    }
+  );
+
+  timeline.to(
+    divider,
+    {
+      scaleX: 1,
+      duration: 0.8,
+      ease: "power2.inOut",
+    },
+    "-=0.15"
+  );
+
+  return timeline;
+}
+
+/* ============================================================
+   ENTRADA MOBILE
+   ============================================================ */
+
+function buildMobileCombinedTimeline(
+  scope: VisualScope,
+  copyLetters: HTMLElement[]
+): gsap.core.Timeline | null {
+  if (
+    !isVisualScopeComplete(scope)
+  ) {
+    return null;
+  }
+
+  const {
+    index,
+    fruit,
+    orangeTitle,
+    mindsetTitle,
+    vivimos,
+    divider,
+  } = scope;
+
+  const timeline = gsap.timeline({
+    paused: true,
+    defaults: {
+      ease: "power3.out",
+    },
+  });
+
+  timeline.to(index, {
+    opacity: 1,
+    y: 0,
+    duration: 0.7,
+  });
+
+  timeline.to(
+    fruit,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0% 0 0)",
+      filter: "blur(0px)",
+      duration: 1.05,
+      ease: "power3.out",
+    },
+    "-=0.25"
+  );
+
+  timeline.to(
+    orangeTitle,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0% 0 0)",
+      filter: "blur(0px)",
+      duration: 0.72,
+      ease: "power3.out",
+    },
+    "-=0.72"
+  );
+
+  timeline.to(
+    mindsetTitle,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0 0 0%)",
+      filter: "blur(0px)",
+      duration: 0.76,
+      ease: "power3.out",
+    },
+    "-=0.52"
+  );
+
+  timeline.to(
+    vivimos,
+    {
+      autoAlpha: 1,
+      clipPath: "inset(0 0% 0 0)",
+      filter: "blur(0px)",
+      duration: 0.6,
+      ease: "power2.out",
+    },
+    "-=0.48"
+  );
+
+  timeline.set(
+    [
+      fruit,
+      orangeTitle,
+      mindsetTitle,
+      vivimos,
+    ],
+    {
+      clearProps:
+        "opacity,visibility,clipPath,filter",
+    }
+  );
+
+  timeline.to(
+    copyLetters,
+    {
+      opacity: 1,
+      duration: 0.01,
+      stagger: {
+        each:
+          getTypewriterStagger(
+            copyLetters.length
+          ),
+        from: "start",
+      },
+      ease: "none",
+    },
+    "-=0.25"
+  );
+
+  timeline.to(
+    divider,
+    {
+      scaleX: 1,
+      duration: 0.8,
+      ease: "power2.inOut",
+    },
+    "-=0.15"
+  );
 
   return timeline;
 }
@@ -312,56 +605,32 @@ function initOrangeMindset(): void {
   if (!section || !slider) return;
 
   /* ==========================================================
-     PANEL 1 — REFS
+     PANEL 1 / ANCLA
      ========================================================== */
+
+  const anchorRoot =
+    section.querySelector<HTMLElement>(
+      ".om-anchor"
+    );
 
   const panel1 =
     section.querySelector<HTMLElement>(
       ".om-panel-1"
     );
 
-  const p1Index =
-    section.querySelector<HTMLElement>(
-      ".om-panel-1 .om-index"
-    );
+  const anchorScope =
+    queryVisualScope(anchorRoot);
 
-  const p1Visual =
-    section.querySelector<HTMLElement>(
-      ".om-panel-1 .om-visual"
-    );
-
-  const p1Fruit =
-    section.querySelector<HTMLElement>(
-      ".om-visual-fruit"
-    );
-
-  const p1OrangeTitle =
-    section.querySelector<HTMLElement>(
-      ".om-visual-orange-title"
-    );
-
-  const p1MindsetTitle =
-    section.querySelector<HTMLElement>(
-      ".om-visual-mindset-title"
-    );
-
-  const p1Vivimos =
-    section.querySelector<HTMLElement>(
-      ".om-visual-vivimos"
-    );
+  const mobileScope =
+    queryVisualScope(panel1);
 
   const p1Copy =
     section.querySelector<HTMLElement>(
       ".om-panel-1 .om-copy"
     );
 
-  const p1Divider =
-    section.querySelector<HTMLElement>(
-      ".om-panel-1 .om-divider"
-    );
-
   /* ==========================================================
-     PANEL 2 — REFS
+     PANEL 2
      ========================================================== */
 
   const panel2 =
@@ -390,7 +659,7 @@ function initOrangeMindset(): void {
     );
 
   /* ==========================================================
-     PREPARAR LETRAS
+     LETRAS
      ========================================================== */
 
   let p1CopyLetters: HTMLElement[] = [];
@@ -405,11 +674,89 @@ function initOrangeMindset(): void {
       getTextLetters(p2Intro);
 
     p2DescriptionLetters =
-      getTextLetters(p2Description);
+      getTextLetters(
+        p2Description
+      );
   }
 
   /* ==========================================================
-     PULSO AMBIENTAL DEL PANEL 2
+     EFECTO:
+     LA NARANJA "SE COME" EL COPY DEL PANEL 1
+     ========================================================== */
+
+  const updatePanelOneCopyMask =
+    (): void => {
+      if (
+        !p1Copy ||
+        prefersReducedMotion ||
+        isMobileViewport()
+      ) {
+        return;
+      }
+
+      const orange =
+        anchorScope.fruit;
+
+      if (!orange) return;
+
+      const copyRect =
+        p1Copy.getBoundingClientRect();
+
+      const orangeRect =
+        orange.getBoundingClientRect();
+
+      /*
+       * El copy se desplaza de derecha a izquierda.
+       *
+       * El borde DERECHO de la naranja funciona como
+       * la "entrada" de la máscara.
+       *
+       * Un pequeño offset hace que las letras se oculten
+       * ligeramente antes de atravesar visualmente la fruta.
+       */
+      const protection = 14;
+
+      const eatBoundary =
+        orangeRect.right - protection;
+
+      /*
+       * Si el lado izquierdo del copy está todavía
+       * a la derecha del borde de la naranja:
+       *
+       * hiddenLeft = negativo -> no se recorta.
+       *
+       * Conforme el copy entra a la naranja:
+       *
+       * hiddenLeft aumenta -> recortamos desde la izquierda.
+       */
+      const hiddenLeft =
+        eatBoundary - copyRect.left;
+
+      const clippedPixels =
+        gsap.utils.clamp(
+          0,
+          copyRect.width,
+          hiddenLeft
+        );
+
+      const clippedPercent =
+        copyRect.width > 0
+          ? (
+              clippedPixels /
+              copyRect.width
+            ) * 100
+          : 0;
+
+      gsap.set(p1Copy, {
+        opacity: 1,
+
+        clipPath:
+          `inset(0 0 0 ${clippedPercent}%)`,
+      });
+    };
+
+  /* ==========================================================
+     PULSO PANEL 2
      ========================================================== */
 
   const timelinePulse =
@@ -418,85 +765,166 @@ function initOrangeMindset(): void {
     );
 
   /* ==========================================================
-     ESTADOS DE REPLAY
+     TIMELINES
      ========================================================== */
 
+  const anchorTimeline =
+    prefersReducedMotion
+      ? null
+      : buildVisualEntranceTimeline(
+          anchorScope
+        );
+
+  let panelOneTextTimeline:
+    | gsap.core.Timeline
+    | null = null;
+
+  if (
+    !prefersReducedMotion &&
+    p1CopyLetters.length
+  ) {
+    panelOneTextTimeline =
+      gsap.timeline({
+        paused: true,
+
+        defaults: {
+          ease: "power3.out",
+        },
+      });
+
+    panelOneTextTimeline.to(
+      p1CopyLetters,
+      {
+        opacity: 1,
+
+        duration: 0.01,
+
+        stagger: {
+          each:
+            getTypewriterStagger(
+              p1CopyLetters.length
+            ),
+
+          from: "start",
+        },
+
+        ease: "none",
+      }
+    );
+  }
+
+  const mobileTimeline =
+    prefersReducedMotion
+      ? null
+      : buildMobileCombinedTimeline(
+          mobileScope,
+          p1CopyLetters
+        );
+
+  let panelTwoTimeline:
+    | gsap.core.Timeline
+    | null = null;
+
+  if (
+    !prefersReducedMotion &&
+    panel2 &&
+    p2Intro &&
+    p2DescriptionWrap &&
+    p2TimelineItems.length
+  ) {
+    panelTwoTimeline =
+      gsap.timeline({
+        paused: true,
+
+        defaults: {
+          ease: "power3.out",
+        },
+      });
+
+    panelTwoTimeline.to(
+      p2IntroLetters,
+      {
+        opacity: 1,
+
+        duration: 0.01,
+
+        stagger: {
+          each:
+            getTypewriterStagger(
+              p2IntroLetters.length
+            ),
+
+          from: "start",
+        },
+
+        ease: "none",
+      }
+    );
+
+    panelTwoTimeline.to(
+      p2TimelineItems,
+      {
+        opacity: 1,
+
+        y: 0,
+
+        duration: 0.6,
+
+        stagger: {
+          each: 0.1,
+          from: "start",
+        },
+      },
+      "-=0.1"
+    );
+
+    panelTwoTimeline.to(
+      p2DescriptionLetters,
+      {
+        opacity: 1,
+
+        duration: 0.01,
+
+        stagger: {
+          each:
+            getTypewriterStagger(
+              p2DescriptionLetters.length
+            ),
+
+          from: "start",
+        },
+
+        ease: "none",
+      },
+      "-=0.05"
+    );
+
+    panelTwoTimeline.call(() => {
+      timelinePulse?.restart();
+    });
+  }
+
+  /* ==========================================================
+     ESTADOS
+     ========================================================== */
+
+  let anchorPlayed = false;
   let panelOnePlayed = false;
   let panelTwoPlayed = false;
 
-  let panelOneTimeline:
-    gsap.core.Timeline | null = null;
-
-  let panelTwoTimeline:
-    gsap.core.Timeline | null = null;
-
   /* ==========================================================
-     PANEL 1 — ESTADO INICIAL
+     ESTADO INICIAL
      ========================================================== */
 
-  const setPanelOneInitialState =
+  const setPanelOneCopyInitialState =
     (): void => {
-      if (
-        !p1Index ||
-        !p1Visual ||
-        !p1Fruit ||
-        !p1OrangeTitle ||
-        !p1MindsetTitle ||
-        !p1Vivimos ||
-        !p1Copy ||
-        !p1Divider
-      ) {
-        return;
-      }
-
-      gsap.set(p1Index, {
-        opacity: 0,
-        y: 20,
-      });
-
-      gsap.set(p1Visual, {
-        opacity: 1,
-      });
-
-      /*
-       * IMPORTANTE:
-       * Las posiciones finales de estas imágenes viven en CSS.
-       * No usamos x, y, scale, rotation ni xPercent aquí porque
-       * GSAP escribiría sobre `transform` y podría romper los
-       * translateX(-50%) definidos en el stylesheet.
-       */
-
-      gsap.set(p1Fruit, {
-        autoAlpha: 0,
-        clipPath: "inset(0 100% 0 0)",
-        filter: "blur(6px)",
-      });
-
-      gsap.set(p1OrangeTitle, {
-        autoAlpha: 0,
-        clipPath: "inset(0 100% 0 0)",
-        filter: "blur(3px)",
-      });
-
-      gsap.set(p1MindsetTitle, {
-        autoAlpha: 0,
-        clipPath: "inset(0 0 0 100%)",
-        filter: "blur(3px)",
-      });
-
-      gsap.set(p1Vivimos, {
-        autoAlpha: 0,
-        clipPath: "inset(0 100% 0 0)",
-        filter: "blur(2px)",
-      });
-
-      /*
-       * El contenedor permanece visible.
-       * Solo las letras desaparecen.
-       */
+      if (!p1Copy) return;
 
       gsap.set(p1Copy, {
         opacity: 1,
+
+        clipPath:
+          "inset(0 0 0 0)",
       });
 
       gsap.set(
@@ -505,18 +933,7 @@ function initOrangeMindset(): void {
           opacity: 0,
         }
       );
-
-      gsap.set(p1Divider, {
-        scaleX: 0,
-
-        transformOrigin:
-          "left center",
-      });
     };
-
-  /* ==========================================================
-     PANEL 2 — ESTADO INICIAL
-     ========================================================== */
 
   const setPanelTwoInitialState =
     (): void => {
@@ -562,14 +979,6 @@ function initOrangeMindset(): void {
         }
       );
 
-      /*
-       * Restauramos también el estado
-       * visual del pulso ambiental.
-       *
-       * Esto NO toca la entrada de los
-       * wrappers del timeline.
-       */
-
       p2TimelineItems.forEach(
         (item) => {
           const dot =
@@ -585,8 +994,11 @@ function initOrangeMindset(): void {
           if (dot) {
             gsap.set(dot, {
               scale: 1,
+
               opacity: 1,
-              backgroundColor: "var(--color-black)",
+
+              backgroundColor:
+                "var(--color-black)",
             });
           }
 
@@ -599,267 +1011,113 @@ function initOrangeMindset(): void {
       );
     };
 
-  /* ==========================================================
-     ESTADO INICIAL
-     ========================================================== */
-
   if (!prefersReducedMotion) {
-    setPanelOneInitialState();
+    setVisualInitialState(
+      anchorScope
+    );
+
+    setVisualInitialState(
+      mobileScope
+    );
+
+    setPanelOneCopyInitialState();
     setPanelTwoInitialState();
   }
 
   /* ==========================================================
-     PANEL 1 — TIMELINE DE ENTRADA
+     PLAY / RESET
      ========================================================== */
 
-  if (
-    !prefersReducedMotion &&
-    p1Index &&
-    p1Visual &&
-    p1Fruit &&
-    p1OrangeTitle &&
-    p1MindsetTitle &&
-    p1Vivimos &&
-    p1Copy &&
-    p1Divider
-  ) {
-    panelOneTimeline =
-      gsap.timeline({
-        paused: true,
-
-        defaults: {
-          ease: "power3.out",
-        },
-      });
-
-    /* Índice */
-
-    panelOneTimeline.to(
-      p1Index,
-      {
-        opacity: 1,
-        y: 0,
-
-        duration: 0.7,
-      }
-    );
-
-    /* =========================================
-       COMPOSICIÓN ORANGE MINDSET
-       =========================================
-
-       Las cuatro piezas conservan SIEMPRE su top/left/bottom/
-       transform del CSS. La entrada se hace con máscara + blur
-       para no modificar las posiciones que ya ajustaste.
-    */
-
-    /* Naranja */
-
-    panelOneTimeline.to(
-      p1Fruit,
-      {
-        autoAlpha: 1,
-        clipPath: "inset(0 0% 0 0)",
-        filter: "blur(0px)",
-        duration: 1.05,
-        ease: "power3.out",
-      },
-      "-=0.25"
-    );
-
-    /* ORANGE */
-
-    panelOneTimeline.to(
-      p1OrangeTitle,
-      {
-        autoAlpha: 1,
-        clipPath: "inset(0 0% 0 0)",
-        filter: "blur(0px)",
-        duration: 0.72,
-        ease: "power3.out",
-      },
-      "-=0.72"
-    );
-
-    /* MINDSET — revelado desde el lado contrario */
-
-    panelOneTimeline.to(
-      p1MindsetTitle,
-      {
-        autoAlpha: 1,
-        clipPath: "inset(0 0 0 0%)",
-        filter: "blur(0px)",
-        duration: 0.76,
-        ease: "power3.out",
-      },
-      "-=0.52"
-    );
-
-    /* VIVIMOS EL */
-
-    panelOneTimeline.to(
-      p1Vivimos,
-      {
-        autoAlpha: 1,
-        clipPath: "inset(0 0% 0 0)",
-        filter: "blur(0px)",
-        duration: 0.6,
-        ease: "power2.out",
-      },
-      "-=0.48"
-    );
-
-    /*
-     * Dejamos únicamente los valores de posicionamiento del CSS.
-     * No limpiamos `transform`, porque nunca lo tocamos desde GSAP.
-     */
-    panelOneTimeline.set(
-      [p1Fruit, p1OrangeTitle, p1MindsetTitle, p1Vivimos],
-      {
-        clearProps: "opacity,visibility,clipPath,filter",
-      }
-    );
-
-    /* Copy — máquina de escribir */
-
-    panelOneTimeline.to(
-      p1CopyLetters,
-      {
-        opacity: 1,
-
-        duration: 0.01,
-
-        stagger: {
-          each: getTypewriterStagger(p1CopyLetters.length),
-          from: "start",
-        },
-
-        ease: "none",
-      },
-      "-=0.25"
-    );
-
-    /* Divider */
-
-    panelOneTimeline.to(
-      p1Divider,
-      {
-        scaleX: 1,
-
-        duration: 0.8,
-
-        ease: "power2.inOut",
-      },
-      "-=0.15"
-    );
-  }
-
-  /* ==========================================================
-     PANEL 2 — TIMELINE DE ENTRADA
-     ========================================================== */
-
-  if (
-    !prefersReducedMotion &&
-    panel2 &&
-    p2Intro &&
-    p2DescriptionWrap &&
-    p2TimelineItems.length
-  ) {
-    panelTwoTimeline =
-      gsap.timeline({
-        paused: true,
-
-        defaults: {
-          ease: "power3.out",
-        },
-      });
-
-    /* Intro — máquina de escribir */
-
-    panelTwoTimeline.to(
-      p2IntroLetters,
-      {
-        opacity: 1,
-
-        duration: 0.01,
-
-        stagger: {
-          each: getTypewriterStagger(p2IntroLetters.length),
-          from: "start",
-        },
-
-        ease: "none",
-      }
-    );
-
-    /* Valores del timeline */
-
-    panelTwoTimeline.to(
-      p2TimelineItems,
-      {
-        opacity: 1,
-        y: 0,
-
-        duration: 0.6,
-
-        stagger: {
-          each: 0.1,
-          from: "start",
-        },
-      },
-      "-=0.1"
-    );
-
-    /* Descripción — máquina de escribir */
-
-    panelTwoTimeline.to(
-      p2DescriptionLetters,
-      {
-        opacity: 1,
-
-        duration: 0.01,
-
-        stagger: {
-          each: getTypewriterStagger(p2DescriptionLetters.length),
-          from: "start",
-        },
-
-        ease: "none",
-      },
-      "-=0.05"
-    );
-
-    /*
-     * Cuando termina toda la entrada
-     * comienza el movimiento ambiental.
-     */
-
-    panelTwoTimeline.call(() => {
-      timelinePulse?.restart();
-    });
-  }
-
-  /* ==========================================================
-     PLAY PANEL 1
-     ========================================================== */
-
-  const playPanelOne = (): void => {
+  const ensureAnchorVisible = (
+    animate: boolean
+  ): void => {
     if (
       prefersReducedMotion ||
-      panelOnePlayed ||
-      !panelOneTimeline
+      anchorPlayed ||
+      !anchorTimeline
     ) {
       return;
     }
 
-    panelOnePlayed = true;
+    anchorPlayed = true;
 
-    panelOneTimeline.restart();
+    if (animate) {
+      anchorTimeline.restart();
+    } else {
+      anchorTimeline.progress(1);
+    }
   };
 
-  /* ==========================================================
-     PLAY PANEL 2
-     ========================================================== */
+  const playPanelOne = (): void => {
+    if (
+      prefersReducedMotion ||
+      panelOnePlayed
+    ) {
+      return;
+    }
+
+    if (isMobileViewport()) {
+      if (!mobileTimeline) return;
+
+      panelOnePlayed = true;
+
+      mobileTimeline.restart();
+    } else {
+      if (!panelOneTextTimeline) {
+        return;
+      }
+
+      panelOnePlayed = true;
+
+      ensureAnchorVisible(true);
+
+      panelOneTextTimeline.restart();
+    }
+  };
+
+  /*
+   * Al regresar desde panel 2 NO queremos
+   * volver a ejecutar la máquina de escribir.
+   *
+   * El texto ya queda completamente "escrito"
+   * y la máscara es la que lo va revelando.
+   */
+  const revealPanelOneFromPanelTwo =
+    (): void => {
+      if (
+        prefersReducedMotion ||
+        isMobileViewport() ||
+        !panelOneTextTimeline
+      ) {
+        return;
+      }
+
+      ensureAnchorVisible(false);
+
+      panelOnePlayed = true;
+
+      /*
+       * Dejamos todas las letras visibles.
+       *
+       * El clip-path es el único responsable
+       * de decidir qué parte del copy se ve.
+       */
+      panelOneTextTimeline.progress(1);
+
+      gsap.set(
+        p1CopyLetters,
+        {
+          opacity: 1,
+        }
+      );
+
+      /*
+       * Calculamos inmediatamente la máscara
+       * para evitar un frame donde aparezca
+       * todo el texto de golpe.
+       */
+      updatePanelOneCopyMask();
+    };
 
   const playPanelTwo = (): void => {
     if (
@@ -872,39 +1130,55 @@ function initOrangeMindset(): void {
 
     panelTwoPlayed = true;
 
+    if (!isMobileViewport()) {
+      ensureAnchorVisible(false);
+    }
+
     timelinePulse?.pause(0);
 
     panelTwoTimeline.restart();
   };
 
-  /* ==========================================================
-     RESET PANEL 1
-     ========================================================== */
+  const resetAnchor = (): void => {
+    if (
+      prefersReducedMotion ||
+      !anchorPlayed ||
+      !anchorTimeline
+    ) {
+      return;
+    }
+
+    anchorPlayed = false;
+
+    anchorTimeline.pause(0);
+
+    setVisualInitialState(
+      anchorScope
+    );
+  };
 
   const resetPanelOne = (): void => {
     if (
       prefersReducedMotion ||
-      !panelOneTimeline
+      !panelOnePlayed
     ) {
       return;
     }
 
     panelOnePlayed = false;
 
-    /*
-     * No hacemos kill().
-     *
-     * La timeline debe permanecer viva
-     * para poder reproducirse después.
-     */
-    panelOneTimeline.pause(0);
+    if (isMobileViewport()) {
+      mobileTimeline?.pause(0);
 
-    setPanelOneInitialState();
+      setVisualInitialState(
+        mobileScope
+      );
+    } else {
+      panelOneTextTimeline?.pause(0);
+    }
+
+    setPanelOneCopyInitialState();
   };
-
-  /* ==========================================================
-     RESET PANEL 2
-     ========================================================== */
 
   const resetPanelTwo = (): void => {
     if (
@@ -916,27 +1190,17 @@ function initOrangeMindset(): void {
 
     panelTwoPlayed = false;
 
-    /*
-     * Primero detenemos el movimiento
-     * ambiental.
-     */
     timelinePulse?.pause(0);
 
-    /*
-     * La timeline sigue existiendo.
-     */
     panelTwoTimeline.pause(0);
 
     setPanelTwoInitialState();
   };
 
-  /* ==========================================================
-     RESET COMPLETO DE ORANGE MINDSET
-     ========================================================== */
-
   const resetOrangeMindset =
     (): void => {
       if (
+        !anchorPlayed &&
         !panelOnePlayed &&
         !panelTwoPlayed
       ) {
@@ -945,6 +1209,7 @@ function initOrangeMindset(): void {
 
       resetPanelOne();
       resetPanelTwo();
+      resetAnchor();
     };
 
   /* ==========================================================
@@ -959,15 +1224,11 @@ function initOrangeMindset(): void {
         slider.scrollWidth -
         section.clientWidth;
 
-      if (
-        getTotalScroll() <= 0
-      ) {
+      if (getTotalScroll() <= 0) {
         return;
       }
 
-      /* =========================================
-         SLIDER
-         ========================================= */
+      let previousProgress = 0;
 
       const tween =
         gsap.to(slider, {
@@ -996,63 +1257,103 @@ function initOrangeMindset(): void {
             invalidateOnRefresh:
               true,
 
-            /*
-             * Muy importante:
-             *
-             * el progreso horizontal decide
-             * qué panel está entrando.
-             *
-             * Si regresamos desde abajo:
-             * progress comienza cerca de 1,
-             * así que se reproduce Panel 2.
-             *
-             * Cuando seguimos subiendo y
-             * cruzamos hacia Panel 1,
-             * éste vuelve a reproducirse.
-             */
-
             onUpdate: (self) => {
+              const progress =
+                self.progress;
+
+              /*
+               * Primero actualizamos la máscara.
+               *
+               * Esto hace que el estado visual
+               * siempre corresponda a la posición
+               * REAL del copy respecto a la naranja.
+               */
+              updatePanelOneCopyMask();
+
+              /*
+               * Detectamos cuando venimos de panel 2
+               * hacia panel 1.
+               */
+              const returningToPanelOne =
+                previousProgress >= 0.5 &&
+                progress < 0.5;
+
               if (
-                self.progress >= 0.5
+                progress >= 0.5
               ) {
                 playPanelTwo();
               } else {
-                playPanelOne();
+                if (
+                  returningToPanelOne
+                ) {
+                  revealPanelOneFromPanelTwo();
+                } else if (
+                  self.direction === -1 &&
+                  panelOnePlayed
+                ) {
+                  /*
+                   * Ya está reproducido.
+                   * Solo dejamos que la máscara
+                   * revele el contenido.
+                   */
+                  updatePanelOneCopyMask();
+                } else {
+                  playPanelOne();
+                }
               }
+
+              previousProgress =
+                progress;
+            },
+
+            onRefresh: () => {
+              requestAnimationFrame(
+                () => {
+                  updatePanelOneCopyMask();
+                }
+              );
             },
           },
         });
 
-      /* =========================================
-         FONDO / CÁSCARA
-         ========================================= */
-
       const bgTween =
         bgLayer
-          ? gsap.to(bgLayer, {
-              "--peel-x": "-25%",
+          ? gsap.to(
+              bgLayer,
+              {
+                "--peel-x":
+                  "-25%",
 
-              ease: "none",
+                ease: "none",
 
-              scrollTrigger: {
-                trigger: section,
+                scrollTrigger: {
+                  trigger:
+                    section,
 
-                start: "top top",
+                  start:
+                    "top top",
 
-                end: () =>
-                  `+=${getTotalScroll()}`,
+                  end: () =>
+                    `+=${getTotalScroll()}`,
 
-                scrub: 1,
+                  scrub: 1,
 
-                invalidateOnRefresh:
-                  true,
-              },
-            })
+                  invalidateOnRefresh:
+                    true,
+                },
+              }
+            )
           : null;
 
-      /* =========================================
-         CLEANUP DESKTOP
-         ========================================= */
+      /*
+       * Estado correcto después del primer
+       * cálculo de layout.
+       */
+      requestAnimationFrame(
+        () => {
+          updatePanelOneCopyMask();
+        }
+      );
 
       return () => {
         tween.scrollTrigger?.kill(
@@ -1084,6 +1385,16 @@ function initOrangeMindset(): void {
             }
           );
         }
+
+        if (p1Copy) {
+          gsap.set(
+            p1Copy,
+            {
+              clearProps:
+                "opacity,clipPath",
+            }
+          );
+        }
       };
     }
   );
@@ -1095,18 +1406,13 @@ function initOrangeMindset(): void {
   mm.add(
     "(max-width: 768px)",
     () => {
-      /*
-       * En móvil no existe el slider horizontal.
-       * Cada panel usa su propio elemento como trigger.
-       * Esto evita que el Panel 1 dependa de la altura
-       * completa de Orange Mindset.
-       */
-
       let panelOneTrigger:
-        ScrollTrigger | null = null;
+        | ScrollTrigger
+        | null = null;
 
       let panelTwoTrigger:
-        ScrollTrigger | null = null;
+        | ScrollTrigger
+        | null = null;
 
       if (panel1) {
         panelOneTrigger =
@@ -1116,17 +1422,17 @@ function initOrangeMindset(): void {
 
             trigger: panel1,
 
-            start: "top 75%",
+            start:
+              "top 75%",
 
-            end: "bottom 25%",
+            end:
+              "bottom 25%",
 
-            onEnter: () => {
-              playPanelOne();
-            },
+            onEnter: () =>
+              playPanelOne(),
 
-            onEnterBack: () => {
-              playPanelOne();
-            },
+            onEnterBack: () =>
+              playPanelOne(),
           });
       }
 
@@ -1138,30 +1444,29 @@ function initOrangeMindset(): void {
 
             trigger: panel2,
 
-            start: "top 75%",
+            start:
+              "top 75%",
 
-            end: "bottom 25%",
+            end:
+              "bottom 25%",
 
-            onEnter: () => {
-              playPanelTwo();
-            },
+            onEnter: () =>
+              playPanelTwo(),
 
-            onEnterBack: () => {
-              playPanelTwo();
-            },
+            onEnterBack: () =>
+              playPanelTwo(),
           });
       }
 
       return () => {
         panelOneTrigger?.kill();
-
         panelTwoTrigger?.kill();
       };
     }
   );
 
   /* ==========================================================
-     DETECCIÓN GLOBAL DE ENTRADA / SALIDA
+     DETECCIÓN GLOBAL
      ========================================================== */
 
   const checkOrangePosition =
@@ -1172,32 +1477,16 @@ function initOrangeMindset(): void {
       const viewportHeight =
         window.innerHeight;
 
-      /* =====================================
-         RESET AL SALIR COMPLETAMENTE
-         ===================================== */
-
-      /*
-       * Dejamos un pequeño margen fuera del viewport.
-       * Antes se reseteaba demasiado pronto y el reset
-       * podía competir con onEnterBack al regresar desde
-       * Solutions, dejando el Panel 1 en blanco.
-       */
       const RESET_BUFFER = 30;
 
-      /*
-       * Orange salió completamente hacia arriba.
-       * Estamos avanzando hacia Solutions.
-       */
       const leftThroughTop =
-        rect.bottom < -RESET_BUFFER;
+        rect.bottom <
+        -RESET_BUFFER;
 
-      /*
-       * Orange salió completamente hacia abajo.
-       * Estamos regresando hacia About.
-       */
       const leftThroughBottom =
         rect.top >
-        viewportHeight + RESET_BUFFER;
+        viewportHeight +
+          RESET_BUFFER;
 
       if (
         leftThroughTop ||
@@ -1207,29 +1496,9 @@ function initOrangeMindset(): void {
         return;
       }
 
-      /* =====================================
-         MOBILE
-         ===================================== */
-
-      if (
-        window.innerWidth <= 768
-      ) {
+      if (isMobileViewport()) {
         return;
       }
-
-      /* =====================================
-         DESKTOP — QUÉ PANEL ESTÁ VISIBLE
-         ===================================== */
-
-      /*
-       * Antes de que comience el pin,
-       * ScrollTrigger.progress todavía
-       * puede ser 0.
-       *
-       * Durante el pin usamos su
-       * progreso real para saber cuál
-       * panel debe entrar.
-       */
 
       const pinTrigger =
         ScrollTrigger.getById(
@@ -1239,9 +1508,11 @@ function initOrangeMindset(): void {
       const progress =
         pinTrigger?.progress ?? 0;
 
-      /* =====================================
-         ALTURA VISIBLE
-         ===================================== */
+      /*
+       * Sincronizamos máscara incluso
+       * cuando entramos desde otra sección.
+       */
+      updatePanelOneCopyMask();
 
       const visibleTop =
         Math.max(
@@ -1272,13 +1543,6 @@ function initOrangeMindset(): void {
         visibleHeight >=
         minimumVisible;
 
-      /*
-       * Activamos Orange antes de llegar
-       * al pin completo, aproximadamente
-       * como el antiguo:
-       *
-       * start: "top 75%"
-       */
       const reachedActivationZone =
         rect.top <
           viewportHeight * 0.78 &&
@@ -1292,28 +1556,28 @@ function initOrangeMindset(): void {
         return;
       }
 
-      /*
-       * Si venimos de About:
-       *
-       * progress = 0
-       * -> Panel 1
-       *
-       * Si regresamos desde Solutions:
-       *
-       * progress ≈ 1
-       * -> Panel 2
-       */
-
-      if (progress >= 0.5) {
+      if (
+        progress >= 0.5
+      ) {
         playPanelTwo();
       } else {
-        playPanelOne();
+        /*
+         * Si entramos a Orange Mindset
+         * desde abajo y ya estamos dentro
+         * del recorrido horizontal,
+         * no hacemos typewriter otra vez.
+         */
+        if (
+          pinTrigger &&
+          pinTrigger.direction === -1 &&
+          progress > 0
+        ) {
+          revealPanelOneFromPanelTwo();
+        } else {
+          playPanelOne();
+        }
       }
     };
-
-  /* ==========================================================
-     LISTENERS DE VISIBILIDAD
-     ========================================================== */
 
   window.addEventListener(
     "scroll",
@@ -1331,13 +1595,11 @@ function initOrangeMindset(): void {
     }
   );
 
-  /* ==========================================================
-     PRIMERA COMPROBACIÓN
-     ========================================================== */
-
-  requestAnimationFrame(() => {
-    checkOrangePosition();
-  });
+  requestAnimationFrame(
+    () => {
+      checkOrangePosition();
+    }
+  );
 }
 
 /* ============================================================

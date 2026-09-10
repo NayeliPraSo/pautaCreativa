@@ -756,13 +756,34 @@
   /* Total */
   .solution-node-total-promotion {
     top: 25%;
-    left: 86%;
+    left: 71%;
+    flex-direction: row-reverse;
+  }
+
+  .solution-node-total-promotion .solution-label {
+    align-items: flex-end;
+    text-align: right;
+    margin-left: 0;
+    margin-right: 10px;
+    white-space: normal;
+    max-width: 92px;
   }
 
   /* Shopper */
   .solution-node-shopper-connections {
-    top: 61%;
-    left: 94%;
+    top: 59%;
+    left: 77%;
+    flex-direction: row-reverse;
+  }
+
+  .solution-node-shopper-connections .solution-label {
+    align-items: flex-end;
+    text-align: right;
+    margin-left: 0;
+    margin-right: 10px;
+    margin-top:18px;
+    white-space: normal;
+    max-width: 92px;
   }
 
   /* Innovation */
@@ -950,20 +971,31 @@
   /* Total */
 
   .solution-node-total-promotion {
-    top: 24%;
-    left: 85%;
+    top: 16%;
+    left: 87%;
+
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
   }
 
   .solution-node-total-promotion .solution-label {
-    margin-left: 8px;
+    order: -1;
+    align-items: center;
+    text-align: center;
+    margin: 0 0 6px 0;
+    white-space: normal;
+    max-width: 75px;
+    margin-left: 28px;
   }
 
 
   /* Shopper */
 
   .solution-node-shopper-connections {
-    top: 60%;
-    left: 94%;
+    top: 58%;
+    left: 69%;
+    flex-direction: row-reverse;
   }
 
   .solution-node-shopper-connections .solution-label {
@@ -1014,13 +1046,16 @@
   /* Diseño */
 
   .solution-node-strategic-design {
-    left: -10%;
-    top: 63%;
+    left: 8%;
+    top: 65%;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
   }
 
   .solution-node-strategic-design .solution-label {
     margin-top: 5px;
-    margin-right: 0;
+    margin-right: 35px;
     max-width: 70px;
     align-items: center;
     white-space: normal;

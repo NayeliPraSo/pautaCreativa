@@ -3,14 +3,13 @@
    ========================================================================== */
 
 .case-detail {
-  width:100%;
-    max-width:1400px;
-    margin:0 auto;
-    display:flex;
-    flex-direction:column;
-    background-color: #000000;
-    border-radius: 20px;
-    margin-bottom: 40px;
+  width: calc(100% - 80px);
+  max-width: 1180px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  background-color: #000000;
+  border-radius: 20px;
 }
 
 /* ==========================================================================
@@ -164,24 +163,39 @@
    ========================================================================== */
 
 .case-detail__media {
-  padding: 3rem 0;
+  width: 100%;
+  padding: 2rem 0 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .case-detail__video {
   position: relative;
   display: block;
-  width: 100%;
+  width: 86%;
+  max-width: 960px;
+  margin: 0 auto;
   padding: 0;
   border: none;
   background: transparent;
   cursor: pointer;
 }
 
-.case-detail__poster,
-.case-detail__image {
+.case-detail__poster {
   display: block;
   width: 100%;
   height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius-sm);
+}
+
+.case-detail__image {
+  display: block;
+  width: 86%;
+  max-width: 960px;
+  height: auto;
+  margin: 0 auto;
   border-radius: var(--radius-sm);
 }
 
@@ -242,8 +256,8 @@
    ========================================================================== */
 .case-detail-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 1400px;
+  width: calc(100% - 80px);
+  max-width: 1180px;
   margin: 0 auto;
 }
  
@@ -288,60 +302,44 @@
 }
 
 @media (max-width: 1440px) {
-  .case-detail{
-    max-width: 1100px;
+  .case-detail,
+  .case-detail-wrapper {
+    width: calc(100% - 100px);
+    max-width: 1000px;
   }
 
-  .case-detail__title {
-    font-size: clamp(2rem, 3vw, 3.3rem);
-  }
+  .case-detail__header { padding: 2.25rem 2.5rem; }
+  .case-detail__title { font-size: clamp(2rem, 3vw, 3.1rem); }
+  .case-detail__media { padding: 1.75rem 0 2rem; }
+  .case-detail__video,
+  .case-detail__image { width: 82%; max-width: 820px; }
+  .case-detail__play { width: 90px; height: 90px; font-size: 2rem; }
+  .case-detail__body { padding: 0 2.5rem; }
+  .case-detail__description { margin-bottom: 50px; }
 }
 
 @media (max-width: 1200px) {
-  .case-detail {
-    max-width: 980px;
-  }
-    
-  .case-detail__header {
-    padding: 2.5rem;
-    gap: var(--space-6);
-  }
-
-  .case-detail__title {
-    font-size: clamp(1.9rem, 3.2vw, 3rem);
-  }
-
-  .case-detail__solutions {
-    gap: 0.85rem;
-  }
-
-  .case-detail__solution {
-    width: 90px;
-  }
-
-  .case-detail__solution-icon {
-    width: 68px;
-    height: 68px;
-    padding: 10px;
-  }
-
-  .case-detail__solution-info {
-    margin-top: 0.55rem;
-  }
-
-  .case-detail__solution-title {
-    font-size: 0.68rem;
-  }
-
-  .case-detail__solution-subtitle {
-    font-size: 0.56rem;
-  }
-
+  .case-detail,
+  .case-detail-wrapper { width: calc(100% - 80px); max-width: 900px; }
+  .case-detail__header { padding: 2rem 2.25rem; gap: var(--space-5); }
+  .case-detail__title { font-size: clamp(1.8rem, 3vw, 2.7rem); }
+  .case-detail__solutions { gap: 0.75rem; }
+  .case-detail__solution { width: 82px; }
+  .case-detail__solution-icon { width: 62px; height: 62px; padding: 9px; }
+  .case-detail__solution-info { margin-top: 0.5rem; }
+  .case-detail__solution-title { font-size: 0.65rem; }
+  .case-detail__solution-subtitle { font-size: 0.54rem; }
+  .case-detail__media { padding: 1.5rem 0 1.75rem; }
+  .case-detail__video,
+  .case-detail__image { width: 80%; max-width: 720px; }
+  .case-detail__play { width: 78px; height: 78px; font-size: 1.8rem; }
+  .case-detail__body { padding: 0 2.25rem; }
+  .case-detail__description { font-size: 1rem; line-height: 1.6; margin-bottom: 42px; }
 }
 
 @media (max-width: 992px) {
   
-  .case-detail {
+.case-detail {
     max-width: 820px;
     border-radius: 14px;
   }
@@ -390,7 +388,7 @@
 }
 
 @media (max-width: 768px) {
-  .case-detail {
+.case-detail {
     border-radius: 10px;
     margin-bottom: 24px;
     padding: 0 30px;

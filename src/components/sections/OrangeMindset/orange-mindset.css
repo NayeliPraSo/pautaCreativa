@@ -28,6 +28,39 @@
   color: var(--color-text);
 }
 
+/* =========================================
+   ANCLA — naranja + índice + divider
+   =========================================
+   Vive fuera de .om-slider. Mientras el pin de
+   GSAP mantiene fija la sección en el viewport,
+   .om-slider se traslada por dentro para cambiar
+   de panel — esta ancla, al no estar dentro del
+   slider, no se mueve con esa traslación.
+*/
+.om-anchor {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-5) var(--space-6);
+}
+
+/* En desktop se oculta con visibility
+   (no display:none) para que siga reservando el
+   mismo espacio y .om-copy no se recorra. */
+@media (min-width: 769px) {
+  .om-panel-1 .om-index,
+  .om-panel-1 .om-visual,
+  .om-panel-1 .om-divider {
+    visibility: hidden;
+  }
+}
+
 /* Contador "02 / 06 ORANGE MINDSET" */
 .om-index {
   position: absolute;
@@ -150,20 +183,24 @@
 
 /* Separador inferior */
 .om-divider {
-  position: absolute;
+  /*position: absolute;
   left: var(--space-10);
   right: var(--space-10);
   bottom: var(--space-6);
   height: 2px;
-  background-color: var(--color-divider);
+  background-color: var(--color-divider);*/
+  display:none;
 }
 
 /* **************************************
   * PANEL 2: ORANGE MINDSET TIMELINE
   ************************************** */
 .om-panel-2-content {
+  --om-visual-reserve: 660px;
+
   width: min(1500px, 100%);
   margin: 0 auto;
+  padding-left: var(--om-visual-reserve);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -225,6 +262,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  container-type: inline-size;
 }
 
 .om-timeline::after {
@@ -240,6 +278,7 @@
 .om-timeline-item {
   position: relative;
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -247,12 +286,19 @@
   z-index: 1;
 }
 
+/*
+ * font-size en cqi (porcentaje del ancho REAL de .om-timeline,
+ * no del viewport): la etiqueta se achica automáticamente según
+ * el espacio disponible, así nunca queda oculta ni truncada,
+ * sin importar en qué punto exacto de la ventana caiga.
+ */
 .om-timeline-label {
   font-family: var(--font-heading);
-  font-size: 1.8rem;
-  letter-spacing: .08em;
+  font-size: clamp(0.72rem, 2.3cqi, 1.8rem);
+  letter-spacing: 0.02em;
   font-weight: 700;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 .om-timeline-dot {
@@ -300,13 +346,13 @@
     width: 460px;
   }
 
+  .om-panel-2-content {
+    --om-visual-reserve: 540px;
+  }
+
   .om-copy {
     font-size: 1.9rem;
     max-width: 650px;
-  }
-
-  .om-timeline-label {
-    font-size: 1.5rem;
   }
 }
 
@@ -316,7 +362,8 @@
     background-size: auto 55%;
   }
 
-  .om-panel {
+  .om-panel,
+  .om-anchor {
     padding: var(--space-7) var(--space-5);
   }
 
@@ -332,6 +379,10 @@
     width: 380px;
   }
 
+  .om-panel-2-content {
+    --om-visual-reserve: 450px;
+  }
+
   .om-copy {
     font-size: 1.7rem;
   }
@@ -339,10 +390,6 @@
   .om-intro,
   .om-description {
     font-size: 1.6rem;
-  }
-
-  .om-timeline-label {
-    font-size: 1.3rem;
   }
 }
 
@@ -384,11 +431,8 @@
     font-size: 1.35rem;
   }
 
-  .om-timeline-label {
-    font-size: 1.1rem;
-  }
-
   .om-panel-2-content {
+    --om-visual-reserve: 350px;
     gap: var(--space-5);
   }
 }
@@ -406,6 +450,13 @@
     height: auto;
     min-height: 0;
     overflow: visible;
+  }
+
+  /* =====================================
+     ANCLA DE DESKTOP oculta en movil
+     ===================================== */
+  .om-anchor {
+    display: none;
   }
 
   /* =====================================
@@ -436,7 +487,6 @@
 
   /* =====================================
      CONTADOR
-     Solo necesitamos uno
      ===================================== */
   .om-index {
     position: relative;
@@ -445,11 +495,6 @@
     margin: 0;
     font-size: var(--fs-base);
   }
-
-  .om-panel-2 .om-index {
-    display: none;
-  }
-
 
   /* =====================================
      PANEL 1
@@ -475,7 +520,6 @@
 
   /* =====================================
      NARANJA + TEXTO
-     En móvil van lado a lado
      ===================================== */
   .om-content {
     width: 100%;
@@ -501,15 +545,13 @@
     text-align: left;
   }
 
-  /* El divider de desktop NO separa
-     las dos partes en móvil */
+  /* El divider de desktop se oculta en movil */
   .om-panel-1 .om-divider {
     display: none;
   }
 
   /* =====================================
      PANEL 2
-     Se convierte en continuación directa
      ===================================== */
   .om-panel-2 {
     padding: 25px 24px 0px;
@@ -522,6 +564,7 @@
     width: 100%;
     max-width: none;
     margin: 0;
+    padding-left: 0;
     gap: 35px;
   }
 
@@ -539,7 +582,6 @@
 
   /* =====================================
      TIMELINE
-     ESTE ES EL ÚNICO SCROLL HORIZONTAL
      ===================================== */
   .om-timeline-hint {
     width: 100%;
