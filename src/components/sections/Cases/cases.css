@@ -60,6 +60,19 @@
   font-weight: 500;
 }
 
+/*
+ * Envuelve cada palabra para la animación tipo "máquina de
+ * escribir" (ver cases.ts). Al ser una unidad inline-block con
+ * white-space:nowrap, el navegador solo puede saltar de línea
+ * ENTRE palabras, nunca entre las letras sueltas que las
+ * componen — evita que "ejecución" o "lo" se corten a la mitad
+ * en pantallas angostas.
+ */
+.cases-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .cases-plus{
   color: var(--color-primary);
 }

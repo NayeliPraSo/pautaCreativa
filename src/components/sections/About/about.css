@@ -116,6 +116,7 @@
     max-width:1100px;
     aspect-ratio:1200 / 650;
     margin:0 auto;
+    container-type: inline-size;
 }
 
 .about-venn{
@@ -141,24 +142,38 @@
     z-index:5;
 }
 
-.left{
-    left:16%;
-    width:280px;
-    text-align:center;
+/*
+ * IMPORTANTE — estos porcentajes están calculados a partir de la
+ * geometría real del SVG (viewBox 0 0 1200 650, RADIUS=255,
+ * LEFT_X=430, RIGHT_X=770):
+ *
+ *   diámetro del círculo     = 510 / 1200 = 42.5% del ancho del diagrama
+ *   centro círculo izq.      = 430 / 1200 = 35.83%
+ *   centro círculo der.      = 770 / 1200 = 64.17%
+ *   lente (intersección)     = de 510 a 690 → de 42.5% a 57.5%
+ */
+.left,
+.right {
+  width: 25.5%;
+  padding: 0 0.35rem;
+  text-align: center;
+  overflow-wrap: break-word;
 }
 
-.right{
-    right:16%;
-    width:280px;
-    text-align:center;
+.left {
+  left: 15.8%;
+}
+
+.right {
+  right: 15.8%;
 }
 
 .circle-content p {
   font-family: var(--font-primary);
-  font-size: 2.3rem;
+  font-size: clamp(0.75rem, 3.1cqi, 2.3rem);
   line-height: 1.25;
   font-weight: 300;
-  margin-bottom: 2.2rem;
+  margin-bottom: 0.7em;
 
   transition:
     transform 0.45s ease,
@@ -171,7 +186,7 @@
 
 .circle-content h3 {
   font-family: var(--font-heading);
-  font-size: 3rem;
+  font-size: clamp(0.9rem, 4cqi, 3rem);
   font-style: italic;
   font-weight: 800;
   line-height: 1;
@@ -205,25 +220,6 @@
   .about-diagram {
     max-width: 950px;
   }
-
-  .circle-content p {
-    font-size: 2rem;
-    margin-bottom: 1.8rem;
-  }
-
-  .circle-content h3 {
-    font-size: 2.6rem;
-  }
-
-  .left {
-    left: 16%;
-    width: 250px;
-  }
-
-  .right {
-    right: 16%;
-    width: 250px;
-  }
 }
 
 /* ≤ 1200px — Tablet landscape */
@@ -236,20 +232,6 @@
 
   .about-copy {
     font-size: 1.8rem;
-  }
-
-  .circle-content p {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .circle-content h3 {
-    font-size: 2.4rem;
-  }
-
-  .left,
-  .right {
-    width: 240px;
   }
 }
 
@@ -274,30 +256,11 @@
   }
 
   .about-diagram {
-    max-width: 700px;
-  }
-
-  .circle-content p {
-    font-size: 1.35rem;
-    margin-bottom: 1rem;
-  }
-
-  .circle-content h3 {
-    font-size: 1.8rem;
-  }
-
-  .left {
-    left: 14%;
-    width: 200px;
-  }
-
-  .right {
-    right: 14%;
-    width: 200px;
+    max-width: 780px;
   }
 }
 
-/* ≤ 768px — Mobile landscape: cambia a círculos apilados */
+/* ≤ 768px — Mobile */
 @media (max-width: 768px) {
   .about {
     min-height: 100svh;
@@ -350,10 +313,11 @@
   }
 
   .about-diagram {
-    width: 115%;
-    max-width: 700px;
+    width: 122%;
+    max-width: 760px;
     aspect-ratio: 1200 / 650;
-    margin: 0 auto;
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
 
   .about-venn {
@@ -364,26 +328,6 @@
 
   .circle-content {
     top: 50%;
-  }
-
-  .left {
-    left: 10%;
-    width: 34%;
-  }
-
-  .right {
-    right: 10%;
-    width: 34%;
-  }
-
-  .circle-content p {
-    font-size: 1.15rem;
-    line-height: 1.15;
-    margin-bottom: 1rem;
-  }
-
-  .circle-content h3 {
-    font-size: 1.7rem;
   }
 
   .hero-scroll {
@@ -440,26 +384,5 @@
   .circle-content {
     top: 50%;
     min-width: 0;
-  }
-
-  .left {
-    left: 7%;
-    width: 45%;
-  }
-
-  .right {
-    right: 7%;
-    width: 45%;
-  }
-
-  .circle-content p {
-    font-size: 0.9rem;
-    line-height: 1.15;
-
-    margin-bottom: 0.7rem;
-  }
-
-  .circle-content h3 {
-    font-size: 1rem;
   }
 }

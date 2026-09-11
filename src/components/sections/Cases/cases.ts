@@ -60,31 +60,60 @@ function splitTextIntoLetters(
       const fragment =
         document.createDocumentFragment();
 
-      [...text].forEach((char) => {
-        if (char === " ") {
+      /*
+       * Separamos por palabras y espacios
+       * (igual que en hero.ts).
+       *
+       * Los espacios se insertan como
+       * nodos de texto normales, para
+       * que el navegador pueda hacer
+       * salto de línea ENTRE palabras.
+       *
+       * Cada palabra se agrupa dentro de
+       * un span "cases-word" (inline-block
+       * + white-space:nowrap), que actúa
+       * como unidad atómica: así el
+       * navegador nunca puede partir la
+       * línea ENTRE dos letras de una
+       * misma palabra, solo entre
+       * palabras completas.
+       */
+      const parts = text.split(/(\s+)/);
+
+      parts.forEach((part) => {
+        if (/^\s+$/.test(part)) {
           fragment.appendChild(
-            document.createTextNode(" ")
+            document.createTextNode(part)
           );
 
           return;
         }
 
-        const letter =
+        if (!part) return;
+
+        const word =
           document.createElement("span");
 
-        letter.className =
-          "cases-letter";
+        word.className = "cases-word";
 
-        letter.textContent = char;
+        [...part].forEach((char) => {
+          const letter =
+            document.createElement("span");
 
-        letter.style.display =
-          "inline-block";
+          letter.className =
+            "cases-letter";
 
-        fragment.appendChild(
-          letter
-        );
+          letter.textContent = char;
 
-        letters.push(letter);
+          letter.style.display =
+            "inline-block";
+
+          word.appendChild(letter);
+
+          letters.push(letter);
+        });
+
+        fragment.appendChild(word);
       });
 
       node.parentNode?.replaceChild(

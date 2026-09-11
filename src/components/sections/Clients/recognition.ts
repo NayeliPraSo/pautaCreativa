@@ -19,22 +19,27 @@ function splitTextIntoLetters(
   const processNode = (node: Node): void => {
     if (node.nodeType === Node.TEXT_NODE) {
       const text = node.textContent ?? "";
-      const fragment = document.createDocumentFragment();
+      const fragment =
+        document.createDocumentFragment();
 
       [...text].forEach((char) => {
         if (/\s/.test(char)) {
           fragment.appendChild(
             document.createTextNode(char),
           );
+
           return;
         }
 
-        const span = document.createElement("span");
+        const span =
+          document.createElement("span");
+
         span.className = className;
         span.textContent = char;
         span.style.display = "inline-block";
 
         fragment.appendChild(span);
+
         letters.push(span);
       });
 
@@ -66,7 +71,9 @@ function getLetters(
       "",
     )}`;
 
-  if (element.dataset[splitKey] === "true") {
+  if (
+    element.dataset[splitKey] === "true"
+  ) {
     return Array.from(
       element.querySelectorAll<HTMLElement>(
         `.${className}`,
@@ -85,6 +92,10 @@ function getLetters(
   return letters;
 }
 
+/* ============================================================
+   VISIBILIDAD REAL
+   ============================================================ */
+
 function isActuallyVisible(
   element: HTMLElement,
 ): boolean {
@@ -99,7 +110,10 @@ function isActuallyVisible(
   }
 
   const visibleTop =
-    Math.max(rect.top, 0);
+    Math.max(
+      rect.top,
+      0,
+    );
 
   const visibleBottom =
     Math.min(
@@ -110,7 +124,8 @@ function isActuallyVisible(
   const visibleHeight =
     Math.max(
       0,
-      visibleBottom - visibleTop,
+      visibleBottom -
+        visibleTop,
     );
 
   if (
@@ -153,7 +168,9 @@ function isActuallyVisible(
       topElement &&
         (
           topElement === element ||
-          element.contains(topElement)
+          element.contains(
+            topElement,
+          )
         ),
     );
   });
@@ -163,71 +180,84 @@ function createRealVisibilityTrigger(
   element: HTMLElement,
   onEnter: () => void,
   onLeave: () => void,
-  rootMargin = "0px 0px -15% 0px",
+  rootMargin =
+    "0px 0px -15% 0px",
 ): () => void {
   let isArmedForReplay = true;
   let hasPlayed = false;
   let checkFrame = 0;
 
-  const checkPosition = (): void => {
-    const rect =
-      element.getBoundingClientRect();
+  const checkPosition =
+    (): void => {
+      const rect =
+        element.getBoundingClientRect();
 
-    const viewportHeight =
-      window.innerHeight;
+      const viewportHeight =
+        window.innerHeight;
 
-    const leftThroughTop =
-      rect.bottom <=
-      viewportHeight * 0.05;
+      const leftThroughTop =
+        rect.bottom <=
+        viewportHeight * 0.05;
 
-    const leftThroughBottom =
-      rect.top >=
-      viewportHeight * 0.95;
+      const leftThroughBottom =
+        rect.top >=
+        viewportHeight * 0.95;
 
-    if (
-      leftThroughTop ||
-      leftThroughBottom
-    ) {
       if (
-        hasPlayed &&
-        !isArmedForReplay
+        leftThroughTop ||
+        leftThroughBottom
       ) {
-        hasPlayed = false;
-        isArmedForReplay = true;
+        if (
+          hasPlayed &&
+          !isArmedForReplay
+        ) {
+          hasPlayed = false;
+          isArmedForReplay = true;
 
-        onLeave();
+          onLeave();
+        }
+
+        return;
       }
 
-      return;
-    }
+      if (!isArmedForReplay) {
+        return;
+      }
 
-    if (!isArmedForReplay) return;
-    if (!isActuallyVisible(element)) return;
+      if (!isActuallyVisible(element)) {
+        return;
+      }
 
-    const activationLine =
-      viewportHeight * 0.85;
+      const activationLine =
+        viewportHeight * 0.85;
 
-    if (
-      rect.top > activationLine
-    ) {
-      return;
-    }
+      if (
+        rect.top >
+        activationLine
+      ) {
+        return;
+      }
 
-    isArmedForReplay = false;
-    hasPlayed = true;
+      isArmedForReplay = false;
+      hasPlayed = true;
 
-    onEnter();
-  };
+      onEnter();
+    };
 
-  const scheduleCheck = (): void => {
-    if (checkFrame) return;
+  const scheduleCheck =
+    (): void => {
+      if (checkFrame) {
+        return;
+      }
 
-    checkFrame =
-      requestAnimationFrame(() => {
-        checkFrame = 0;
-        checkPosition();
-      });
-  };
+      checkFrame =
+        requestAnimationFrame(
+          () => {
+            checkFrame = 0;
+            checkPosition();
+          },
+        );
+    };
 
   const observer =
     new IntersectionObserver(
@@ -236,12 +266,14 @@ function createRealVisibilityTrigger(
       },
       {
         root: null,
+
         threshold: [
           0,
           0.05,
           0.1,
           0.2,
         ],
+
         rootMargin,
       },
     );
@@ -309,26 +341,32 @@ function animateCounter(
     gsap.utils.clamp(
       0.4,
       0.8,
-      0.32 + target * 0.025,
+      0.32 +
+        target * 0.025,
     );
 
-  return gsap.to(state, {
-    value: target,
-    duration,
-    ease: "none",
+  return gsap.to(
+    state,
+    {
+      value: target,
 
-    onUpdate: () => {
-      element.textContent =
-        `${Math.round(
-          state.value,
-        )}`;
-    },
+      duration,
 
-    onComplete: () => {
-      element.textContent =
-        `${target}`;
+      ease: "none",
+
+      onUpdate: () => {
+        element.textContent =
+          `${Math.round(
+            state.value,
+          )}`;
+      },
+
+      onComplete: () => {
+        element.textContent =
+          `${target}`;
+      },
     },
-  });
+  );
 }
 
 /* ============================================================
@@ -336,8 +374,11 @@ function animateCounter(
    ============================================================ */
 
 function initRecognition(): void {
+  /*
+   * Si ya existía una instancia anterior,
+   * primero la limpiamos por completo.
+   */
   cleanupRecognition?.();
-
   cleanupRecognition = null;
 
   const section =
@@ -345,7 +386,9 @@ function initRecognition(): void {
       "#recognition",
     );
 
-  if (!section) return;
+  if (!section) {
+    return;
+  }
 
   const clientsBlock =
     section.querySelector<HTMLElement>(
@@ -385,7 +428,8 @@ function initRecognition(): void {
     gsap.core.Timeline[] = [];
 
   /* ==========================================================
-     BLOQUE 1 — LO DICEN NUESTROS CLIENTES
+     BLOQUE 1
+     LO DICEN NUESTROS CLIENTES
      ========================================================== */
 
   const badge =
@@ -471,36 +515,45 @@ function initRecognition(): void {
   const setClientsInitialState =
     (): void => {
       if (topLine) {
-        gsap.set(topLine, {
-          scaleX: 0,
-          transformOrigin:
-            "left center",
-        });
+        gsap.set(
+          topLine,
+          {
+            scaleX: 0,
+            transformOrigin:
+              "left center",
+          },
+        );
       }
 
       if (badge) {
-        gsap.set(badge, {
-          autoAlpha: 0,
-          scale: 0.88,
-          y: 18,
-          rotation: 0,
-          transformOrigin:
-            "center center",
-        });
+        gsap.set(
+          badge,
+          {
+            autoAlpha: 0,
+            scale: 0.88,
+            y: 18,
+            rotation: 0,
+            transformOrigin:
+              "center center",
+          },
+        );
       }
 
       if (numberOne) {
-        gsap.set(numberOne, {
-          autoAlpha: 0,
-          x: 0,
-          y: 0,
-          scale: 0.82,
-          scaleX: 1,
-          scaleY: 1,
-          rotation: 0,
-          transformOrigin:
-            "center bottom",
-        });
+        gsap.set(
+          numberOne,
+          {
+            autoAlpha: 0,
+            x: 0,
+            y: 0,
+            scale: 0.82,
+            scaleX: 1,
+            scaleY: 1,
+            rotation: 0,
+            transformOrigin:
+              "center bottom",
+          },
+        );
       }
 
       if (verticalLine) {
@@ -517,9 +570,12 @@ function initRecognition(): void {
       categoryLetters
         .flat()
         .forEach((letter) => {
-          gsap.set(letter, {
-            autoAlpha: 0,
-          });
+          gsap.set(
+            letter,
+            {
+              autoAlpha: 0,
+            },
+          );
         });
 
       if (rankingLine) {
@@ -536,9 +592,12 @@ function initRecognition(): void {
       statementLetters
         .flat()
         .forEach((letter) => {
-          gsap.set(letter, {
-            autoAlpha: 0,
-          });
+          gsap.set(
+            letter,
+            {
+              autoAlpha: 0,
+            },
+          );
         });
 
       if (statementsLine) {
@@ -554,9 +613,12 @@ function initRecognition(): void {
 
       integratedLetters.forEach(
         (letter) => {
-          gsap.set(letter, {
-            autoAlpha: 0,
-          });
+          gsap.set(
+            letter,
+            {
+              autoAlpha: 0,
+            },
+          );
         },
       );
 
@@ -592,28 +654,37 @@ function initRecognition(): void {
             repeatDelay: 3,
             paused: true,
           })
-          .to(numberOne, {
-            scaleX: 1.04,
-            scaleY: 0.96,
-            duration: 0.16,
-            ease: "power2.in",
-            transformOrigin:
-              "center bottom",
-          })
-          .to(numberOne, {
-            y: -9,
-            scaleX: 0.98,
-            scaleY: 1.04,
-            duration: 0.26,
-            ease: "power2.out",
-          })
-          .to(numberOne, {
-            y: 0,
-            scaleX: 1,
-            scaleY: 1,
-            duration: 0.48,
-            ease: "bounce.out",
-          })
+          .to(
+            numberOne,
+            {
+              scaleX: 1.04,
+              scaleY: 0.96,
+              duration: 0.16,
+              ease: "power2.in",
+              transformOrigin:
+                "center bottom",
+            },
+          )
+          .to(
+            numberOne,
+            {
+              y: -9,
+              scaleX: 0.98,
+              scaleY: 1.04,
+              duration: 0.26,
+              ease: "power2.out",
+            },
+          )
+          .to(
+            numberOne,
+            {
+              y: 0,
+              scaleX: 1,
+              scaleY: 1,
+              duration: 0.48,
+              ease: "bounce.out",
+            },
+          )
       : null;
 
   const badgeFloat =
@@ -651,6 +722,10 @@ function initRecognition(): void {
       badgeFloat,
     );
   }
+
+  /* ==========================================================
+     TIMELINE CLIENTES
+     ========================================================== */
 
   const clientsTimeline =
     gsap.timeline({
@@ -868,7 +943,8 @@ function initRecognition(): void {
     };
 
   /* ==========================================================
-     BLOQUE 2 — RECONOCIMIENTOS DE LA INDUSTRIA
+     BLOQUE 2
+     RECONOCIMIENTOS DE LA INDUSTRIA
      ========================================================== */
 
   const industryTitle =
@@ -895,20 +971,15 @@ function initRecognition(): void {
       ),
     );
 
-  /*
-   * Cada ranking puede tener:
-   *
-   * #3
-   * #6
-   *
-   * o:
-   *
-   * TOP 10
-   * TOP 15
-   *
-   * En los TOP animamos únicamente
-   * .recognition__timeline-value.
-   */
+  /* ==========================================================
+     RANKINGS
+
+     MUY IMPORTANTE:
+     Los valores finales salen SIEMPRE de data-target.
+
+     Nunca de textContent, porque GSAP modifica el DOM
+     temporalmente durante la animación.
+     ========================================================== */
 
   const rankings =
     timelineItems.map((item) => {
@@ -930,37 +1001,13 @@ function initRecognition(): void {
       const isTop =
         Boolean(valueElement);
 
-      /*
-       * Si es TOP tomamos únicamente
-       * el contenido del span del número.
-       *
-       * Si es # tomamos el contenido
-       * completo del elemento.
-       */
-      const rawText =
-        isTop
-          ? valueElement?.textContent ?? ""
-          : number?.textContent ?? "";
-
-      const rawTarget =
-        rawText.replace(
-          /[^0-9]/g,
-          "",
-        );
-
       const target =
         Number.parseInt(
-          rawTarget,
+          number?.dataset.target ??
+            "0",
           10,
         ) || 0;
 
-      /*
-       * Para TOP:
-       *   counterElement = span del número
-       *
-       * Para #:
-       *   counterElement = span principal
-       */
       const counterElement =
         valueElement ?? number;
 
@@ -985,10 +1032,11 @@ function initRecognition(): void {
 
   const awardIcons =
     awards
-      .map((award) =>
-        award.querySelector<HTMLElement>(
-          ".recognition__award-icon",
-        ),
+      .map(
+        (award) =>
+          award.querySelector<HTMLElement>(
+            ".recognition__award-icon",
+          ),
       )
       .filter(
         (
@@ -1012,6 +1060,10 @@ function initRecognition(): void {
           Boolean(element),
       );
 
+  /* ==========================================================
+     COUNTERS
+     ========================================================== */
+
   const stopCounterAnimations =
     (): void => {
       counterTweens.forEach(
@@ -1022,6 +1074,130 @@ function initRecognition(): void {
 
       counterTweens.length = 0;
     };
+
+  /* ==========================================================
+     ESTADO FINAL VÁLIDO
+     Se usa antes de destruir una instancia anterior.
+     ========================================================== */
+
+  const restoreIndustryFinalState =
+    (): void => {
+      stopCounterAnimations();
+
+      if (industryTitle) {
+        gsap.set(
+          industryTitle,
+          {
+            clearProps:
+              "transform,opacity,visibility",
+            autoAlpha: 1,
+          },
+        );
+      }
+
+      if (awards.length) {
+        gsap.set(
+          awards,
+          {
+            clearProps:
+              "transform,opacity,visibility",
+            autoAlpha: 1,
+          },
+        );
+      }
+
+      awardIcons.forEach(
+        (icon) => {
+          gsap.set(
+            icon,
+            {
+              clearProps:
+                "transform",
+            },
+          );
+        },
+      );
+
+      if (timeline) {
+        gsap.set(
+          timeline,
+          {
+            clearProps:
+              "clipPath",
+          },
+        );
+      }
+
+      rankings.forEach(
+        ({
+          number,
+          counterElement,
+          target,
+          isTop,
+          letters,
+          item,
+        }) => {
+          if (
+            number &&
+            counterElement
+          ) {
+            gsap.set(
+              number,
+              {
+                clearProps:
+                  "transform,opacity,visibility",
+                autoAlpha: 1,
+              },
+            );
+
+            if (target > 0) {
+              counterElement.textContent =
+                isTop
+                  ? `${target}`
+                  : `#${target}`;
+            }
+          }
+
+          gsap.set(
+            item,
+            {
+              clearProps:
+                "transform",
+            },
+          );
+
+          letters.forEach(
+            (letter) => {
+              gsap.set(
+                letter,
+                {
+                  clearProps:
+                    "opacity,filter",
+                  opacity: 1,
+                },
+              );
+            },
+          );
+        },
+      );
+
+      rankingAccentTexts.forEach(
+        (accent) => {
+          gsap.set(
+            accent,
+            {
+              clearProps:
+                "opacity",
+              opacity: 1,
+            },
+          );
+        },
+      );
+    };
+
+  /* ==========================================================
+     ESTADO INICIAL INDUSTRIA
+     ========================================================== */
 
   const setIndustryInitialState =
     (): void => {
@@ -1052,10 +1228,13 @@ function initRecognition(): void {
 
       awardIcons.forEach(
         (icon) => {
-          gsap.set(icon, {
-            scale: 1,
-            y: 0,
-          });
+          gsap.set(
+            icon,
+            {
+              scale: 1,
+              y: 0,
+            },
+          );
         },
       );
 
@@ -1074,24 +1253,13 @@ function initRecognition(): void {
           ) {
             if (target > 0) {
               /*
-               * TOP:
-               * cambiamos solo:
-               *
-               * <span class="...value">
-               *
-               * Por eso "TOP" permanece
-               * intacto en el DOM.
+               * Dejamos el contador en 1 para que
+               * después anime hacia data-target.
                */
-              if (isTop) {
-                counterElement.textContent =
-                  "1";
-              } else {
-                /*
-                 * Ranking tradicional.
-                 */
-                counterElement.textContent =
-                  "#1";
-              }
+              counterElement.textContent =
+                isTop
+                  ? "1"
+                  : "#1";
             }
 
             gsap.set(
@@ -1104,9 +1272,12 @@ function initRecognition(): void {
             );
           }
 
-          gsap.set(item, {
-            x: 0,
-          });
+          gsap.set(
+            item,
+            {
+              x: 0,
+            },
+          );
 
           letters.forEach(
             (letter) => {
@@ -1134,17 +1305,34 @@ function initRecognition(): void {
         },
       );
 
-      if (
-        timeline &&
-        window.innerWidth > 768
-      ) {
-        gsap.set(
-          timeline,
-          {
-            clipPath:
-              "inset(0 100% 0 0)",
-          },
-        );
+      /*
+       * Desktop:
+       * la timeline entra revelándose horizontalmente.
+       *
+       * Mobile:
+       * el layout cambia a grid y no debe conservar
+       * ningún clip-path inline.
+       */
+      if (timeline) {
+        if (
+          window.innerWidth > 768
+        ) {
+          gsap.set(
+            timeline,
+            {
+              clipPath:
+                "inset(0 100% 0 0)",
+            },
+          );
+        } else {
+          gsap.set(
+            timeline,
+            {
+              clearProps:
+                "clipPath",
+            },
+          );
+        }
       }
     };
 
@@ -1206,7 +1394,9 @@ function initRecognition(): void {
         },
         index,
       ) => {
-        if (!number) return;
+        if (!number) {
+          return;
+        }
 
         const accent =
           rankingAccentTexts[
@@ -1315,20 +1505,26 @@ function initRecognition(): void {
       );
     }
 
-    industryTimeline.to(
-      awards,
-      {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.45,
-        stagger: 0.1,
-        ease:
-          "back.out(1.35)",
-      },
-      "-=0.2",
-    );
+    if (awards.length) {
+      industryTimeline.to(
+        awards,
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.45,
+          stagger: 0.1,
+          ease:
+            "back.out(1.35)",
+        },
+        "-=0.2",
+      );
+    }
 
+    /*
+     * El clip-path pertenece exclusivamente
+     * al layout desktop.
+     */
     if (
       timeline &&
       window.innerWidth > 768
@@ -1382,12 +1578,6 @@ function initRecognition(): void {
 
         industryTimeline.add(
           () => {
-            /*
-             * Para TOP animamos solo el número.
-             *
-             * Para # usamos un contador auxiliar
-             * que mantiene el símbolo.
-             */
             if (isTop) {
               const counterTween =
                 animateCounter(
@@ -1411,8 +1601,7 @@ function initRecognition(): void {
                   0.4,
                   0.8,
                   0.32 +
-                    target *
-                      0.025,
+                    target * 0.025,
                 );
 
               const counterTween =
@@ -1421,8 +1610,11 @@ function initRecognition(): void {
                   {
                     value:
                       target,
+
                     duration,
-                    ease: "none",
+
+                    ease:
+                      "none",
 
                     onUpdate:
                       () => {
@@ -1470,17 +1662,22 @@ function initRecognition(): void {
             letters,
             {
               opacity: 1,
+
               filter:
                 "blur(0px)",
+
               duration: 0.1,
+
               stagger: {
                 each:
                   getTypewriterStagger(
                     letters.length,
                   ),
+
                 from:
                   "start",
               },
+
               ease:
                 "power1.out",
             },
@@ -1526,6 +1723,12 @@ function initRecognition(): void {
      ========================================================== */
 
   if (prefersReducedMotion) {
+    /*
+     * Si el usuario pide reducir movimiento,
+     * dejamos todo visible y con valores finales.
+     */
+    restoreIndustryFinalState();
+
     cleanupRecognition =
       () => {};
 
@@ -1553,8 +1756,22 @@ function initRecognition(): void {
     stopIndustryTrigger,
   );
 
+  /* ==========================================================
+     CLEANUP
+     ========================================================== */
+
   cleanupRecognition =
     () => {
+      /*
+       * Primero dejamos el DOM en un estado
+       * visual válido.
+       *
+       * Esto evita que al cruzar mobile ↔ desktop
+       * quede alguno de los elementos oculto con
+       * opacity / visibility / clip-path inline.
+       */
+      restoreIndustryFinalState();
+
       cleanupFns.forEach(
         (fn) => fn(),
       );
@@ -1579,6 +1796,9 @@ function initRecognition(): void {
         },
       );
 
+      numberOneBounce?.kill();
+      badgeFloat?.kill();
+
       sectionLine?.classList.remove(
         "is-alive",
       );
@@ -1590,5 +1810,56 @@ function initRecognition(): void {
    ============================================================ */
 
 initRecognition();
+
+/* ============================================================
+   CAMBIO DE BREAKPOINT
+
+   Solo reconstruimos Recognition cuando realmente cruzamos
+   768px.
+
+   No lo hacemos en cada pixel de resize.
+   ============================================================ */
+
+let recognitionIsDesktop =
+  window.innerWidth > 768;
+
+let recognitionResizeTimer:
+  ReturnType<typeof setTimeout> |
+  undefined;
+
+window.addEventListener(
+  "resize",
+  () => {
+    window.clearTimeout(
+      recognitionResizeTimer,
+    );
+
+    recognitionResizeTimer =
+      setTimeout(
+        () => {
+          const isDesktopNow =
+            window.innerWidth > 768;
+
+          if (
+            isDesktopNow !==
+            recognitionIsDesktop
+          ) {
+            recognitionIsDesktop =
+              isDesktopNow;
+
+            /*
+             * cleanupRecognition se ejecuta al principio
+             * de initRecognition().
+             */
+            initRecognition();
+          }
+        },
+        200,
+      );
+  },
+  {
+    passive: true,
+  },
+);
 
 export {};

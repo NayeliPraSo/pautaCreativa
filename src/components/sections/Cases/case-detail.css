@@ -388,17 +388,30 @@
 }
 
 @media (max-width: 768px) {
-.case-detail {
+  .case-detail,
+  .case-detail-wrapper {
+    width: calc(100% - 40px);
+    max-width: 640px;
+  }
+
+  .case-detail {
     border-radius: 10px;
     margin-bottom: 24px;
-    padding: 0 30px;
   }
 
   .case-detail__header {
     padding: 1.5rem 1.65rem 1.5rem;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr;
     align-items: start;
     gap: var(--space-3);
+  }
+
+  .case-detail__solutions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 0.5rem;
   }
 
   .case-detail__label {
@@ -411,15 +424,16 @@
     margin-top: 0.5rem;
   }
 
-  .case-detail__solutions {
-    gap: 0.35rem;
-  }
-
+  /*
+   * OJO: este contenedor NO debe llevar un `height` fijo — dentro
+   * va el ícono + el título + el subtítulo (2-3 líneas de texto),
+   * y una altura fija más chica que ese contenido hacía que todo
+   * se desbordara sin recorte visual, "flotando" fuera de su
+   * caja. Solo se limita el `width` (el alto queda automático,
+   * según el contenido).
+   */
   .case-detail__solution {
-    width: 54px;
-    height: 54px;
-    border-radius: 6px;
-    padding: 8px;
+    width: 76px;
   }
 
   .case-detail__solution-icon {
@@ -488,6 +502,12 @@
 }
 
 @media (max-width: 480px) {
+  .case-detail,
+  .case-detail-wrapper {
+    width: calc(100% - 24px);
+    max-width: 480px;
+  }
+
   .case-detail__header {
     padding: 1.25rem 1rem 0.75rem;
   }
@@ -496,14 +516,26 @@
     font-size: clamp(1.3rem, 6vw, 1.7rem);
   }
 
+  .case-detail__solutions {
+    gap: 0.6rem;
+  }
+
   .case-detail__solution {
-    width: 38px;
-    height: 38px;
+    width: 58px;
   }
 
   .case-detail__solution-icon {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
+    padding: 7px;
+  }
+
+  .case-detail__solution-title {
+    font-size: 0.56rem;
+  }
+
+  .case-detail__solution-subtitle {
+    font-size: 0.48rem;
   }
 
   .case-detail__body {
