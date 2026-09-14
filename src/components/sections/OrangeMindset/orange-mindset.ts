@@ -663,6 +663,16 @@ function initOrangeMindset(): void {
       ".om-timeline-scrollbar__thumb"
     );
 
+  const mobileTimelinePrev =
+    section.querySelector<HTMLButtonElement>(
+      "[data-om-timeline-prev]"
+    );
+
+  const mobileTimelineNext =
+    section.querySelector<HTMLButtonElement>(
+      "[data-om-timeline-next]"
+    );
+
   const p2DescriptionWrap =
     section.querySelector<HTMLElement>(
       ".om-description-wrap"
@@ -787,8 +797,6 @@ function initOrangeMindset(): void {
     (): void => {
       if (
         !mobileTimelineScroll ||
-        !mobileTimelineScrollbar ||
-        !mobileTimelineThumb ||
         !isMobileViewport()
       ) {
         return;
@@ -801,7 +809,47 @@ function initOrangeMindset(): void {
         mobileTimelineScroll.scrollWidth;
 
       const maxScroll =
-        contentWidth - viewportWidth;
+        Math.max(
+          0,
+          contentWidth - viewportWidth
+        );
+
+      const currentScroll =
+        mobileTimelineScroll.scrollLeft;
+
+      const edgeTolerance = 2;
+
+      if (mobileTimelinePrev) {
+        mobileTimelinePrev.disabled =
+          currentScroll <= edgeTolerance;
+
+        mobileTimelinePrev.setAttribute(
+          "aria-disabled",
+          String(
+            mobileTimelinePrev.disabled
+          )
+        );
+      }
+
+      if (mobileTimelineNext) {
+        mobileTimelineNext.disabled =
+          currentScroll >=
+          maxScroll - edgeTolerance;
+
+        mobileTimelineNext.setAttribute(
+          "aria-disabled",
+          String(
+            mobileTimelineNext.disabled
+          )
+        );
+      }
+
+      if (
+        !mobileTimelineScrollbar ||
+        !mobileTimelineThumb
+      ) {
+        return;
+      }
 
       if (maxScroll <= 0) {
         gsap.set(
@@ -827,8 +875,7 @@ function initOrangeMindset(): void {
         thumbWidth;
 
       const scrollProgress =
-        mobileTimelineScroll.scrollLeft /
-        maxScroll;
+        currentScroll / maxScroll;
 
       const thumbX =
         scrollbarTravel *
@@ -841,6 +888,59 @@ function initOrangeMindset(): void {
           x: thumbX,
         }
       );
+    };
+
+  const scrollMobileTimeline =
+    (
+      direction: -1 | 1
+    ): void => {
+      if (
+        !mobileTimelineScroll ||
+        !isMobileViewport()
+      ) {
+        return;
+      }
+
+      const firstItem =
+        p2TimelineItems[0];
+
+      const itemWidth =
+        firstItem
+          ?.getBoundingClientRect()
+          .width ?? 0;
+
+      const styles =
+        window.getComputedStyle(
+          mobileTimelineScroll
+        );
+
+      const columnGap =
+        Number.parseFloat(
+          styles.columnGap
+        ) || 0;
+
+      const gap =
+        Number.parseFloat(
+          styles.gap
+        ) || 0;
+
+      const scrollStep =
+        itemWidth > 0
+          ? itemWidth +
+            (columnGap || gap)
+          : mobileTimelineScroll.clientWidth *
+            0.6;
+
+      mobileTimelineScroll.scrollBy({
+        left:
+          direction *
+          scrollStep,
+
+        behavior:
+          prefersReducedMotion
+            ? "auto"
+            : "smooth",
+      });
     };
 
   /* ==========================================================
@@ -1498,6 +1598,30 @@ function initOrangeMindset(): void {
           updateMobileTimelineScrollbar();
         };
 
+      const handleTimelinePrev =
+        (): void => {
+          scrollMobileTimeline(-1);
+        };
+
+      const handleTimelineNext =
+        (): void => {
+          scrollMobileTimeline(1);
+        };
+
+      if (mobileTimelinePrev) {
+        mobileTimelinePrev.addEventListener(
+          "click",
+          handleTimelinePrev
+        );
+      }
+
+      if (mobileTimelineNext) {
+        mobileTimelineNext.addEventListener(
+          "click",
+          handleTimelineNext
+        );
+      }
+
       if (mobileTimelineScroll) {
         mobileTimelineScroll.addEventListener(
           "scroll",
@@ -1579,6 +1703,16 @@ function initOrangeMindset(): void {
         mobileTimelineScroll?.removeEventListener(
           "scroll",
           handleTimelineScroll
+        );
+
+        mobileTimelinePrev?.removeEventListener(
+          "click",
+          handleTimelinePrev
+        );
+
+        mobileTimelineNext?.removeEventListener(
+          "click",
+          handleTimelineNext
         );
       };
     }

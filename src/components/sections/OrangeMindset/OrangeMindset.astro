@@ -81,9 +81,24 @@ const mindsetValues: string[] = [
           de pensar:
         </p>
 
-        <div class="om-timeline-hint" aria-hidden="true">
-          <span class="om-timeline-hint__arrow"> ← </span>
-          <span class="om-timeline-hint__arrow"> → </span>
+        <div class="om-timeline-hint">
+          <button
+            type="button"
+            class="om-timeline-hint__arrow"
+            data-om-timeline-prev
+            aria-label="Ver elemento anterior"
+          >
+            ←
+          </button>
+
+          <button
+            type="button"
+            class="om-timeline-hint__arrow"
+            data-om-timeline-next
+            aria-label="Ver siguiente elemento"
+          >
+            →
+          </button>
         </div>
 
         <div
