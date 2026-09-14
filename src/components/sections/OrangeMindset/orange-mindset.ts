@@ -648,6 +648,21 @@ function initOrangeMindset(): void {
       ".om-timeline-item"
     );
 
+  const mobileTimelineScroll =
+    section.querySelector<HTMLElement>(
+      ".om-timeline"
+    );
+
+  const mobileTimelineScrollbar =
+    section.querySelector<HTMLElement>(
+      ".om-timeline-scrollbar"
+    );
+
+  const mobileTimelineThumb =
+    section.querySelector<HTMLElement>(
+      ".om-timeline-scrollbar__thumb"
+    );
+
   const p2DescriptionWrap =
     section.querySelector<HTMLElement>(
       ".om-description-wrap"
@@ -763,6 +778,70 @@ function initOrangeMindset(): void {
     createTimelinePulse(
       p2TimelineItems
     );
+
+  /* ==========================================================
+     MOBILE TIMELINE — SCROLLBAR VISUAL SINCRONIZADA
+     ========================================================== */
+
+  const updateMobileTimelineScrollbar =
+    (): void => {
+      if (
+        !mobileTimelineScroll ||
+        !mobileTimelineScrollbar ||
+        !mobileTimelineThumb ||
+        !isMobileViewport()
+      ) {
+        return;
+      }
+
+      const viewportWidth =
+        mobileTimelineScroll.clientWidth;
+
+      const contentWidth =
+        mobileTimelineScroll.scrollWidth;
+
+      const maxScroll =
+        contentWidth - viewportWidth;
+
+      if (maxScroll <= 0) {
+        gsap.set(
+          mobileTimelineThumb,
+          {
+            width: "100%",
+            x: 0,
+          }
+        );
+
+        return;
+      }
+
+      const ratio =
+        viewportWidth / contentWidth;
+
+      const thumbWidth =
+        mobileTimelineScrollbar.clientWidth *
+        ratio;
+
+      const scrollbarTravel =
+        mobileTimelineScrollbar.clientWidth -
+        thumbWidth;
+
+      const scrollProgress =
+        mobileTimelineScroll.scrollLeft /
+        maxScroll;
+
+      const thumbX =
+        scrollbarTravel *
+        scrollProgress;
+
+      gsap.set(
+        mobileTimelineThumb,
+        {
+          width: thumbWidth,
+          x: thumbX,
+        }
+      );
+    };
 
   /* ==========================================================
      TIMELINES
@@ -1414,6 +1493,27 @@ function initOrangeMindset(): void {
         | ScrollTrigger
         | null = null;
 
+      const handleTimelineScroll =
+        (): void => {
+          updateMobileTimelineScrollbar();
+        };
+
+      if (mobileTimelineScroll) {
+        mobileTimelineScroll.addEventListener(
+          "scroll",
+          handleTimelineScroll,
+          {
+            passive: true,
+          }
+        );
+
+        requestAnimationFrame(
+          () => {
+            updateMobileTimelineScrollbar();
+          }
+        );
+      }
+
       if (panel1) {
         panelOneTrigger =
           ScrollTrigger.create({
@@ -1450,17 +1550,36 @@ function initOrangeMindset(): void {
             end:
               "bottom 25%",
 
-            onEnter: () =>
-              playPanelTwo(),
+            onEnter: () => {
+              playPanelTwo();
 
-            onEnterBack: () =>
-              playPanelTwo(),
+              requestAnimationFrame(
+                () => {
+                  updateMobileTimelineScrollbar();
+                }
+              );
+            },
+
+            onEnterBack: () => {
+              playPanelTwo();
+
+              requestAnimationFrame(
+                () => {
+                  updateMobileTimelineScrollbar();
+                }
+              );
+            },
           });
       }
 
       return () => {
         panelOneTrigger?.kill();
         panelTwoTrigger?.kill();
+
+        mobileTimelineScroll?.removeEventListener(
+          "scroll",
+          handleTimelineScroll
+        );
       };
     }
   );
