@@ -971,6 +971,11 @@ function initRecognition(): void {
       ),
     );
 
+  const timelineNotes =
+    industryBlock.querySelector<HTMLElement>(
+      ".recognition__timeline-notes",
+    );
+
   /* ==========================================================
      RANKINGS
 
@@ -1124,6 +1129,17 @@ function initRecognition(): void {
           {
             clearProps:
               "clipPath",
+          },
+        );
+      }
+
+      if (timelineNotes) {
+        gsap.set(
+          timelineNotes,
+          {
+            clearProps:
+              "transform,opacity,visibility",
+            autoAlpha: 1,
           },
         );
       }
@@ -1333,6 +1349,16 @@ function initRecognition(): void {
             },
           );
         }
+      }
+
+      if (timelineNotes) {
+        gsap.set(
+          timelineNotes,
+          {
+            autoAlpha: 0,
+            y: 10,
+          },
+        );
       }
     };
 
@@ -1686,6 +1712,20 @@ function initRecognition(): void {
         }
       },
     );
+
+    if (timelineNotes) {
+      industryTimeline.to(
+        timelineNotes,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4,
+          ease:
+            "power2.out",
+        },
+        "-=0.1",
+      );
+    }
   }
 
   const playIndustry =

@@ -289,6 +289,16 @@
   color:var(--color-teal);
 }
 
+.recognition__timeline-notes {
+  margin: 2rem 0 0;
+  font-family: var(--font-primary);
+  font-size: var(--fs-xs);
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 
 /* ==========================================================================
    Líneas de separación
@@ -795,6 +805,10 @@
   .recognition__line--section::before {
     display: none;
   }
+
+  .recognition__timeline-notes {
+    margin-top: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -913,5 +927,10 @@
   .recognition__line--section,
   .recognition__line--section::before {
     display: none;
+  }
+
+  .recognition__timeline-notes {
+    margin-top: 1.25rem;
+    font-size: 0.65rem;
   }
 }
