@@ -696,11 +696,6 @@ if (hero) {
 
         /*
          * Entrada.
-         *
-         * Para Hero no necesitamos
-         * esperar hasta 75%-80%
-         * del viewport porque es
-         * la primera sección.
          */
         const isVisible =
           rect.bottom > 0 &&
