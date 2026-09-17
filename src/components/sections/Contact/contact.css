@@ -241,7 +241,7 @@
 }
 
 .contact.is-form-open .contact-container {
-  padding-top: 3rem;
+  padding-top: 0rem;
 }
 
 @media (max-width: 1440px) {
@@ -515,7 +515,7 @@
   .contact-container {
     max-width: none;
 
-    padding: 4rem 2.5rem 5rem;
+    padding: 1rem 2.5rem 5rem;
 
     gap: 3rem;
   }
@@ -642,8 +642,7 @@
   }
 
   .contact.is-form-open .contact-container {
-    padding-top: 4rem;
-    padding-bottom: 5rem;
+    padding-bottom: 1rem;
   }
 
   .contact.is-form-open .contact-layout {
@@ -660,14 +659,11 @@
   /* Título horizontal en movil */
   .contact.is-form-open .contact-title {
     position: static;
-
     display: block;
-
-    width: auto;
-    height: 520px;
-    max-width: 100%;
-
-    margin: -150px auto;
+    width: 230px;
+    max-width: none;
+    height: 400px;
+    margin: -100px auto;
     transform: rotate(90deg);
     transform-origin: center;
   }
@@ -735,7 +731,7 @@
 @media (max-width: 480px) {
 
   .contact-container {
-    padding: 2.5rem 1.5rem 4rem;
+    padding: 1rem 1.5rem 4rem;
     gap: 2rem;
   }
 
@@ -758,7 +754,7 @@
     width: 100%;
     max-width: 360px;
 
-    margin: 4rem auto 0;
+    margin: 1rem auto 0;
   }
 
   /* =========================
@@ -797,14 +793,11 @@
   ========================= */
 
   .contact.is-form-open .contact-container {
-    padding-top: 2.5rem;
-    padding-bottom: 4rem;
+    padding-bottom: 1rem;
   }
 
   .contact.is-form-open .contact-title {
-    height: 400px;
-
-    margin-top: 2rem;
+    max-width: 180px;
   }
 
   .contact.is-form-open .contact-description-row {
@@ -813,7 +806,6 @@
 
   .contact.is-form-open .contact-description {
     max-width: 360px;
-
     font-size: 0.95rem;
   }
 
