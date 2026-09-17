@@ -279,8 +279,14 @@
     padding-bottom: 1.5rem;
   }
 
-  .solutions-index{
+  .solutions-index {
     font-size: var(--fs-base);
+    font-weight: 300;
+    letter-spacing: 0.38em;
+  }
+
+  .solutions-index-label {
+    font-weight: 300;
   }
 
   .solutions-intro p {

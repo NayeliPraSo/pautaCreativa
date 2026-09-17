@@ -531,13 +531,11 @@
 
   .contact-label {
     position: static;
-
     display: flex;
     align-items: center;
     gap: 1.5rem;
-
     font-size: var(--fs-base);
-    letter-spacing: 0.32em;
+    letter-spacing: 0.38em;
   }
 
   /* =========================
@@ -741,9 +739,9 @@
 
   .contact-label {
     gap: 1rem;
-
-    font-size: 0.65rem;
-    letter-spacing: 0.28em;
+ 
+    font-size: var(--fs-base);
+    letter-spacing: 0.38em;
   }
 
   /* =========================

@@ -260,13 +260,14 @@
   }
 
   .clientes-counter {
-    left: 24px;
+    left: var(--space-4);
+    top: calc(var(--space-7) + var(--space-3));
     font-size: var(--fs-base);
-    letter-spacing: 0.25em;
+    letter-spacing: 0.38em;
   }
-
+ 
   .clientes-counter .label {
-    margin-left: 12px;
+    margin-left: var(--space-3);
   }
 
   .clientes-title {
@@ -325,16 +326,16 @@
   }
 
   .clientes-counter {
-    left: 20px;
-    top: 22px;
-    font-size: 11px;
-    letter-spacing: 0.22em;
+    left: var(--space-4);
+    top: calc(var(--space-7) + var(--space-3));
+    font-size: var(--fs-base);
+    letter-spacing: 0.38em;
   }
-
+ 
   .clientes-counter .label {
-    margin-left: 10px;
+    margin-left: var(--space-3);
   }
-
+  
   .clientes-title {
     width: 94%;
     margin-top: 70px;
