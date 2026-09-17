@@ -945,7 +945,7 @@
     padding: var(--space-4) var(--space-6);
   }
 
-  .om-circle {
+  .om-visual {
     width: 380px;
   }
 
@@ -964,7 +964,7 @@
 }
 
 @media (min-width: 769px) and (max-height: 600px) {
-  .om-circle {
+  .om-visual {
     width: 260px;
   }
 

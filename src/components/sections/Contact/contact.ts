@@ -5,6 +5,7 @@
  * - Texto con efecto máquina de escribir.
  * - Botones aparecen uno por uno.
  * - Transición suave entre vista inicial y formulario.
+ * - Al abandonar Contacto siempre se restaura la Vista 1.
  * - El título NO usa Flip.
  * - El título NO conserva transforms inline.
  * - El CSS mantiene el control total de su posición/rotación responsive.
@@ -37,7 +38,10 @@ function isActuallyVisible(
   const activationLine =
     window.innerHeight * activationRatio;
 
-  if (rect.top > activationLine || rect.bottom <= 0) {
+  if (
+    rect.top > activationLine ||
+    rect.bottom <= 0
+  ) {
     return false;
   }
 
@@ -73,7 +77,10 @@ function isActuallyVisible(
 function splitIntoTypewriterLetters(
   element: HTMLElement,
 ): HTMLElement[] {
-  if (element.dataset.typewriterReady === "true") {
+  if (
+    element.dataset.typewriterReady ===
+    "true"
+  ) {
     return Array.from(
       element.querySelectorAll<HTMLElement>(
         ".contact-type-letter",
@@ -102,27 +109,32 @@ function splitIntoTypewriterLetters(
     wordSpan.style.display =
       "inline-block";
 
-    Array.from(word).forEach((character) => {
-      const letter =
-        document.createElement("span");
+    Array.from(word).forEach(
+      (character) => {
+        const letter =
+          document.createElement("span");
 
-      letter.className =
-        "contact-type-letter";
+        letter.className =
+          "contact-type-letter";
 
-      letter.textContent =
-        character;
+        letter.textContent =
+          character;
 
-      letter.style.display =
-        "inline-block";
+        letter.style.display =
+          "inline-block";
 
-      wordSpan.appendChild(letter);
+        wordSpan.appendChild(letter);
 
-      letters.push(letter);
-    });
+        letters.push(letter);
+      },
+    );
 
     element.appendChild(wordSpan);
 
-    if (wordIndex < words.length - 1) {
+    if (
+      wordIndex <
+      words.length - 1
+    ) {
       element.appendChild(
         document.createTextNode(" "),
       );
@@ -150,10 +162,6 @@ function initContact() {
 
   if (!contactElement) return;
 
-  /*
-   * Desde aquí `contact` es HTMLElement,
-   * nunca null.
-   */
   const contact = contactElement;
 
   const prefersReducedMotion =
@@ -258,7 +266,8 @@ function initContact() {
     return (
       panels.find(
         (panel) =>
-          panel.dataset.formPanel === formType,
+          panel.dataset.formPanel ===
+          formType,
       ) ?? null
     );
   }
@@ -285,9 +294,6 @@ function initContact() {
   /*
    * Solo incluimos en Flip elementos
    * realmente visibles.
-   *
-   * Esto evita intentar animar decoration
-   * cuando en móvil está display:none.
    */
   function getFlipElements(): HTMLElement[] {
     return [
@@ -300,7 +306,8 @@ function initContact() {
       ): element is HTMLElement =>
         Boolean(
           element &&
-            window.getComputedStyle(element)
+            window
+              .getComputedStyle(element)
               .display !== "none",
         ),
     );
@@ -404,9 +411,6 @@ function initContact() {
         titleImage.src =
           imageSrc;
 
-        /*
-         * Nunca dejamos transform inline.
-         */
         gsap.set(titleImage, {
           clearProps: "transform",
         });
@@ -495,10 +499,6 @@ function initContact() {
                   titleImage.src =
                     imageSrc;
 
-                  /*
-                   * Dejamos el transform completamente
-                   * en manos del CSS.
-                   */
                   gsap.set(
                     titleImage,
                     {
@@ -597,11 +597,6 @@ function initContact() {
         titleImage,
       );
 
-      /*
-       * Muy importante:
-       * NO usamos y ni scale aquí.
-       * Solo opacity.
-       */
       gsap.to(
         titleImage,
         {
@@ -638,13 +633,8 @@ function initContact() {
         imageSrc;
 
       /*
-       * Fundamental en móvil:
-       * eliminamos cualquier transform inline anterior
-       * para que vuelva a funcionar:
-       *
-       * transform: rotate(90deg);
-       *
-       * definido por CSS.
+       * Dejamos transform en manos
+       * del CSS responsive.
        */
       gsap.set(
         titleImage,
@@ -710,11 +700,6 @@ function initContact() {
         prune: true,
 
         onComplete: () => {
-          /*
-           * Antes de mostrar título:
-           * aseguramos nuevamente que el CSS
-           * controle su transform.
-           */
           if (titleImage) {
             gsap.set(
               titleImage,
@@ -764,7 +749,8 @@ function initContact() {
       );
 
     /*
-     * Estado inicial o reduced motion.
+     * Estado inicial, reset inmediato
+     * o reduced motion.
      */
     if (
       !wasOpen ||
@@ -789,8 +775,15 @@ function initContact() {
         titleImage.alt =
           "Cuéntanos tu reto";
 
+        gsap.killTweensOf(
+          titleImage,
+        );
+
         /*
-         * Devolvemos siempre transform al CSS.
+         * Eliminamos cualquier estado
+         * inline de GSAP para que Vista 1
+         * quede completamente controlada
+         * por CSS.
          */
         gsap.set(
           titleImage,
@@ -800,6 +793,19 @@ function initContact() {
           },
         );
       }
+
+      /*
+       * Limpiamos también cualquier
+       * estado temporal de los paneles.
+       */
+      panels.forEach((panel) => {
+        gsap.killTweensOf(panel);
+
+        gsap.set(panel, {
+          clearProps:
+            "opacity,visibility,transform",
+        });
+      });
 
       return;
     }
@@ -848,11 +854,6 @@ function initContact() {
           titleImage.alt =
             "Cuéntanos tu reto";
 
-          /*
-           * Quitamos cualquier transformación de GSAP
-           * antes de que el navegador aplique
-           * nuevamente el layout normal.
-           */
           gsap.set(
             titleImage,
             {
@@ -885,9 +886,6 @@ function initContact() {
 
             onComplete: () => {
               if (titleImage) {
-                /*
-                 * CSS recupera control total.
-                 */
                 gsap.set(
                   titleImage,
                   {
@@ -925,14 +923,6 @@ function initContact() {
 
     const hidePanelThenContinue =
       () => {
-        /*
-         * Después sale el título.
-         *
-         * SOLO opacity.
-         * No y.
-         * No scale.
-         * No transform.
-         */
         if (titleImage) {
           gsap.killTweensOf(
             titleImage,
@@ -945,7 +935,8 @@ function initContact() {
 
               duration: 0.25,
 
-              ease: "power2.in",
+              ease:
+                "power2.in",
 
               onComplete:
                 performFlipBack,
@@ -1009,7 +1000,6 @@ function initContact() {
 
         if (isActive) {
           closeForms(true);
-
           return;
         }
 
@@ -1111,7 +1101,8 @@ function initContact() {
         gsap.set(decoration, {
           autoAlpha: 0,
           scale: 0.9,
-          transformOrigin: "center center",
+          transformOrigin:
+            "center center",
         });
       }
 
@@ -1120,7 +1111,8 @@ function initContact() {
           autoAlpha: 0,
           y: 18,
           scale: 0.96,
-          transformOrigin: "center center",
+          transformOrigin:
+            "center center",
         });
       }
     };
@@ -1158,12 +1150,16 @@ function initContact() {
     );
 
     /*
-     * El título recupera el control del transform por CSS.
-     * Esto conserva correctamente la rotación responsive.
+     * El título recupera el control
+     * del transform por CSS.
      */
-    entryTimeline.set(titleImage, {
-      clearProps: "transform",
-    });
+    entryTimeline.set(
+      titleImage,
+      {
+        clearProps:
+          "transform",
+      },
+    );
   }
 
   if (letters.length) {
@@ -1172,7 +1168,10 @@ function initContact() {
       {
         autoAlpha: 1,
         duration: 0.01,
-        stagger: getTypewriterStagger(letters.length),
+        stagger:
+          getTypewriterStagger(
+            letters.length,
+          ),
         ease: "none",
       },
       "-=0.15",
@@ -1187,7 +1186,8 @@ function initContact() {
         scale: 1,
         duration: 0.55,
         ease: "back.out(1.5)",
-        clearProps: "transform",
+        clearProps:
+          "transform",
       },
       "-=0.2",
     );
@@ -1203,7 +1203,8 @@ function initContact() {
         duration: 0.55,
         stagger: 0.18,
         ease: "power3.out",
-        clearProps: "transform",
+        clearProps:
+          "transform",
       },
       "-=0.1",
     );
@@ -1217,62 +1218,92 @@ function initContact() {
   let isArmedForReplay = true;
   let checkFrame = 0;
 
-  const isFormOpen = (): boolean =>
-    contact.classList.contains(
-      "is-form-open",
-    );
+  const isFormOpen =
+    (): boolean =>
+      contact.classList.contains(
+        "is-form-open",
+      );
 
-  const playEntry = (): void => {
-    if (!isArmedForReplay) return;
+  /* ----------------------------------------------------------
+     ENTRADA
+     ---------------------------------------------------------- */
 
-    if (
-      !isActuallyVisible(
-        contact,
-        0.82,
-      )
-    ) {
-      return;
-    }
+  const playEntry =
+    (): void => {
+      if (!isArmedForReplay) {
+        return;
+      }
 
-    isArmedForReplay = false;
-    hasPlayed = true;
+      if (
+        !isActuallyVisible(
+          contact,
+          0.82,
+        )
+      ) {
+        return;
+      }
 
-    /*
-     * Si el usuario dejó un formulario abierto,
-     * no reconstruimos la Vista 1. Se conserva:
-     * - formulario activo
-     * - campos capturados
-     * - archivo elegido
-     * - título correspondiente
-     * - botón activo
-     */
-    if (isFormOpen()) {
-      return;
-    }
+      isArmedForReplay = false;
+      hasPlayed = true;
 
-    setEntryInitialState();
-    entryTimeline.restart();
-  };
+      /*
+       * Protección adicional:
+       * Contacto siempre entra en Vista 1.
+       */
+      if (isFormOpen()) {
+        closeForms(false);
+      }
 
-  const resetEntry = (): void => {
-    if (!hasPlayed || isArmedForReplay) {
-      return;
-    }
+      setEntryInitialState();
 
-    hasPlayed = false;
-    isArmedForReplay = true;
+      entryTimeline.restart();
+    };
 
-    /*
-     * Nunca tocamos la Vista 2 al salir.
-     * Así no se pierde ningún estado del formulario.
-     */
-    if (isFormOpen()) {
-      return;
-    }
+  /* ----------------------------------------------------------
+     RESET AL SALIR DE CONTACTO
+     ---------------------------------------------------------- */
 
-    entryTimeline.pause(0);
-    setEntryInitialState();
-  };
+  const resetEntry =
+    (): void => {
+      /*
+       * Lo más importante:
+       *
+       * si Clientes, Bolsa de trabajo
+       * o Proveedores estaba abierto,
+       * restauramos Vista 1 SIN animación.
+       *
+       * Como Contacto ya está abandonando
+       * el viewport, no necesitamos mostrar
+       * la transición Vista 2 -> Vista 1.
+       */
+      if (isFormOpen()) {
+        closeForms(false);
+      }
+
+      /*
+       * Si todavía no había reproducido
+       * la entrada, basta con dejarla armada.
+       */
+      hasPlayed = false;
+      isArmedForReplay = true;
+
+      /*
+       * Detenemos cualquier reproducción
+       * que pudiera seguir activa.
+       */
+      entryTimeline.pause(0);
+
+      /*
+       * Preparamos Vista 1 para que cuando
+       * vuelva a entrar se reproduzca desde
+       * el principio.
+       */
+      setEntryInitialState();
+    };
+
+  /* ----------------------------------------------------------
+     DETECCIÓN DE POSICIÓN
+     ---------------------------------------------------------- */
 
   const checkContactPosition =
     (): void => {
@@ -1282,6 +1313,13 @@ function initContact() {
       const viewportHeight =
         window.innerHeight;
 
+      /*
+       * Salida por arriba:
+       * usuario vuelve hacia Clientes.
+       *
+       * Salida por abajo:
+       * usuario continúa hacia Footer.
+       */
       const leftThroughTop =
         rect.bottom <=
         viewportHeight * 0.05;
@@ -1299,7 +1337,10 @@ function initContact() {
       }
 
       const visibleTop =
-        Math.max(rect.top, 0);
+        Math.max(
+          rect.top,
+          0,
+        );
 
       const visibleBottom =
         Math.min(
@@ -1310,7 +1351,8 @@ function initContact() {
       const visibleHeight =
         Math.max(
           0,
-          visibleBottom - visibleTop,
+          visibleBottom -
+            visibleTop,
         );
 
       const minimumVisible =
@@ -1342,10 +1384,13 @@ function initContact() {
       if (checkFrame) return;
 
       checkFrame =
-        requestAnimationFrame(() => {
-          checkFrame = 0;
-          checkContactPosition();
-        });
+        requestAnimationFrame(
+          () => {
+            checkFrame = 0;
+
+            checkContactPosition();
+          },
+        );
     };
 
   const entryObserver =
@@ -1360,12 +1405,15 @@ function initContact() {
           0.08,
           0.2,
         ],
+
         rootMargin:
           "0px 0px -12% 0px",
       },
     );
 
-  entryObserver.observe(contact);
+  entryObserver.observe(
+    contact,
+  );
 
   window.addEventListener(
     "scroll",
@@ -1399,6 +1447,14 @@ function initContact() {
 
       entryObserver.disconnect();
 
+      if (checkFrame) {
+        cancelAnimationFrame(
+          checkFrame,
+        );
+
+        checkFrame = 0;
+      }
+
       entryTimeline.kill();
 
       Flip.killFlipsOf(
@@ -1417,8 +1473,8 @@ function initContact() {
         );
 
         /*
-         * Por seguridad, nunca dejamos
-         * transform inline al destruir.
+         * Nunca dejamos transform inline
+         * al destruir.
          */
         gsap.set(
           titleImage,

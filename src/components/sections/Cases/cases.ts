@@ -39,6 +39,52 @@ const detailWrappers =
   );
 
 /* ============================================================
+   RESET DE DETALLE -> GRID
+   ============================================================ */
+
+function resetCaseDetail(): void {
+  if (!casesSection) return;
+
+  /*
+   * Restauramos cualquier video que haya sido
+   * reproducido dentro de un caso.
+   *
+   * Si existe un iframe de YouTube, recuperamos
+   * el contenido original del contenedor.
+   */
+  detailWrappers.forEach((wrapper) => {
+    const videoContainer =
+      wrapper.querySelector<HTMLElement>(
+        ".case-detail__video"
+      );
+
+    if (videoContainer) {
+      const originalContent =
+        videoContainer.dataset.originalContent;
+
+      if (originalContent) {
+        videoContainer.innerHTML =
+          originalContent;
+      }
+    }
+
+    /*
+     * Todos los detalles vuelven a quedar
+     * ocultos.
+     */
+    wrapper.style.display = "none";
+  });
+
+  /*
+   * Al eliminar esta clase el CSS vuelve
+   * a mostrar el grid de casos.
+   */
+  casesSection.classList.remove(
+    "is-detail-open"
+  );
+}
+
+/* ============================================================
    MÁQUINA DE ESCRIBIR
    ============================================================ */
 
@@ -61,29 +107,25 @@ function splitTextIntoLetters(
         document.createDocumentFragment();
 
       /*
-       * Separamos por palabras y espacios
-       * (igual que en hero.ts).
+       * Separamos por palabras y espacios.
        *
-       * Los espacios se insertan como
-       * nodos de texto normales, para
-       * que el navegador pueda hacer
-       * salto de línea ENTRE palabras.
+       * Los espacios se insertan como nodos
+       * normales para permitir salto de línea
+       * ENTRE palabras.
        *
-       * Cada palabra se agrupa dentro de
-       * un span "cases-word" (inline-block
-       * + white-space:nowrap), que actúa
-       * como unidad atómica: así el
-       * navegador nunca puede partir la
-       * línea ENTRE dos letras de una
-       * misma palabra, solo entre
-       * palabras completas.
+       * Cada palabra queda agrupada dentro
+       * de un span para impedir que se corte
+       * entre letras.
        */
-      const parts = text.split(/(\s+)/);
+      const parts =
+        text.split(/(\s+)/);
 
       parts.forEach((part) => {
         if (/^\s+$/.test(part)) {
           fragment.appendChild(
-            document.createTextNode(part)
+            document.createTextNode(
+              part
+            )
           );
 
           return;
@@ -92,28 +134,42 @@ function splitTextIntoLetters(
         if (!part) return;
 
         const word =
-          document.createElement("span");
+          document.createElement(
+            "span"
+          );
 
-        word.className = "cases-word";
+        word.className =
+          "cases-word";
 
-        [...part].forEach((char) => {
-          const letter =
-            document.createElement("span");
+        [...part].forEach(
+          (char) => {
+            const letter =
+              document.createElement(
+                "span"
+              );
 
-          letter.className =
-            "cases-letter";
+            letter.className =
+              "cases-letter";
 
-          letter.textContent = char;
+            letter.textContent =
+              char;
 
-          letter.style.display =
-            "inline-block";
+            letter.style.display =
+              "inline-block";
 
-          word.appendChild(letter);
+            word.appendChild(
+              letter
+            );
 
-          letters.push(letter);
-        });
+            letters.push(
+              letter
+            );
+          }
+        );
 
-        fragment.appendChild(word);
+        fragment.appendChild(
+          word
+        );
       });
 
       node.parentNode?.replaceChild(
@@ -126,7 +182,9 @@ function splitTextIntoLetters(
 
     Array.from(
       node.childNodes
-    ).forEach(processNode);
+    ).forEach(
+      processNode
+    );
   };
 
   processNode(element);
@@ -154,9 +212,12 @@ function getTextLetters(
   }
 
   const letters =
-    splitTextIntoLetters(element);
+    splitTextIntoLetters(
+      element
+    );
 
-  element.dataset.split = "true";
+  element.dataset.split =
+    "true";
 
   return letters;
 }
@@ -238,14 +299,13 @@ function initCasesIntroAnimation():
      ========================================================== */
 
   const letters =
-    getTextLetters(introText);
+    getTextLetters(
+      introText
+    );
 
   /*
-   * El stagger ya no es fijo.
-   *
-   * typewriter.ts calcula automáticamente
-   * la separación entre letras dependiendo
-   * de la longitud del texto.
+   * El stagger se calcula automáticamente
+   * dependiendo de la longitud del texto.
    */
   const typewriterStagger =
     getTypewriterStagger(
@@ -258,35 +318,50 @@ function initCasesIntroAnimation():
 
   const setInitialState =
     (): void => {
-      gsap.set(counter, {
-        autoAlpha: 0,
-        x: -35,
-      });
+      gsap.set(
+        counter,
+        {
+          autoAlpha: 0,
+          x: -35,
+        }
+      );
 
-      gsap.set(intro, {
-        autoAlpha: 1,
-      });
+      gsap.set(
+        intro,
+        {
+          autoAlpha: 1,
+        }
+      );
 
       if (plus) {
-        gsap.set(plus, {
-          autoAlpha: 0,
-          scale: 0.5,
-          rotation: -20,
+        gsap.set(
+          plus,
+          {
+            autoAlpha: 0,
+            scale: 0.5,
+            rotation: -20,
 
-          transformOrigin:
-            "center center",
-        });
+            transformOrigin:
+              "center center",
+          }
+        );
       }
 
-      gsap.set(letters, {
-        autoAlpha: 0,
-        y: 8,
-      });
+      gsap.set(
+        letters,
+        {
+          autoAlpha: 0,
+          y: 8,
+        }
+      );
 
-      gsap.set(title, {
-        autoAlpha: 0,
-        y: 40,
-      });
+      gsap.set(
+        title,
+        {
+          autoAlpha: 0,
+          y: 40,
+        }
+      );
 
       /*
        * Solo opacity sobre la card.
@@ -295,9 +370,12 @@ function initCasesIntroAnimation():
        * porque .case-card necesita
        * conservar su hover CSS.
        */
-      gsap.set(caseCards, {
-        autoAlpha: 0,
-      });
+      gsap.set(
+        caseCards,
+        {
+          autoAlpha: 0,
+        }
+      );
 
       /*
        * El movimiento ocurre en el
@@ -311,13 +389,15 @@ function initCasesIntroAnimation():
       );
 
       /*
-       * Reveal tipo "cortina" en la
-       * imagen.
+       * Reveal tipo cortina.
        */
-      gsap.set(caseCardImages, {
-        clipPath:
-          "inset(0% 100% 0% 0%)",
-      });
+      gsap.set(
+        caseCardImages,
+        {
+          clipPath:
+            "inset(0% 100% 0% 0%)",
+        }
+      );
     };
 
   setInitialState();
@@ -338,7 +418,8 @@ function initCasesIntroAnimation():
 
             duration: 1.2,
 
-            ease: "sine.inOut",
+            ease:
+              "sine.inOut",
 
             repeat: -1,
 
@@ -368,14 +449,18 @@ function initCasesIntroAnimation():
      CONTADOR
      ---------------------------------------------------------- */
 
-  tl.to(counter, {
-    autoAlpha: 1,
-    x: 0,
+  tl.to(
+    counter,
+    {
+      autoAlpha: 1,
+      x: 0,
 
-    duration: 0.55,
+      duration: 0.55,
 
-    ease: "power3.out",
-  });
+      ease:
+        "power3.out",
+    }
+  );
 
   /* ----------------------------------------------------------
      PLUS
@@ -408,20 +493,14 @@ function initCasesIntroAnimation():
       autoAlpha: 1,
       y: 0,
 
-      /*
-       * Duración de la animación
-       * individual de cada letra.
-       */
       duration: 0.02,
 
-      /*
-       * La separación entre letras
-       * ahora se calcula desde
-       * typewriter.ts.
-       */
       stagger: {
-        each: typewriterStagger,
-        from: "start",
+        each:
+          typewriterStagger,
+
+        from:
+          "start",
       },
 
       ease: "none",
@@ -441,7 +520,8 @@ function initCasesIntroAnimation():
 
       duration: 0.65,
 
-      ease: "power3.out",
+      ease:
+        "power3.out",
     },
     "-=0.2"
   );
@@ -462,7 +542,8 @@ function initCasesIntroAnimation():
         from: "start",
       },
 
-      ease: "power3.out",
+      ease:
+        "power3.out",
     },
     "-=0.3"
   );
@@ -483,14 +564,15 @@ function initCasesIntroAnimation():
         from: "start",
       },
 
-      ease: "power3.out",
+      ease:
+        "power3.out",
 
       /*
-       * Después de la entrada
-       * quitamos el transform inline.
+       * Después de la entrada quitamos
+       * el transform inline.
        *
-       * Así el hover de las cards
-       * queda completamente libre.
+       * Así el hover de las cards queda
+       * completamente libre.
        */
       onComplete: () => {
         gsap.set(
@@ -522,7 +604,8 @@ function initCasesIntroAnimation():
         from: "start",
       },
 
-      ease: "power3.out",
+      ease:
+        "power3.out",
     },
     "<"
   );
@@ -541,7 +624,8 @@ function initCasesIntroAnimation():
 
   let hasPlayed = false;
 
-  let isArmedForReplay = true;
+  let isArmedForReplay =
+    true;
 
   let checkFrame = 0;
 
@@ -561,20 +645,29 @@ function initCasesIntroAnimation():
 
   const playCases =
     (): void => {
-      if (!isArmedForReplay) {
+      if (
+        !isArmedForReplay
+      ) {
         return;
       }
 
-      isArmedForReplay = false;
+      isArmedForReplay =
+        false;
+
       hasPlayed = true;
 
       /*
-       * Si el usuario dejó un caso
-       * abierto y regresó a la sección,
-       * conservamos exactamente esa vista.
+       * PROTECCIÓN ADICIONAL:
+       *
+       * Cases siempre debe entrar
+       * mostrando el grid.
+       *
+       * Normalmente resetCases()
+       * ya habrá cerrado el detalle
+       * al salir de la sección.
        */
       if (isDetailOpen()) {
-        return;
+        resetCaseDetail();
       }
 
       plusPulse?.pause();
@@ -590,29 +683,42 @@ function initCasesIntroAnimation():
 
   const resetCases =
     (): void => {
-      if (!hasPlayed) {
-        return;
+      /*
+       * IMPORTANTE:
+       *
+       * Si el usuario dejó un caso
+       * abierto, lo cerramos en cuanto
+       * abandona la sección.
+       *
+       * No hacemos animación de cierre
+       * porque Cases ya está saliendo
+       * del viewport.
+       */
+      if (isDetailOpen()) {
+        resetCaseDetail();
       }
 
-      if (isArmedForReplay) {
-        return;
-      }
+      /*
+       * Rearmamos siempre la sección
+       * para una nueva entrada.
+       */
+      isArmedForReplay =
+        true;
 
-      isArmedForReplay = true;
       hasPlayed = false;
 
       plusPulse?.pause();
 
       /*
-       * Si existe un detalle abierto,
-       * NO llevamos la timeline a cero.
+       * Regresamos la timeline
+       * al principio.
        */
-      if (isDetailOpen()) {
-        return;
-      }
-
       tl.pause(0);
 
+      /*
+       * Grid preparado para volver
+       * a ejecutar la animación.
+       */
       setInitialState();
     };
 
@@ -679,7 +785,8 @@ function initCasesIntroAnimation():
       const minimumVisible =
         Math.min(
           120,
-          viewportHeight * 0.12
+          viewportHeight *
+            0.12
         );
 
       const isVisibleEnough =
@@ -692,9 +799,11 @@ function initCasesIntroAnimation():
 
       const reachedActivationZone =
         rect.top <
-          viewportHeight * 0.78 &&
+          viewportHeight *
+            0.78 &&
         rect.bottom >
-          viewportHeight * 0.05;
+          viewportHeight *
+            0.05;
 
       if (
         isVisibleEnough &&
@@ -747,7 +856,9 @@ function initCasesIntroAnimation():
       }
     );
 
-  observer.observe(casesSection);
+  observer.observe(
+    casesSection
+  );
 
   /* ==========================================================
      LISTENERS
@@ -773,9 +884,11 @@ function initCasesIntroAnimation():
      PRIMERA COMPROBACIÓN
      ========================================================== */
 
-  requestAnimationFrame(() => {
-    checkCasesPosition();
-  });
+  requestAnimationFrame(
+    () => {
+      checkCasesPosition();
+    }
+  );
 }
 
 /* ============================================================
@@ -814,15 +927,20 @@ if (
           return;
         }
 
-        casesSection.classList.add(
-          "is-detail-open"
-        );
-
+        /*
+         * Antes de abrir uno nuevo,
+         * ocultamos cualquier detalle
+         * que pudiera haber quedado visible.
+         */
         detailWrappers.forEach(
           (wrapper) => {
             wrapper.style.display =
               "none";
           }
+        );
+
+        casesSection.classList.add(
+          "is-detail-open"
         );
 
         selectedWrapper.style.display =
@@ -845,28 +963,12 @@ if (
       closeButton?.addEventListener(
         "click",
         () => {
-          const videoContainer =
-            wrapper.querySelector<HTMLElement>(
-              ".case-detail__video"
-            );
-
-          if (videoContainer) {
-            const originalContent =
-              videoContainer.dataset
-                .originalContent;
-
-            if (originalContent) {
-              videoContainer.innerHTML =
-                originalContent;
-            }
-          }
-
-          wrapper.style.display =
-            "none";
-
-          casesSection.classList.remove(
-            "is-detail-open"
-          );
+          /*
+           * Usamos exactamente el mismo
+           * reset que se ejecuta al salir
+           * de Cases.
+           */
+          resetCaseDetail();
         }
       );
     }
@@ -921,7 +1023,8 @@ videoContainers.forEach(
         iframe.allowFullscreen =
           true;
 
-        container.innerHTML = "";
+        container.innerHTML =
+          "";
 
         container.appendChild(
           iframe
@@ -948,6 +1051,13 @@ videoContainers.forEach(
       }
     );
 
+    /*
+     * Guardamos el contenido original.
+     *
+     * resetCaseDetail() lo utiliza
+     * para eliminar el iframe y
+     * restaurar la portada del video.
+     */
     container.dataset.originalContent =
       originalContent;
   }
@@ -1000,13 +1110,17 @@ function getYouTubeVideoId(
    MOBILE — DOTS DEL CARRUSEL
    ============================================================ */
 
-const dots = Array.from(
-  document.querySelectorAll<HTMLButtonElement>(
-    "[data-case-dot]"
-  )
-);
+const dots =
+  Array.from(
+    document.querySelectorAll<HTMLButtonElement>(
+      "[data-case-dot]"
+    )
+  );
 
-if (grid && dots.length) {
+if (
+  grid &&
+  dots.length
+) {
   /* ==========================================================
      CLICK EN DOT
      ========================================================== */
@@ -1026,9 +1140,14 @@ if (grid && dots.length) {
           );
 
         targetCard?.scrollIntoView({
-          behavior: "smooth",
-          inline: "center",
-          block: "nearest",
+          behavior:
+            "smooth",
+
+          inline:
+            "center",
+
+          block:
+            "nearest",
         });
       }
     );
@@ -1059,8 +1178,7 @@ if (grid && dots.length) {
                 dot.classList.toggle(
                   "is-active",
 
-                  dot.dataset
-                    .caseDot ===
+                  dot.dataset.caseDot ===
                     caseId
                 );
               }
@@ -1068,18 +1186,19 @@ if (grid && dots.length) {
           }
         );
       },
-
       {
         root: grid,
         threshold: 0.6,
       }
     );
 
-  cards.forEach((card) => {
-    activeCardObserver.observe(
-      card
-    );
-  });
+  cards.forEach(
+    (card) => {
+      activeCardObserver.observe(
+        card
+      );
+    }
+  );
 }
 
 /* ============================================================

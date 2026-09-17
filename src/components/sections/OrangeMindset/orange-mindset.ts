@@ -710,12 +710,26 @@ function initOrangeMindset(): void {
      ========================================================== */
 
   const updatePanelOneCopyMask =
-    (): void => {
+    (forceVisible = false): void => {
       if (
         !p1Copy ||
         prefersReducedMotion ||
         isMobileViewport()
       ) {
+        return;
+      }
+
+      /*
+       * Cuando ya regresamos completamente
+       * al panel 1, eliminamos cualquier
+       * clip-path residual.
+       */
+      if (forceVisible) {
+        gsap.set(p1Copy, {
+          opacity: 1,
+          clipPath: "inset(0 0 0 0)",
+        });
+
         return;
       }
 
@@ -731,29 +745,14 @@ function initOrangeMindset(): void {
         orange.getBoundingClientRect();
 
       /*
-       * El copy se desplaza de derecha a izquierda.
-       *
-       * El borde DERECHO de la naranja funciona como
-       * la "entrada" de la máscara.
-       *
-       * Un pequeño offset hace que las letras se oculten
-       * ligeramente antes de atravesar visualmente la fruta.
+       * El borde derecho de la naranja
+       * funciona como entrada de la máscara.
        */
       const protection = 14;
 
       const eatBoundary =
         orangeRect.right - protection;
 
-      /*
-       * Si el lado izquierdo del copy está todavía
-       * a la derecha del borde de la naranja:
-       *
-       * hiddenLeft = negativo -> no se recorta.
-       *
-       * Conforme el copy entra a la naranja:
-       *
-       * hiddenLeft aumenta -> recortamos desde la izquierda.
-       */
       const hiddenLeft =
         eatBoundary - copyRect.left;
 
@@ -774,7 +773,6 @@ function initOrangeMindset(): void {
 
       gsap.set(p1Copy, {
         opacity: 1,
-
         clipPath:
           `inset(0 0 0 ${clippedPercent}%)`,
       });
@@ -1044,7 +1042,6 @@ function initOrangeMindset(): void {
       p2TimelineItems,
       {
         opacity: 1,
-
         y: 0,
 
         duration: 0.6,
@@ -1101,7 +1098,6 @@ function initOrangeMindset(): void {
 
       gsap.set(p1Copy, {
         opacity: 1,
-
         clipPath:
           "inset(0 0 0 0)",
       });
@@ -1255,11 +1251,12 @@ function initOrangeMindset(): void {
   };
 
   /*
-   * Al regresar desde panel 2 NO queremos
-   * volver a ejecutar la máquina de escribir.
+   * Al regresar desde panel 2 NO volvemos
+   * a ejecutar la máquina de escribir.
    *
-   * El texto ya queda completamente "escrito"
-   * y la máscara es la que lo va revelando.
+   * Las letras quedan visibles y la máscara
+   * se encarga de revelar el copy conforme
+   * regresamos al panel 1.
    */
   const revealPanelOneFromPanelTwo =
     (): void => {
@@ -1276,10 +1273,7 @@ function initOrangeMindset(): void {
       panelOnePlayed = true;
 
       /*
-       * Dejamos todas las letras visibles.
-       *
-       * El clip-path es el único responsable
-       * de decidir qué parte del copy se ve.
+       * Dejamos el typewriter terminado.
        */
       panelOneTextTimeline.progress(1);
 
@@ -1291,9 +1285,8 @@ function initOrangeMindset(): void {
       );
 
       /*
-       * Calculamos inmediatamente la máscara
-       * para evitar un frame donde aparezca
-       * todo el texto de golpe.
+       * Sincronizamos inmediatamente la
+       * máscara con la posición actual.
        */
       updatePanelOneCopyMask();
     };
@@ -1436,48 +1429,82 @@ function initOrangeMindset(): void {
             invalidateOnRefresh:
               true,
 
+            /*
+             * El slider termina siempre
+             * en uno de los dos paneles.
+             */
+            snap: {
+              snapTo: [0, 1],
+
+              duration: {
+                min: 0.3,
+                max: 0.65,
+              },
+
+              delay: 0.05,
+
+              ease: "power2.inOut",
+            },
+
             onUpdate: (self) => {
               const progress =
                 self.progress;
 
               /*
-               * Primero actualizamos la máscara.
-               *
-               * Esto hace que el estado visual
-               * siempre corresponda a la posición
-               * REAL del copy respecto a la naranja.
-               */
-              updatePanelOneCopyMask();
-
-              /*
-               * Detectamos cuando venimos de panel 2
-               * hacia panel 1.
+               * Detectamos el momento exacto
+               * en el que cruzamos desde
+               * panel 2 hacia panel 1.
                */
               const returningToPanelOne =
                 previousProgress >= 0.5 &&
                 progress < 0.5;
 
-              if (
-                progress >= 0.5
-              ) {
+              if (progress >= 0.5) {
+                /*
+                 * Mientras avanzamos hacia
+                 * panel 2 mantenemos la máscara
+                 * sincronizada.
+                 */
+                updatePanelOneCopyMask();
+
                 playPanelTwo();
               } else {
                 if (
                   returningToPanelOne
                 ) {
+                  /*
+                   * No repetimos el typewriter.
+                   * Dejamos las letras escritas.
+                   */
                   revealPanelOneFromPanelTwo();
-                } else if (
+                }
+
+                if (
                   self.direction === -1 &&
                   panelOnePlayed
                 ) {
                   /*
-                   * Ya está reproducido.
-                   * Solo dejamos que la máscara
-                   * revele el contenido.
+                   * Regresando:
+                   * la naranja va revelando
+                   * progresivamente el copy.
                    */
                   updatePanelOneCopyMask();
                 } else {
                   playPanelOne();
+
+                  updatePanelOneCopyMask();
+                }
+
+                /*
+                 * IMPORTANTE:
+                 *
+                 * Cuando el slider ya llegó
+                 * prácticamente al panel 1,
+                 * quitamos cualquier clip-path
+                 * residual.
+                 */
+                if (progress <= 0.01) {
+                  updatePanelOneCopyMask(true);
                 }
               }
 
@@ -1488,7 +1515,27 @@ function initOrangeMindset(): void {
             onRefresh: () => {
               requestAnimationFrame(
                 () => {
-                  updatePanelOneCopyMask();
+                  const trigger =
+                    ScrollTrigger.getById(
+                      "orange-mindset-pin"
+                    );
+
+                  /*
+                   * Si estamos completamente
+                   * en panel 1 después de un
+                   * refresh, garantizamos que
+                   * el copy quede sin recorte.
+                   */
+                  if (
+                    !trigger ||
+                    trigger.progress <= 0.01
+                  ) {
+                    updatePanelOneCopyMask(
+                      true
+                    );
+                  } else {
+                    updatePanelOneCopyMask();
+                  }
                 }
               );
             },
@@ -1525,12 +1572,24 @@ function initOrangeMindset(): void {
           : null;
 
       /*
-       * Estado correcto después del primer
-       * cálculo de layout.
+       * Estado correcto después del
+       * primer cálculo de layout.
        */
       requestAnimationFrame(
         () => {
-          updatePanelOneCopyMask();
+          const trigger =
+            ScrollTrigger.getById(
+              "orange-mindset-pin"
+            );
+
+          if (
+            !trigger ||
+            trigger.progress <= 0.01
+          ) {
+            updatePanelOneCopyMask(true);
+          } else {
+            updatePanelOneCopyMask();
+          }
         }
       );
 
@@ -1762,10 +1821,16 @@ function initOrangeMindset(): void {
         pinTrigger?.progress ?? 0;
 
       /*
-       * Sincronizamos máscara incluso
-       * cuando entramos desde otra sección.
+       * Si estamos en panel 1 completamente,
+       * no calculamos la máscara geométrica:
+       * quitamos directamente cualquier
+       * recorte residual.
        */
-      updatePanelOneCopyMask();
+      if (progress <= 0.01) {
+        updatePanelOneCopyMask(true);
+      } else {
+        updatePanelOneCopyMask();
+      }
 
       const visibleTop =
         Math.max(
@@ -1828,6 +1893,15 @@ function initOrangeMindset(): void {
           revealPanelOneFromPanelTwo();
         } else {
           playPanelOne();
+        }
+
+        /*
+         * Nuevamente garantizamos el estado
+         * completamente visible al llegar
+         * al inicio.
+         */
+        if (progress <= 0.01) {
+          updatePanelOneCopyMask(true);
         }
       }
     };
