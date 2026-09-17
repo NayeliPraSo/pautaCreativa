@@ -841,7 +841,7 @@
 
   .solutions-dots {
     display: flex;
-    margin-top: 28px;
+    margin-top: 38px;
   }
 
   /* Dots del carrusel en segunda vista */
@@ -865,10 +865,11 @@
   }
 
   .solutions.is-active .solutions-diagram {
-    width: 100%;
-    max-width: none;
-    aspect-ratio: auto;
-    min-height: 60vh;
+    width: min(92vw, 430px);
+    max-width: 430px;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    margin: 0 auto;
   }
 
   .solutions.is-active .solutions-diagram-orange {
@@ -1069,7 +1070,7 @@
 
   .solutions-dots {
     gap: 8px;
-    margin-top: 18px;
+    margin-top: 28px;
   }
 
   .solutions-dot {
@@ -1083,9 +1084,11 @@
      ========================================= */
 
   .solutions.is-active .solutions-diagram {
-    width: 100%;
-    max-width: none;
-    min-height: 55vh;
+    width: min(94vw, 380px);
+    max-width: 380px;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    margin: 0 auto;
   }
 
   .solutions.is-active .solutions-diagram-orange {

@@ -262,6 +262,7 @@
 
   .solutions-container {
     width: calc(100% - 32px);
+    height: auto;
     min-height: auto;
     margin-bottom: 30px;
   }
