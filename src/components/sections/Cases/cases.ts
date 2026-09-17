@@ -48,9 +48,6 @@ function resetCaseDetail(): void {
   /*
    * Restauramos cualquier video que haya sido
    * reproducido dentro de un caso.
-   *
-   * Si existe un iframe de YouTube, recuperamos
-   * el contenido original del contenedor.
    */
   detailWrappers.forEach((wrapper) => {
     const videoContainer =
@@ -69,15 +66,13 @@ function resetCaseDetail(): void {
     }
 
     /*
-     * Todos los detalles vuelven a quedar
-     * ocultos.
+     * Todos los detalles vuelven a quedar ocultos.
      */
     wrapper.style.display = "none";
   });
 
   /*
-   * Al eliminar esta clase el CSS vuelve
-   * a mostrar el grid de casos.
+   * Volvemos oficialmente a la vista Grid.
    */
   casesSection.classList.remove(
     "is-detail-open"
@@ -303,10 +298,6 @@ function initCasesIntroAnimation():
       introText
     );
 
-  /*
-   * El stagger se calcula automáticamente
-   * dependiendo de la longitud del texto.
-   */
   const typewriterStagger =
     getTypewriterStagger(
       letters.length
@@ -567,13 +558,6 @@ function initCasesIntroAnimation():
       ease:
         "power3.out",
 
-      /*
-       * Después de la entrada quitamos
-       * el transform inline.
-       *
-       * Así el hover de las cards queda
-       * completamente libre.
-       */
       onComplete: () => {
         gsap.set(
           caseCardInners,
@@ -622,8 +606,6 @@ function initCasesIntroAnimation():
      ESTADO DEL REPLAY
      ========================================================== */
 
-  let hasPlayed = false;
-
   let isArmedForReplay =
     true;
 
@@ -654,17 +636,10 @@ function initCasesIntroAnimation():
       isArmedForReplay =
         false;
 
-      hasPlayed = true;
-
       /*
-       * PROTECCIÓN ADICIONAL:
-       *
+       * Protección adicional:
        * Cases siempre debe entrar
        * mostrando el grid.
-       *
-       * Normalmente resetCases()
-       * ya habrá cerrado el detalle
-       * al salir de la sección.
        */
       if (isDetailOpen()) {
         resetCaseDetail();
@@ -684,28 +659,19 @@ function initCasesIntroAnimation():
   const resetCases =
     (): void => {
       /*
-       * IMPORTANTE:
-       *
-       * Si el usuario dejó un caso
-       * abierto, lo cerramos en cuanto
-       * abandona la sección.
-       *
-       * No hacemos animación de cierre
-       * porque Cases ya está saliendo
-       * del viewport.
+       * Si había un caso abierto,
+       * regresamos inmediatamente al grid.
        */
       if (isDetailOpen()) {
         resetCaseDetail();
       }
 
       /*
-       * Rearmamos siempre la sección
-       * para una nueva entrada.
+       * Rearmamos la animación para
+       * la siguiente entrada.
        */
       isArmedForReplay =
         true;
-
-      hasPlayed = false;
 
       plusPulse?.pause();
 
@@ -716,8 +682,8 @@ function initCasesIntroAnimation():
       tl.pause(0);
 
       /*
-       * Grid preparado para volver
-       * a ejecutar la animación.
+       * Dejamos preparado el grid
+       * para volver a animarse.
        */
       setInitialState();
     };
@@ -928,8 +894,7 @@ if (
         }
 
         /*
-         * Antes de abrir uno nuevo,
-         * ocultamos cualquier detalle
+         * Ocultamos cualquier detalle
          * que pudiera haber quedado visible.
          */
         detailWrappers.forEach(
@@ -963,11 +928,6 @@ if (
       closeButton?.addEventListener(
         "click",
         () => {
-          /*
-           * Usamos exactamente el mismo
-           * reset que se ejecuta al salir
-           * de Cases.
-           */
           resetCaseDetail();
         }
       );
@@ -1052,11 +1012,8 @@ videoContainers.forEach(
     );
 
     /*
-     * Guardamos el contenido original.
-     *
-     * resetCaseDetail() lo utiliza
-     * para eliminar el iframe y
-     * restaurar la portada del video.
+     * Guardamos el contenido original
+     * para restaurarlo al cerrar/salir.
      */
     container.dataset.originalContent =
       originalContent;

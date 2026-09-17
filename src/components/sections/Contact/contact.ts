@@ -33,10 +33,12 @@ function isActuallyVisible(
   element: HTMLElement,
   activationRatio = 0.82,
 ): boolean {
-  const rect = element.getBoundingClientRect();
+  const rect =
+    element.getBoundingClientRect();
 
   const activationLine =
-    window.innerHeight * activationRatio;
+    window.innerHeight *
+    activationRatio;
 
   if (
     rect.top > activationLine ||
@@ -45,10 +47,14 @@ function isActuallyVisible(
     return false;
   }
 
-  const sampleY = Math.min(
-    Math.max(rect.top + 24, 0),
-    window.innerHeight - 1,
-  );
+  const sampleY =
+    Math.min(
+      Math.max(
+        rect.top + 24,
+        0,
+      ),
+      window.innerHeight - 1,
+    );
 
   const sampleXs = [
     window.innerWidth * 0.25,
@@ -58,13 +64,18 @@ function isActuallyVisible(
 
   return sampleXs.some((x) => {
     const topElement =
-      document.elementFromPoint(x, sampleY);
+      document.elementFromPoint(
+        x,
+        sampleY,
+      );
 
     return Boolean(
       topElement &&
         (
           topElement === element ||
-          element.contains(topElement)
+          element.contains(
+            topElement,
+          )
         ),
     );
   });
@@ -78,7 +89,8 @@ function splitIntoTypewriterLetters(
   element: HTMLElement,
 ): HTMLElement[] {
   if (
-    element.dataset.typewriterReady ===
+    element.dataset
+      .typewriterReady ===
     "true"
   ) {
     return Array.from(
@@ -89,59 +101,77 @@ function splitIntoTypewriterLetters(
   }
 
   const text =
-    element.textContent?.trim() ?? "";
+    element.textContent?.trim() ??
+    "";
 
   if (!text) return [];
 
   element.textContent = "";
 
-  const words = text.split(/\s+/);
+  const words =
+    text.split(/\s+/);
 
-  const letters: HTMLElement[] = [];
+  const letters: HTMLElement[] =
+    [];
 
-  words.forEach((word, wordIndex) => {
-    const wordSpan =
-      document.createElement("span");
+  words.forEach(
+    (word, wordIndex) => {
+      const wordSpan =
+        document.createElement(
+          "span",
+        );
 
-    wordSpan.className =
-      "contact-type-word";
+      wordSpan.className =
+        "contact-type-word";
 
-    wordSpan.style.display =
-      "inline-block";
+      wordSpan.style.display =
+        "inline-block";
 
-    Array.from(word).forEach(
-      (character) => {
-        const letter =
-          document.createElement("span");
+      Array.from(word).forEach(
+        (character) => {
+          const letter =
+            document.createElement(
+              "span",
+            );
 
-        letter.className =
-          "contact-type-letter";
+          letter.className =
+            "contact-type-letter";
 
-        letter.textContent =
-          character;
+          letter.textContent =
+            character;
 
-        letter.style.display =
-          "inline-block";
+          letter.style.display =
+            "inline-block";
 
-        wordSpan.appendChild(letter);
+          wordSpan.appendChild(
+            letter,
+          );
 
-        letters.push(letter);
-      },
-    );
-
-    element.appendChild(wordSpan);
-
-    if (
-      wordIndex <
-      words.length - 1
-    ) {
-      element.appendChild(
-        document.createTextNode(" "),
+          letters.push(
+            letter,
+          );
+        },
       );
-    }
-  });
 
-  element.dataset.typewriterReady =
+      element.appendChild(
+        wordSpan,
+      );
+
+      if (
+        wordIndex <
+        words.length - 1
+      ) {
+        element.appendChild(
+          document.createTextNode(
+            " ",
+          ),
+        );
+      }
+    },
+  );
+
+  element.dataset
+    .typewriterReady =
     "true";
 
   return letters;
@@ -162,7 +192,8 @@ function initContact() {
 
   if (!contactElement) return;
 
-  const contact = contactElement;
+  const contact =
+    contactElement;
 
   const prefersReducedMotion =
     window.matchMedia(
@@ -240,20 +271,24 @@ function initContact() {
      ========================================================== */
 
   const defaultTitle =
-    formWrapper?.dataset.defaultTitle ?? "";
+    formWrapper?.dataset
+      .defaultTitle ?? "";
 
   const titleImages: Record<
     string,
     string | undefined
   > = {
     clientes:
-      formWrapper?.dataset.titleClientes,
+      formWrapper?.dataset
+        .titleClientes,
 
     trabajo:
-      formWrapper?.dataset.titleTrabajo,
+      formWrapper?.dataset
+        .titleTrabajo,
 
     proveedores:
-      formWrapper?.dataset.titleProveedores,
+      formWrapper?.dataset
+        .titleProveedores,
   };
 
   /* ==========================================================
@@ -266,16 +301,19 @@ function initContact() {
     return (
       panels.find(
         (panel) =>
-          panel.dataset.formPanel ===
+          panel.dataset
+            .formPanel ===
           formType,
       ) ?? null
     );
   }
 
   function hideAllPanels() {
-    panels.forEach((panel) => {
-      panel.hidden = true;
-    });
+    panels.forEach(
+      (panel) => {
+        panel.hidden = true;
+      },
+    );
   }
 
   function activateButton(
@@ -283,19 +321,19 @@ function initContact() {
       | HTMLButtonElement
       | null,
   ) {
-    buttons.forEach((button) => {
-      button.classList.toggle(
-        "is-active",
-        button === activeButton,
-      );
-    });
+    buttons.forEach(
+      (button) => {
+        button.classList.toggle(
+          "is-active",
+          button ===
+            activeButton,
+        );
+      },
+    );
   }
 
-  /*
-   * Solo incluimos en Flip elementos
-   * realmente visibles.
-   */
-  function getFlipElements(): HTMLElement[] {
+  function getFlipElements():
+    HTMLElement[] {
     return [
       descriptionRow,
       selector,
@@ -307,8 +345,11 @@ function initContact() {
         Boolean(
           element &&
             window
-              .getComputedStyle(element)
-              .display !== "none",
+              .getComputedStyle(
+                element,
+              )
+              .display !==
+              "none",
         ),
     );
   }
@@ -320,7 +361,11 @@ function initContact() {
   function animateFormFields(
     panel: HTMLElement,
   ) {
-    if (prefersReducedMotion) return;
+    if (
+      prefersReducedMotion
+    ) {
+      return;
+    }
 
     const fields =
       Array.from(
@@ -339,19 +384,26 @@ function initContact() {
         ".contact-submit",
       );
 
-    const elements: HTMLElement[] = [
-      ...fields,
-    ];
+    const elements:
+      HTMLElement[] = [
+        ...fields,
+      ];
 
     if (privacy) {
-      elements.push(privacy);
+      elements.push(
+        privacy,
+      );
     }
 
     if (submit) {
-      elements.push(submit);
+      elements.push(
+        submit,
+      );
     }
 
-    gsap.killTweensOf(elements);
+    gsap.killTweensOf(
+      elements,
+    );
 
     gsap.fromTo(
       elements,
@@ -367,7 +419,8 @@ function initContact() {
 
         stagger: 0.065,
 
-        ease: "power2.out",
+        ease:
+          "power2.out",
 
         clearProps:
           "opacity,visibility,transform",
@@ -377,32 +430,42 @@ function initContact() {
 
   /* ==========================================================
      CAMBIO ENTRE FORMULARIOS
-     YA ESTANDO EN VISTA 2
      ========================================================== */
 
   function switchForm(
     formType: string,
-    activeButton: HTMLButtonElement,
+    activeButton:
+      HTMLButtonElement,
   ) {
     const newPanel =
-      getActivePanel(formType);
+      getActivePanel(
+        formType,
+      );
 
     if (!newPanel) return;
 
     const currentPanel =
       panels.find(
-        (panel) => !panel.hidden,
+        (panel) =>
+          !panel.hidden,
       );
 
-    activateButton(activeButton);
+    activateButton(
+      activeButton,
+    );
 
     const imageSrc =
-      titleImages[formType];
+      titleImages[
+        formType
+      ];
 
-    if (prefersReducedMotion) {
+    if (
+      prefersReducedMotion
+    ) {
       hideAllPanels();
 
-      newPanel.hidden = false;
+      newPanel.hidden =
+        false;
 
       if (
         titleImage &&
@@ -411,9 +474,13 @@ function initContact() {
         titleImage.src =
           imageSrc;
 
-        gsap.set(titleImage, {
-          clearProps: "transform",
-        });
+        gsap.set(
+          titleImage,
+          {
+            clearProps:
+              "transform",
+          },
+        );
       }
 
       return;
@@ -421,11 +488,13 @@ function initContact() {
 
     if (
       !currentPanel ||
-      currentPanel === newPanel
+      currentPanel ===
+        newPanel
     ) {
       hideAllPanels();
 
-      newPanel.hidden = false;
+      newPanel.hidden =
+        false;
 
       if (
         titleImage &&
@@ -434,9 +503,13 @@ function initContact() {
         titleImage.src =
           imageSrc;
 
-        gsap.set(titleImage, {
-          clearProps: "transform",
-        });
+        gsap.set(
+          titleImage,
+          {
+            clearProps:
+              "transform",
+          },
+        );
       }
 
       animateFormFields(
@@ -458,7 +531,8 @@ function initContact() {
 
         duration: 0.25,
 
-        ease: "power2.in",
+        ease:
+          "power2.in",
 
         onComplete: () => {
           hideAllPanels();
@@ -474,10 +548,6 @@ function initContact() {
             },
           );
 
-          /* --------------------------------------------
-             Cambio de título SIN Flip
-             -------------------------------------------- */
-
           if (
             titleImage &&
             imageSrc
@@ -491,40 +561,46 @@ function initContact() {
               {
                 autoAlpha: 0,
 
-                duration: 0.22,
+                duration:
+                  0.22,
 
-                ease: "power2.in",
+                ease:
+                  "power2.in",
 
-                onComplete: () => {
-                  titleImage.src =
-                    imageSrc;
+                onComplete:
+                  () => {
+                    titleImage.src =
+                      imageSrc;
 
-                  gsap.set(
-                    titleImage,
-                    {
-                      clearProps:
-                        "transform",
-                    },
-                  );
+                    gsap.set(
+                      titleImage,
+                      {
+                        clearProps:
+                          "transform",
+                      },
+                    );
 
-                  gsap.fromTo(
-                    titleImage,
-                    {
-                      autoAlpha: 0,
-                    },
-                    {
-                      autoAlpha: 1,
+                    gsap.fromTo(
+                      titleImage,
+                      {
+                        autoAlpha:
+                          0,
+                      },
+                      {
+                        autoAlpha:
+                          1,
 
-                      duration: 0.35,
+                        duration:
+                          0.35,
 
-                      ease:
-                        "power2.out",
+                        ease:
+                          "power2.out",
 
-                      clearProps:
-                        "opacity,visibility,transform",
-                    },
-                  );
-                },
+                        clearProps:
+                          "opacity,visibility,transform",
+                      },
+                    );
+                  },
               },
             );
           }
@@ -543,12 +619,9 @@ function initContact() {
 
   function openForm(
     formType: string,
-    activeButton: HTMLButtonElement,
+    activeButton:
+      HTMLButtonElement,
   ) {
-    /*
-     * Si la Vista 2 ya está abierta,
-     * únicamente cambiamos formulario.
-     */
     if (
       contact.classList.contains(
         "is-form-open",
@@ -563,16 +636,17 @@ function initContact() {
     }
 
     const panel =
-      getActivePanel(formType);
+      getActivePanel(
+        formType,
+      );
 
     if (!panel) return;
 
     const imageSrc =
-      titleImages[formType];
+      titleImages[
+        formType
+      ];
 
-    /*
-     * El título NO forma parte de Flip.
-     */
     const flipElements =
       getFlipElements();
 
@@ -584,10 +658,6 @@ function initContact() {
             "opacity,visibility",
         },
       );
-
-    /* --------------------------------------------------------
-       Título sale antes del cambio
-       -------------------------------------------------------- */
 
     if (
       titleImage &&
@@ -604,14 +674,11 @@ function initContact() {
 
           duration: 0.25,
 
-          ease: "power2.in",
+          ease:
+            "power2.in",
         },
       );
     }
-
-    /* --------------------------------------------------------
-       CSS calcula la Vista 2
-       -------------------------------------------------------- */
 
     contact.classList.add(
       "is-form-open",
@@ -632,10 +699,6 @@ function initContact() {
       titleImage.src =
         imageSrc;
 
-      /*
-       * Dejamos transform en manos
-       * del CSS responsive.
-       */
       gsap.set(
         titleImage,
         {
@@ -644,7 +707,9 @@ function initContact() {
         },
       );
 
-      if (!prefersReducedMotion) {
+      if (
+        !prefersReducedMotion
+      ) {
         gsap.set(
           titleImage,
           {
@@ -654,11 +719,9 @@ function initContact() {
       }
     }
 
-    /* --------------------------------------------------------
-       Campos ocultos durante transición
-       -------------------------------------------------------- */
-
-    if (!prefersReducedMotion) {
+    if (
+      !prefersReducedMotion
+    ) {
       const formElements =
         panel.querySelectorAll<HTMLElement>(
           [
@@ -677,13 +740,11 @@ function initContact() {
       );
     }
 
-    if (prefersReducedMotion) {
+    if (
+      prefersReducedMotion
+    ) {
       return;
     }
-
-    /* --------------------------------------------------------
-       Movimiento de layout
-       -------------------------------------------------------- */
 
     Flip.from(
       state,
@@ -717,7 +778,8 @@ function initContact() {
               {
                 autoAlpha: 1,
 
-                duration: 0.45,
+                duration:
+                  0.45,
 
                 ease:
                   "power2.out",
@@ -748,10 +810,6 @@ function initContact() {
         "is-form-open",
       );
 
-    /*
-     * Estado inicial, reset inmediato
-     * o reduced motion.
-     */
     if (
       !wasOpen ||
       !animate ||
@@ -779,12 +837,6 @@ function initContact() {
           titleImage,
         );
 
-        /*
-         * Eliminamos cualquier estado
-         * inline de GSAP para que Vista 1
-         * quede completamente controlada
-         * por CSS.
-         */
         gsap.set(
           titleImage,
           {
@@ -794,33 +846,33 @@ function initContact() {
         );
       }
 
-      /*
-       * Limpiamos también cualquier
-       * estado temporal de los paneles.
-       */
-      panels.forEach((panel) => {
-        gsap.killTweensOf(panel);
+      panels.forEach(
+        (panel) => {
+          gsap.killTweensOf(
+            panel,
+          );
 
-        gsap.set(panel, {
-          clearProps:
-            "opacity,visibility,transform",
-        });
-      });
+          gsap.set(
+            panel,
+            {
+              clearProps:
+                "opacity,visibility,transform",
+            },
+          );
+        },
+      );
 
       return;
     }
 
     const currentPanel =
       panels.find(
-        (panel) => !panel.hidden,
+        (panel) =>
+          !panel.hidden,
       );
 
     const flipElements =
       getFlipElements();
-
-    /* --------------------------------------------------------
-       Vista 2 -> Vista 1
-       -------------------------------------------------------- */
 
     const performFlipBack =
       () => {
@@ -833,9 +885,6 @@ function initContact() {
             },
           );
 
-        /*
-         * El CSS vuelve a Vista 1.
-         */
         contact.classList.remove(
           "is-form-open",
         );
@@ -884,42 +933,44 @@ function initContact() {
 
             prune: true,
 
-            onComplete: () => {
-              if (titleImage) {
-                gsap.set(
-                  titleImage,
-                  {
-                    clearProps:
-                      "transform",
-                  },
-                );
+            onComplete:
+              () => {
+                if (
+                  titleImage
+                ) {
+                  gsap.set(
+                    titleImage,
+                    {
+                      clearProps:
+                        "transform",
+                    },
+                  );
 
-                gsap.fromTo(
-                  titleImage,
-                  {
-                    autoAlpha: 0,
-                  },
-                  {
-                    autoAlpha: 1,
+                  gsap.fromTo(
+                    titleImage,
+                    {
+                      autoAlpha:
+                        0,
+                    },
+                    {
+                      autoAlpha:
+                        1,
 
-                    duration: 0.45,
+                      duration:
+                        0.45,
 
-                    ease:
-                      "power2.out",
+                      ease:
+                        "power2.out",
 
-                    clearProps:
-                      "opacity,visibility,transform",
-                  },
-                );
-              }
-            },
+                      clearProps:
+                        "opacity,visibility,transform",
+                    },
+                  );
+                }
+              },
           },
         );
       };
-
-    /* --------------------------------------------------------
-       Primero sale el formulario
-       -------------------------------------------------------- */
 
     const hidePanelThenContinue =
       () => {
@@ -958,19 +1009,21 @@ function initContact() {
 
           duration: 0.25,
 
-          ease: "power2.in",
+          ease:
+            "power2.in",
 
-          onComplete: () => {
-            gsap.set(
-              currentPanel,
-              {
-                clearProps:
-                  "opacity,visibility,transform",
-              },
-            );
+          onComplete:
+            () => {
+              gsap.set(
+                currentPanel,
+                {
+                  clearProps:
+                    "opacity,visibility,transform",
+                },
+              );
 
-            hidePanelThenContinue();
-          },
+              hidePanelThenContinue();
+            },
         },
       );
 
@@ -984,66 +1037,75 @@ function initContact() {
      BOTONES
      ========================================================== */
 
-  buttons.forEach((button) => {
-    button.addEventListener(
-      "click",
-      () => {
-        const formType =
-          button.dataset.form;
+  buttons.forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const formType =
+            button.dataset.form;
 
-        if (!formType) return;
+          if (!formType) {
+            return;
+          }
 
-        const isActive =
-          button.classList.contains(
-            "is-active",
+          const isActive =
+            button.classList.contains(
+              "is-active",
+            );
+
+          if (isActive) {
+            closeForms(true);
+
+            return;
+          }
+
+          openForm(
+            formType,
+            button,
           );
-
-        if (isActive) {
-          closeForms(true);
-          return;
-        }
-
-        openForm(
-          formType,
-          button,
-        );
-      },
-      {
-        signal,
-      },
-    );
-  });
+        },
+        {
+          signal,
+        },
+      );
+    },
+  );
 
   /* ==========================================================
      INPUTS DE ARCHIVO
      ========================================================== */
 
-  fileInputs.forEach((input) => {
-    const fileName =
-      input
-        .closest(".contact-file")
-        ?.querySelector<HTMLElement>(
-          ".contact-file-name",
-        );
+  fileInputs.forEach(
+    (input) => {
+      const fileName =
+        input
+          .closest(
+            ".contact-file",
+          )
+          ?.querySelector<HTMLElement>(
+            ".contact-file-name",
+          );
 
-    if (!fileName) return;
+      if (!fileName) return;
 
-    input.addEventListener(
-      "change",
-      () => {
-        const file =
-          input.files?.[0];
+      input.addEventListener(
+        "change",
+        () => {
+          const file =
+            input.files?.[0];
 
-        fileName.textContent =
-          file
-            ? file.name
-            : "Ningún archivo seleccionado";
-      },
-      {
-        signal,
-      },
-    );
-  });
+          fileName.textContent =
+            file
+              ? file.name
+              : "Ningún archivo seleccionado";
+        },
+        {
+          signal,
+        },
+      );
+    },
+  );
 
   /* ==========================================================
      ESTADO INICIAL
@@ -1055,7 +1117,9 @@ function initContact() {
      ANIMACIÓN DE ENTRADA — REPLAY
      ========================================================== */
 
-  if (prefersReducedMotion) {
+  if (
+    prefersReducedMotion
+  ) {
     cleanupCurrentContact =
       () => {
         controller.abort();
@@ -1072,55 +1136,76 @@ function initContact() {
       : [];
 
   /* ----------------------------------------------------------
-     Estado inicial reutilizable
+     ESTADO INICIAL REUTILIZABLE
      ---------------------------------------------------------- */
 
   const setEntryInitialState =
     (): void => {
       if (label) {
-        gsap.set(label, {
-          autoAlpha: 0,
-          y: 16,
-        });
+        gsap.set(
+          label,
+          {
+            autoAlpha: 0,
+            y: 16,
+          },
+        );
       }
 
       if (titleImage) {
-        gsap.set(titleImage, {
-          autoAlpha: 0,
-          y: 28,
-        });
+        gsap.set(
+          titleImage,
+          {
+            autoAlpha: 0,
+            y: 28,
+          },
+        );
       }
 
-      if (letters.length) {
-        gsap.set(letters, {
-          autoAlpha: 0,
-        });
+      if (
+        letters.length
+      ) {
+        gsap.set(
+          letters,
+          {
+            autoAlpha: 0,
+          },
+        );
       }
 
       if (decoration) {
-        gsap.set(decoration, {
-          autoAlpha: 0,
-          scale: 0.9,
-          transformOrigin:
-            "center center",
-        });
+        gsap.set(
+          decoration,
+          {
+            autoAlpha: 0,
+            scale: 0.9,
+
+            transformOrigin:
+              "center center",
+          },
+        );
       }
 
-      if (buttons.length) {
-        gsap.set(buttons, {
-          autoAlpha: 0,
-          y: 18,
-          scale: 0.96,
-          transformOrigin:
-            "center center",
-        });
+      if (
+        buttons.length
+      ) {
+        gsap.set(
+          buttons,
+          {
+            autoAlpha: 0,
+            y: 18,
+            scale: 0.96,
+
+            transformOrigin:
+              "center center",
+          },
+        );
       }
     };
 
   setEntryInitialState();
 
   /* ----------------------------------------------------------
-     Timeline de entrada reutilizable
+     TIMELINE DE ENTRADA
      ---------------------------------------------------------- */
 
   const entryTimeline =
@@ -1129,12 +1214,18 @@ function initContact() {
     });
 
   if (label) {
-    entryTimeline.to(label, {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.65,
-      ease: "power3.out",
-    });
+    entryTimeline.to(
+      label,
+      {
+        autoAlpha: 1,
+        y: 0,
+
+        duration: 0.65,
+
+        ease:
+          "power3.out",
+      },
+    );
   }
 
   if (titleImage) {
@@ -1143,16 +1234,17 @@ function initContact() {
       {
         autoAlpha: 1,
         y: 0,
+
         duration: 0.95,
-        ease: "power3.out",
+
+        ease:
+          "power3.out",
       },
-      label ? "-=0.25" : 0,
+      label
+        ? "-=0.25"
+        : 0,
     );
 
-    /*
-     * El título recupera el control
-     * del transform por CSS.
-     */
     entryTimeline.set(
       titleImage,
       {
@@ -1162,16 +1254,21 @@ function initContact() {
     );
   }
 
-  if (letters.length) {
+  if (
+    letters.length
+  ) {
     entryTimeline.to(
       letters,
       {
         autoAlpha: 1,
+
         duration: 0.01,
+
         stagger:
           getTypewriterStagger(
             letters.length,
           ),
+
         ease: "none",
       },
       "-=0.15",
@@ -1184,8 +1281,12 @@ function initContact() {
       {
         autoAlpha: 1,
         scale: 1,
+
         duration: 0.55,
-        ease: "back.out(1.5)",
+
+        ease:
+          "back.out(1.5)",
+
         clearProps:
           "transform",
       },
@@ -1193,16 +1294,23 @@ function initContact() {
     );
   }
 
-  if (buttons.length) {
+  if (
+    buttons.length
+  ) {
     entryTimeline.to(
       buttons,
       {
         autoAlpha: 1,
         y: 0,
         scale: 1,
+
         duration: 0.55,
+
         stagger: 0.18,
-        ease: "power3.out",
+
+        ease:
+          "power3.out",
+
         clearProps:
           "transform",
       },
@@ -1214,8 +1322,9 @@ function initContact() {
      CONTROL DE REPLAY
      ========================================================== */
 
-  let hasPlayed = false;
-  let isArmedForReplay = true;
+  let isArmedForReplay =
+    true;
+
   let checkFrame = 0;
 
   const isFormOpen =
@@ -1230,7 +1339,9 @@ function initContact() {
 
   const playEntry =
     (): void => {
-      if (!isArmedForReplay) {
+      if (
+        !isArmedForReplay
+      ) {
         return;
       }
 
@@ -1243,12 +1354,13 @@ function initContact() {
         return;
       }
 
-      isArmedForReplay = false;
-      hasPlayed = true;
+      isArmedForReplay =
+        false;
 
       /*
        * Protección adicional:
-       * Contacto siempre entra en Vista 1.
+       * Contacto siempre entra
+       * mostrando Vista 1.
        */
       if (isFormOpen()) {
         closeForms(false);
@@ -1260,44 +1372,27 @@ function initContact() {
     };
 
   /* ----------------------------------------------------------
-     RESET AL SALIR DE CONTACTO
+     RESET AL SALIR
      ---------------------------------------------------------- */
 
   const resetEntry =
     (): void => {
       /*
-       * Lo más importante:
-       *
-       * si Clientes, Bolsa de trabajo
-       * o Proveedores estaba abierto,
-       * restauramos Vista 1 SIN animación.
-       *
-       * Como Contacto ya está abandonando
-       * el viewport, no necesitamos mostrar
-       * la transición Vista 2 -> Vista 1.
+       * Si había un formulario abierto,
+       * restauramos inmediatamente Vista 1.
        */
       if (isFormOpen()) {
         closeForms(false);
       }
 
       /*
-       * Si todavía no había reproducido
-       * la entrada, basta con dejarla armada.
+       * Rearmamos la animación.
        */
-      hasPlayed = false;
-      isArmedForReplay = true;
+      isArmedForReplay =
+        true;
 
-      /*
-       * Detenemos cualquier reproducción
-       * que pudiera seguir activa.
-       */
       entryTimeline.pause(0);
 
-      /*
-       * Preparamos Vista 1 para que cuando
-       * vuelva a entrar se reproduzca desde
-       * el principio.
-       */
       setEntryInitialState();
     };
 
@@ -1314,25 +1409,27 @@ function initContact() {
         window.innerHeight;
 
       /*
-       * Salida por arriba:
-       * usuario vuelve hacia Clientes.
-       *
-       * Salida por abajo:
-       * usuario continúa hacia Footer.
+       * Salida hacia la sección anterior.
        */
       const leftThroughTop =
         rect.bottom <=
-        viewportHeight * 0.05;
+        viewportHeight *
+          0.05;
 
+      /*
+       * Salida hacia Footer.
+       */
       const leftThroughBottom =
         rect.top >=
-        viewportHeight * 0.95;
+        viewportHeight *
+          0.95;
 
       if (
         leftThroughTop ||
         leftThroughBottom
       ) {
         resetEntry();
+
         return;
       }
 
@@ -1358,7 +1455,8 @@ function initContact() {
       const minimumVisible =
         Math.min(
           100,
-          viewportHeight * 0.1,
+          viewportHeight *
+            0.1,
         );
 
       const isVisibleEnough =
@@ -1367,9 +1465,11 @@ function initContact() {
 
       const reachedActivationZone =
         rect.top <
-          viewportHeight * 0.82 &&
+          viewportHeight *
+            0.82 &&
         rect.bottom >
-          viewportHeight * 0.05;
+          viewportHeight *
+            0.05;
 
       if (
         isVisibleEnough &&
@@ -1381,7 +1481,9 @@ function initContact() {
 
   const scheduleEntryCheck =
     (): void => {
-      if (checkFrame) return;
+      if (checkFrame) {
+        return;
+      }
 
       checkFrame =
         requestAnimationFrame(
@@ -1472,10 +1574,6 @@ function initContact() {
           titleImage,
         );
 
-        /*
-         * Nunca dejamos transform inline
-         * al destruir.
-         */
         gsap.set(
           titleImage,
           {
