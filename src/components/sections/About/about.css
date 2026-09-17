@@ -330,6 +330,14 @@
     top: 50%;
   }
 
+  .circle-content p {
+    font-size: clamp(0.68rem, 2.7cqi, 1.05rem);
+  }
+ 
+  .circle-content h3 {
+    font-size: clamp(0.78rem, 3.3cqi, 1.5rem);
+  }
+
   .hero-scroll {
     display: none;
   }
@@ -384,5 +392,13 @@
   .circle-content {
     top: 50%;
     min-width: 0;
+  }
+
+  .circle-content p {
+    font-size: clamp(0.62rem, 2.4cqi, 0.95rem);
+  }
+ 
+  .circle-content h3 {
+    font-size: clamp(0.7rem, 2.9cqi, 1.3rem);
   }
 }
