@@ -1,21 +1,25 @@
 import type { ImageMetadata } from "astro";
-import capistranoGrid from "../../../assets/images/cases/caso1.jpg";
+/*import capistranoGrid from "../../../assets/images/cases/caso1.jpg";*/
 import walmartGrid from "../../../assets/images/cases/THUMB_maestros.avif";
 import fantaGrid from "../../../assets/images/cases/THUMB_fanta.avif";
 import kelloggsGrid from "../../../assets/images/cases/THUMB_ventas.avif";
 /*import hotsaleGrid from "../../../assets/images/cases/caso5.jpg";*/
-import eggoGrid from "../../../assets/images/cases/caso6.jpg";
+/*import eggoGrid from "../../../assets/images/cases/caso6.jpg";*/
 /*import mezcladitoGrid from "../../../assets/images/cases/caso7.jpg";*/
 import baitGrid from "../../../assets/images/cases/THUMB_bait.avif";
+import cocaColaGrid from "../../../assets/images/cases/THUMB_coca.avif";
+import rustikGrid from "../../../assets/images/cases/THUMB_rustik.avif";
 
 import kelloggsDetail from "../../../assets/images/cases/kelloggs.jpg";
 /*import mezcladitoDetail from "../../../assets/images/cases/MEZCLADITO.jpg";*/
-import eggoPoster from "../../../assets/images/cases/waffles.jpg";
+/*import eggoPoster from "../../../assets/images/cases/waffles.jpg";*/
 /*import hotsalePoster from "../../../assets/images/cases/hotsale.jpg";*/
-import walmartPoster from "../../../assets/images/cases/maestros.jpg";
-import fantaPoster from "../../../assets/images/cases/fanta.webp";
-import capistranoPoster from "../../../assets/images/cases/capis.jpg"
-import baitDetail from "../../../assets/images/cases/bait.jpg"
+import walmartPoster from "../../../assets/images/cases/maestros.avif";
+import fantaPoster from "../../../assets/images/cases/fanta.avif";
+/*import capistranoPoster from "../../../assets/images/cases/capis.jpg";*/
+import baitDetail from "../../../assets/images/cases/bait.avif";
+import cocaColaPoster from "../../../assets/images/cases/cocacola.avif";
+import rustikPoster from "../../../assets/images/cases/rustik.avif";
 
 export interface Case {
   id: string;
@@ -34,7 +38,7 @@ export interface Case {
 }
 
 export const cases: Case[] = [
-  {
+  /*{
     id: "capistrano",
     title: "EXPOS CAPISTRANO",
     client: "Grupo Capistrano Alimentari",
@@ -47,7 +51,7 @@ export const cases: Case[] = [
       "experience-marketing",
       "total-promotion"
     ]
-  },
+  },*/
   {
     id: "walmart",
     title: "MAESTROS DE LA PARRILLA",
@@ -80,7 +84,8 @@ export const cases: Case[] = [
     client: "KELLOGG'S",
     gridImage: kelloggsGrid,
     description:"Kellanova México nos desafió a motivar a sus equipos comerciales para lograr metas de venta y generar mayor engagement con la compañía. Desarrollamos un concepto y storytelling con el potencial de desdoblarse y mantener el interés de los asistentes con la producción de escenario, dinámicas, experiencias y logística durante 5 días del evento.",
-    detailImage: kelloggsDetail,
+    video:"https://www.youtube.com/watch?v=Go25H6ZMpg8",
+    videoPoster: kelloggsDetail,
     solutionIds: [
       "experience-marketing",
         "total-promotion"
@@ -100,7 +105,7 @@ export const cases: Case[] = [
         "influencer"
         ]
   },*/
-  {
+  /*{
     id: "eggo",
     title: "EGGO WAFFLES",
     client: "KELLOGG'S",
@@ -112,7 +117,7 @@ export const cases: Case[] = [
       "influencer",
       "shopper-connections"
         ]
-  },
+  },*/
   /*{
     id: "mezcladito",
     title: "MEZCLADITO",
@@ -136,4 +141,30 @@ export const cases: Case[] = [
         "total-promotion"
         ]
   },
+  {
+    id: "Coca Cola",
+    title: "DE CARA A LA VICTORIA",
+    client: "Coca Cola / Sams Club",
+    gridImage: cocaColaGrid,
+    description:"Transformamos una promoción en una experiencia capaz de conectar marca, retail y una pasión cultural. Junto con Coca-Cola y Sam’s Club, desarrollamos una dinámica que integró compra, social media y una recompensa relevante para detonar participación y resultados de negocio. El caso generó más de 103 mil reacciones, 1,398 participantes y un incremento superior al 8% en ventas durante la promoción.",
+    video:"https://www.youtube.com/watch?v=JgKPUqIM7C8",
+    videoPoster:cocaColaPoster,
+    solutionIds: [
+      "influencer",
+        "total-promotion"
+        ]
+  },
+  {
+    id: "rustik",
+    title: "Rustik",
+    client: "Cinsa/ Rustik",
+    gridImage: rustikGrid,
+    description:"Cuando un buen producto se encuentra con una buena idea, surge la magia. Transformamos una marca tradicional en una trendy, todo a través de un rediseño de identidad y arquitectura renovada con paquetes pensados para las familias actuales, dando más valor al producto y llevándolo a nuevos mercados.",
+    video:"https://www.youtube.com/watch?v=Zo0jL6CcJ4s",
+    videoPoster:rustikPoster,
+    solutionIds: [
+      "strategic-design",
+        ]
+  },
+
 ];
