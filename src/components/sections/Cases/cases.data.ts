@@ -1,13 +1,13 @@
 import type { ImageMetadata } from "astro";
 /*import capistranoGrid from "../../../assets/images/cases/caso1.jpg";*/
-import walmartGrid from "../../../assets/images/cases/THUMB_maestros.avif";
-import fantaGrid from "../../../assets/images/cases/THUMB_fanta.avif";
+import walmartGrid from "../../../assets/images/cases/THUMB_maestros_1.avif";
+import fantaGrid from "../../../assets/images/cases/THUMB_fanta_1.avif";
 import kelloggsGrid from "../../../assets/images/cases/THUMB_ventas.avif";
 /*import hotsaleGrid from "../../../assets/images/cases/caso5.jpg";*/
 /*import eggoGrid from "../../../assets/images/cases/caso6.jpg";*/
 /*import mezcladitoGrid from "../../../assets/images/cases/caso7.jpg";*/
 import baitGrid from "../../../assets/images/cases/THUMB_bait.avif";
-import cocaColaGrid from "../../../assets/images/cases/THUMB_coca.avif";
+import cocaColaGrid from "../../../assets/images/cases/THUMB_coca_1.avif";
 import rustikGrid from "../../../assets/images/cases/THUMB_rustik.avif";
 
 import kelloggsDetail from "../../../assets/images/cases/kelloggs.jpg";
@@ -144,7 +144,7 @@ export const cases: Case[] = [
   {
     id: "Coca Cola",
     title: "DE CARA A LA VICTORIA",
-    client: "Coca Cola / Sams Club",
+    client: "Coca-Cola / Sam's Club",
     gridImage: cocaColaGrid,
     description:"Transformamos una promoción en una experiencia capaz de conectar marca, retail y una pasión cultural. Junto con Coca-Cola y Sam’s Club, desarrollamos una dinámica que integró compra, social media y una recompensa relevante para detonar participación y resultados de negocio. El caso generó más de 103 mil reacciones, 1,398 participantes y un incremento superior al 8% en ventas durante la promoción.",
     video:"https://www.youtube.com/watch?v=JgKPUqIM7C8",
@@ -156,8 +156,8 @@ export const cases: Case[] = [
   },
   {
     id: "rustik",
-    title: "Rustik",
-    client: "Cinsa/ Rustik",
+    title: "Identidad de marca",
+    client: "Cinsa / Rustik",
     gridImage: rustikGrid,
     description:"Cuando un buen producto se encuentra con una buena idea, surge la magia. Transformamos una marca tradicional en una trendy, todo a través de un rediseño de identidad y arquitectura renovada con paquetes pensados para las familias actuales, dando más valor al producto y llevándolo a nuevos mercados.",
     video:"https://www.youtube.com/watch?v=Zo0jL6CcJ4s",
