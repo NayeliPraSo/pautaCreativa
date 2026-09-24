@@ -1,7 +1,6 @@
 ---
 import "./contactForm.css";
 
-import { actions } from "astro:actions";
 import { contactForms, type ContactFormType } from "./contact.data";
 
 interface Props {
@@ -13,17 +12,17 @@ const { formType } = Astro.props;
 const form = contactForms[formType];
 ---
 
-<form
-  class="contact-form"
-  data-form-type={formType}
-  method="POST"
-  enctype="multipart/form-data"
-  action={actions.contact}
->
-  <!-- Tipo de formulario para el backend -->
+<form class="contact-form" data-form-type={formType}>
+  <!--
+    Identifica qué formulario se está enviando.
+    El backend PHP valida este valor.
+  -->
   <input type="hidden" name="formType" value={formType} />
 
-  <!-- Honeypot antispam -->
+  <!--
+    Honeypot antispam.
+    Debe permanecer vacío.
+  -->
   <input
     class="contact-honeypot"
     name="website"
@@ -57,19 +56,18 @@ const form = contactForms[formType];
                 type="file"
                 class="contact-file-input"
                 required={field.required}
-                accept={field.accept}
+                accept=".pdf,application/pdf"
+                data-max-size="5242880"
               />
 
               <label
                 for={`${formType}-${field.name}`}
-                class="contact-file-label"
+                class="contact-file-button"
               >
-                <span class="contact-file-button">Adjuntar archivo</span>
-
-                <span class="contact-file-name">
-                  Ningún archivo seleccionado
-                </span>
+                Seleccionar archivo
               </label>
+
+              <span class="contact-file-name">Ningún archivo seleccionado</span>
             </div>
           ) : (
             <input
@@ -86,32 +84,33 @@ const form = contactForms[formType];
     }
   </div>
 
-  <!-- Footer del formulario -->
   <div class="contact-form-footer">
     <label class="contact-privacy">
-      <input
-        type="checkbox"
-        name="privacy"
-        class="contact-privacy-input"
-        required
-      />
-
-      <span class="contact-privacy-check" aria-hidden="true"></span>
+      <input type="checkbox" name="privacy" required />
 
       <span class="contact-privacy-text">
         He leído y acepto el{" "}
         <a
-          href={`${import.meta.env.BASE_URL}aviso-de-privacidad`}
+          href={`${import.meta.env.BASE_URL}aviso-de-privacidad/`}
           target="_blank"
           rel="noopener noreferrer"
         >
           Aviso de Privacidad
         </a>
+        .
       </span>
     </label>
 
     <button type="submit" class="contact-submit">
       {form.submitLabel}
     </button>
+
+    <p
+      class="contact-form-status"
+      data-form-status
+      role="status"
+      aria-live="polite"
+    >
+    </p>
   </div>
 </form>

@@ -26,6 +26,13 @@ gsap.registerPlugin(Flip);
 let cleanupCurrentContact: (() => void) | null = null;
 
 /* ============================================================
+   ENDPOINT DEL BACKEND PHP
+   ============================================================ */
+
+const CONTACT_ENDPOINT =
+  "http://localhost:8000/contact.php";
+
+/* ============================================================
    VISIBILIDAD REAL
    ============================================================ */
 
@@ -1106,6 +1113,177 @@ function initContact() {
       );
     },
   );
+
+  /* ==========================================================
+     ENVÍO DE FORMULARIOS — BACKEND PHP
+     ========================================================== */
+
+  const forms =
+    Array.from(
+      contact.querySelectorAll<HTMLFormElement>(
+        ".contact-form",
+      ),
+    );
+
+  forms.forEach((form) => {
+    form.addEventListener(
+      "submit",
+      async (event) => {
+        event.preventDefault();
+
+        /*
+         * Honeypot antispam.
+         * Este campo debe permanecer vacío.
+         */
+        const honeypot =
+          form.querySelector<HTMLInputElement>(
+            'input[name="website"]',
+          );
+
+        if (
+          honeypot?.value.trim()
+        ) {
+          form.reset();
+          return;
+        }
+
+        /*
+         * Validaciones HTML nativas:
+         * required, email, checkbox, etc.
+         */
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const submitButton =
+          form.querySelector<HTMLButtonElement>(
+            ".contact-submit",
+          );
+
+        if (!submitButton) {
+          return;
+        }
+
+        const originalText =
+          submitButton.textContent ??
+          "ENVIAR";
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+          "ENVIANDO...";
+
+        try {
+          /*
+           * FormData recoge automáticamente:
+           *
+                     * - formType
+           * - campos del formulario
+           * - privacy
+           * - archivo, cuando corresponda
+           */
+          const formData =
+            new FormData(form);
+
+          const response =
+            await fetch(
+              CONTACT_ENDPOINT,
+              {
+                method: "POST",
+
+                body: formData,
+
+                headers: {
+                  Accept:
+                    "application/json",
+                },
+
+                signal,
+              },
+            );
+
+          const result:
+            {
+              success?: boolean;
+              message?: string;
+            } =
+            await response.json();
+
+          if (
+            !response.ok ||
+            !result.success
+          ) {
+            throw new Error(
+              result.message ||
+                "El servidor rechazó el envío.",
+            );
+          }
+
+          /*
+           * Envío correcto.
+           */
+          form.reset();
+
+          /*
+           * Restauramos visualmente el
+           * nombre del archivo.
+           */
+          const fileName =
+            form.querySelector<HTMLElement>(
+              ".contact-file-name",
+            );
+
+          if (fileName) {
+            fileName.textContent =
+              "Ningún archivo seleccionado";
+          }
+
+          /*
+           * Mensaje provisional.
+           *
+           * Más adelante podremos reemplazarlo
+           * por un mensaje integrado al diseño.
+           */
+          window.alert(
+            "Tu información se envió correctamente.",
+          );
+        } catch (error) {
+          /*
+           * Si Contacto se destruye mientras
+           * existe una petición en curso,
+           * AbortController la cancela.
+           */
+          if (
+            error instanceof
+              DOMException &&
+            error.name ===
+              "AbortError"
+          ) {
+            return;
+          }
+
+          console.error(
+            "Error al enviar formulario:",
+            error,
+          );
+
+          window.alert(
+            "No pudimos enviar tu información. Intenta nuevamente.",
+          );
+        } finally {
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            originalText;
+        }
+      },
+      {
+        signal,
+      },
+    );
+  });
 
   /* ==========================================================
      ESTADO INICIAL

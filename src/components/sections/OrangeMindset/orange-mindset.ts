@@ -1386,252 +1386,167 @@ function initOrangeMindset(): void {
 
   /* ==========================================================
      DESKTOP >= 769px
-     SLIDER HORIZONTAL
+     SLIDER HORIZONTAL CON ZONAS DE PERMANENCIA
      ========================================================== */
 
   mm.add(
     "(min-width: 769px)",
     () => {
-      const getTotalScroll = () =>
+      const getSliderDistance = () =>
         slider.scrollWidth -
         section.clientWidth;
 
-      if (getTotalScroll() <= 0) {
+      /*
+       * Recorrido vertical total de Orange Mindset.
+       *
+       * La sección se mantiene fija mientras distribuimos
+       * el scroll en tres zonas:
+       *
+       * 0%  - 25%  -> Panel 1 quieto
+       * 25% - 60%  -> transición horizontal
+       * 60% - 100% -> Panel 2 quieto
+       */
+      const getScrollDistance = () =>
+        getSliderDistance() * 2.2;
+
+      if (getSliderDistance() <= 0) {
         return;
       }
 
-      let previousProgress = 0;
+      const PANEL_ONE_END = 0.25;
+      const TRANSITION_END = 0.60;
 
-      const tween =
-        gsap.to(slider, {
-          x: () =>
-            -getTotalScroll(),
+      let previousSliderProgress = 0;
 
-          ease: "none",
+      const getSliderProgress = (
+        scrollProgress: number
+      ): number => {
+        if (scrollProgress <= PANEL_ONE_END) {
+          return 0;
+        }
 
-          scrollTrigger: {
-            id:
-              "orange-mindset-pin",
+        if (scrollProgress >= TRANSITION_END) {
+          return 1;
+        }
 
-            trigger: section,
+        return gsap.utils.mapRange(
+          PANEL_ONE_END,
+          TRANSITION_END,
+          0,
+          1,
+          scrollProgress
+        );
+      };
 
-            start: "top top",
+      const updateDesktopProgress = (
+        self: ScrollTrigger
+      ): void => {
+        const sliderProgress =
+          getSliderProgress(self.progress);
 
-            end: () =>
-              `+=${getTotalScroll()}`,
+        gsap.set(slider, {
+          x: -getSliderDistance() *
+            sliderProgress,
+        });
 
-            pin: true,
+        if (bgLayer) {
+          gsap.set(bgLayer, {
+            "--peel-x": `${
+              -25 * sliderProgress
+            }%`,
+          });
+        }
 
-            scrub: 1,
+        const returningToPanelOne =
+          previousSliderProgress >= 0.5 &&
+          sliderProgress < 0.5;
 
-            anticipatePin: 1,
+        if (sliderProgress >= 0.5) {
+          updatePanelOneCopyMask();
+          playPanelTwo();
+        } else {
+          if (returningToPanelOne) {
+            revealPanelOneFromPanelTwo();
+          }
 
-            invalidateOnRefresh:
-              true,
+          if (
+            self.direction === -1 &&
+            panelOnePlayed
+          ) {
+            updatePanelOneCopyMask();
+          } else {
+            playPanelOne();
+            updatePanelOneCopyMask();
+          }
 
-            /*
-             * El slider termina siempre
-             * en uno de los dos paneles.
-             */
-            snap: {
-              snapTo: [0, 1],
+          if (sliderProgress <= 0.01) {
+            updatePanelOneCopyMask(true);
+          }
+        }
 
-              duration: {
-                min: 0.3,
-                max: 0.65,
-              },
+        previousSliderProgress =
+          sliderProgress;
+      };
 
-              delay: 0.05,
+      const pinTrigger =
+        ScrollTrigger.create({
+          id: "orange-mindset-pin",
 
-              ease: "power2.inOut",
-            },
+          trigger: section,
 
-            onUpdate: (self) => {
-              const progress =
-                self.progress;
+          start: "top top",
 
-              /*
-               * Detectamos el momento exacto
-               * en el que cruzamos desde
-               * panel 2 hacia panel 1.
-               */
-              const returningToPanelOne =
-                previousProgress >= 0.5 &&
-                progress < 0.5;
+          end: () =>
+            `+=${getScrollDistance()}`,
 
-              if (progress >= 0.5) {
-                /*
-                 * Mientras avanzamos hacia
-                 * panel 2 mantenemos la máscara
-                 * sincronizada.
-                 */
-                updatePanelOneCopyMask();
+          pin: true,
 
-                playPanelTwo();
-              } else {
-                if (
-                  returningToPanelOne
-                ) {
-                  /*
-                   * No repetimos el typewriter.
-                   * Dejamos las letras escritas.
-                   */
-                  revealPanelOneFromPanelTwo();
-                }
+          anticipatePin: 1,
 
-                if (
-                  self.direction === -1 &&
-                  panelOnePlayed
-                ) {
-                  /*
-                   * Regresando:
-                   * la naranja va revelando
-                   * progresivamente el copy.
-                   */
-                  updatePanelOneCopyMask();
-                } else {
-                  playPanelOne();
+          invalidateOnRefresh: true,
 
-                  updatePanelOneCopyMask();
-                }
+          /*
+           * No usamos snap aquí. Las zonas quietas
+           * ya crean la permanencia perceptible y
+           * evitamos que GSAP empuje al usuario
+           * automáticamente entre los paneles.
+           */
+          onUpdate: (self) => {
+            updateDesktopProgress(self);
+          },
 
-                /*
-                 * IMPORTANTE:
-                 *
-                 * Cuando el slider ya llegó
-                 * prácticamente al panel 1,
-                 * quitamos cualquier clip-path
-                 * residual.
-                 */
-                if (progress <= 0.01) {
-                  updatePanelOneCopyMask(true);
-                }
-              }
-
-              previousProgress =
-                progress;
-            },
-
-            onRefresh: () => {
-              requestAnimationFrame(
-                () => {
-                  const trigger =
-                    ScrollTrigger.getById(
-                      "orange-mindset-pin"
-                    );
-
-                  /*
-                   * Si estamos completamente
-                   * en panel 1 después de un
-                   * refresh, garantizamos que
-                   * el copy quede sin recorte.
-                   */
-                  if (
-                    !trigger ||
-                    trigger.progress <= 0.01
-                  ) {
-                    updatePanelOneCopyMask(
-                      true
-                    );
-                  } else {
-                    updatePanelOneCopyMask();
-                  }
-                }
-              );
-            },
+          onRefresh: (self) => {
+            requestAnimationFrame(() => {
+              updateDesktopProgress(self);
+            });
           },
         });
 
-      const bgTween =
-        bgLayer
-          ? gsap.to(
-              bgLayer,
-              {
-                "--peel-x":
-                  "-25%",
-
-                ease: "none",
-
-                scrollTrigger: {
-                  trigger:
-                    section,
-
-                  start:
-                    "top top",
-
-                  end: () =>
-                    `+=${getTotalScroll()}`,
-
-                  scrub: 1,
-
-                  invalidateOnRefresh:
-                    true,
-                },
-              }
-            )
-          : null;
-
       /*
-       * Estado correcto después del
-       * primer cálculo de layout.
+       * Estado correcto después del primer
+       * cálculo de layout.
        */
-      requestAnimationFrame(
-        () => {
-          const trigger =
-            ScrollTrigger.getById(
-              "orange-mindset-pin"
-            );
-
-          if (
-            !trigger ||
-            trigger.progress <= 0.01
-          ) {
-            updatePanelOneCopyMask(true);
-          } else {
-            updatePanelOneCopyMask();
-          }
-        }
-      );
+      requestAnimationFrame(() => {
+        updateDesktopProgress(pinTrigger);
+      });
 
       return () => {
-        tween.scrollTrigger?.kill(
-          true
-        );
+        pinTrigger.kill(true);
 
-        tween.kill();
-
-        gsap.set(
-          slider,
-          {
-            clearProps:
-              "transform",
-          }
-        );
-
-        bgTween?.scrollTrigger?.kill(
-          true
-        );
-
-        bgTween?.kill();
+        gsap.set(slider, {
+          clearProps: "transform",
+        });
 
         if (bgLayer) {
-          gsap.set(
-            bgLayer,
-            {
-              clearProps:
-                "--peel-x",
-            }
-          );
+          gsap.set(bgLayer, {
+            clearProps: "--peel-x",
+          });
         }
 
         if (p1Copy) {
-          gsap.set(
-            p1Copy,
-            {
-              clearProps:
-                "opacity,clipPath",
-            }
-          );
+          gsap.set(p1Copy, {
+            clearProps: "opacity,clipPath",
+          });
         }
       };
     }
