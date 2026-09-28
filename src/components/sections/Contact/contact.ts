@@ -30,7 +30,7 @@ let cleanupCurrentContact: (() => void) | null = null;
    ============================================================ */
 
 const CONTACT_ENDPOINT =
-  "http://localhost:8000/contact.php";
+ "http://localhost:8000/contact.php";
 
 /* ============================================================
    VISIBILIDAD REAL

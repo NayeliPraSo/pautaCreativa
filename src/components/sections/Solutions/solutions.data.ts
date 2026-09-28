@@ -41,7 +41,7 @@ export const solutions: Solution[] = [
     subtitle: "& Social Hub",
 
     description:
-      "Diseñamos ecosistemas de creadores, contenido y conversación social para construir relevancia, confianza y conexión cultural.",
+      "Integramos RRSS, creatividad, Paid Media e Influencers para crear contenido relevante, amplificar conversaciones y conectar con la cultura.",
 
     label: [
       "Influencer",
@@ -63,7 +63,7 @@ export const solutions: Solution[] = [
     subtitle: "Promotion",
 
     description:
-      "Desde la idea a la acción, desarrollo y administración de promociones conectivas en cualquier punto de venta. Estrategia, desarrollo, soluciónes legales y CRM / Contact Center.",
+      "Desde la idea a la acción, desarrollo y administración de promociones conectivas en cualquier punto de venta. Estrategia, desarrollo, soluciones legales y CRM / Contact Center.",
     
     label: [
       "Total",
