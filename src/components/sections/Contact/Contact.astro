@@ -2,6 +2,7 @@
 import "./contact.css";
 import Section from "../../ui/Section/Section.astro";
 import PlusIcon from "../../ui/PlusIcon/PlusIcon.astro";
+import FeedbackModal from "../../ui/FeedbackModal/FeedbackModal.astro";
 import contactTitle from "../../../assets/images/tit_cuentanos_tu_reto.png";
 
 import { contactForms } from "./contact.data";
@@ -90,6 +91,11 @@ import ContactForm from "./ContactForm.astro";
       </div>
     </div>
   </div>
+  <!--
+    Modal compartido por los tres formularios.
+    contact.ts determina el contenido y el estado.
+  -->
+  <FeedbackModal id="contact-feedback" buttonText="ENTENDIDO" />
 </Section>
 
 <script>

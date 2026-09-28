@@ -1,0 +1,50 @@
+---
+import "./feedbackModal.css";
+
+interface Props {
+  id?: string;
+  buttonText?: string;
+}
+
+const { id = "feedback-modal", buttonText = "ACEPTAR" } = Astro.props;
+---
+
+<div
+  id={id}
+  class="feedback-modal"
+  data-feedback-modal
+  data-feedback-type="info"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={`${id}-title`}
+  aria-describedby={`${id}-message`}
+  aria-hidden="true"
+>
+  <button
+    type="button"
+    class="feedback-modal__backdrop"
+    data-feedback-close
+    tabindex="-1"
+    aria-label="Cerrar mensaje"
+  >
+  </button>
+
+  <div class="feedback-modal__dialog" role="document">
+    <div class="feedback-modal__icon" data-feedback-icon aria-hidden="true">
+    </div>
+
+    <h3 id={`${id}-title`} class="feedback-modal__title" data-feedback-title>
+    </h3>
+
+    <p
+      id={`${id}-message`}
+      class="feedback-modal__message"
+      data-feedback-message
+    >
+    </p>
+
+    <button type="button" class="feedback-modal__button" data-feedback-close>
+      {buttonText}
+    </button>
+  </div>
+</div>

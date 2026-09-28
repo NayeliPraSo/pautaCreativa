@@ -16,6 +16,10 @@
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { getTypewriterStagger } from "../../../utils/typewriter";
+import {
+  initFeedbackModals,
+  showFeedbackModal,
+} from "../../ui/FeedbackModal/feedbackModal";
 
 gsap.registerPlugin(Flip);
 
@@ -30,7 +34,8 @@ let cleanupCurrentContact: (() => void) | null = null;
    ============================================================ */
 
 const CONTACT_ENDPOINT =
- "http://localhost:8000/contact.php";
+  import.meta.env.PUBLIC_CONTACT_ENDPOINT ??
+  "http://localhost:8000/contact.php";
 
 /* ============================================================
    VISIBILIDAD REAL
@@ -267,11 +272,18 @@ function initContact() {
       ),
     );
 
+  const feedbackModal =
+    document.querySelector<HTMLElement>(
+      "#contact-feedback",
+    );
+
   const controller =
     new AbortController();
 
   const { signal } =
     controller;
+
+  initFeedbackModals();
 
   /* ==========================================================
      TÍTULOS
@@ -1239,15 +1251,41 @@ function initContact() {
               "Ningún archivo seleccionado";
           }
 
-          /*
-           * Mensaje provisional.
-           *
-           * Más adelante podremos reemplazarlo
-           * por un mensaje integrado al diseño.
-           */
-          window.alert(
-            "Tu información se envió correctamente.",
-          );
+          if (feedbackModal) {
+            const formType =
+              form.dataset.formType;
+
+            const feedback =
+              formType === "clientes"
+                ? {
+                    title:
+                      "¡RECIBIMOS TU RETO!",
+                    message:
+                      "Tu información se envió correctamente. Nuestro equipo se pondrá en contacto contigo.",
+                  }
+                : formType === "trabajo"
+                  ? {
+                      title:
+                        "¡RECIBIMOS TU PERFIL!",
+                      message:
+                        "Tu información se envió correctamente. Nuestro equipo revisará tu perfil.",
+                    }
+                  : {
+                      title:
+                        "¡RECIBIMOS TU INFORMACIÓN!",
+                      message:
+                        "Tu información se envió correctamente. Nuestro equipo revisará los datos de tu empresa.",
+                    };
+
+            showFeedbackModal(
+              feedbackModal,
+              {
+                type: "success",
+                title: feedback.title,
+                message: feedback.message,
+              },
+            );
+          }
         } catch (error) {
           /*
            * Si Contacto se destruye mientras
@@ -1268,9 +1306,18 @@ function initContact() {
             error,
           );
 
-          window.alert(
-            "No pudimos enviar tu información. Intenta nuevamente.",
-          );
+          if (feedbackModal) {
+            showFeedbackModal(
+              feedbackModal,
+              {
+                type: "error",
+                title:
+                  "NO PUDIMOS ENVIARLO",
+                message:
+                  "Ocurrió un problema al enviar tu información. Inténtalo nuevamente.",
+              },
+            );
+          }
         } finally {
           submitButton.disabled =
             false;

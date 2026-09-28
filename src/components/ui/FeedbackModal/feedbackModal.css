@@ -1,0 +1,417 @@
+/* ==========================================================================
+   FEEDBACK MODAL — PAUTA CREATIVA
+   ========================================================================== */
+
+.feedback-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 100dvh;
+
+  padding: 24px;
+
+  opacity: 0;
+}
+
+/* ==========================================================================
+   BACKDROP
+   ========================================================================== */
+
+.feedback-modal__backdrop {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  appearance: none;
+
+  background: rgba(0, 0, 0, 0.52);
+
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   MODAL
+   ========================================================================== */
+
+.feedback-modal__dialog {
+  position: relative;
+  z-index: 1;
+
+  width: min(100%, 530px);
+
+  padding: 38px 48px 34px;
+
+  overflow: hidden;
+
+  background: var(--color-primary, #ea5b0c);
+  border-radius: 10px;
+
+  text-align: center;
+
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.35);
+
+  opacity: 0;
+}
+
+/* ==========================================================================
+   ELEMENTOS DECORATIVOS
+   ========================================================================== */
+
+.feedback-modal__dialog::before,
+.feedback-modal__dialog::after {
+  position: absolute;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  line-height: 1;
+
+  pointer-events: none;
+}
+
+.feedback-modal__dialog::before {
+  content: "+";
+
+  top: 15px;
+  right: 21px;
+
+  color: #fff;
+
+  font-size: 1.7rem;
+
+  opacity: 0.95;
+}
+
+.feedback-modal__dialog::after {
+  content: "+";
+
+  top: 16px;
+  right: 41px;
+
+  color: #111;
+
+  font-size: 1.45rem;
+
+  opacity: 0.95;
+}
+
+/* ==========================================================================
+   ICONO
+   ========================================================================== */
+
+.feedback-modal__icon {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 20px;
+
+  border: 2px solid #fff;
+  border-radius: 50%;
+
+  color: #fff;
+}
+
+/* ==========================================================================
+   SUCCESS
+   ========================================================================== */
+
+.feedback-modal[data-feedback-type="success"]
+  .feedback-modal__icon::before {
+  content: "";
+
+  width: 23px;
+  height: 12px;
+
+  border-left: 3px solid currentColor;
+  border-bottom: 3px solid currentColor;
+
+  transform:
+    translateY(-3px)
+    rotate(-45deg);
+}
+
+/* ==========================================================================
+   ERROR
+   ========================================================================== */
+
+.feedback-modal[data-feedback-type="error"]
+  .feedback-modal__icon::before,
+.feedback-modal[data-feedback-type="error"]
+  .feedback-modal__icon::after {
+  content: "";
+
+  position: absolute;
+
+  width: 24px;
+  height: 3px;
+
+  border-radius: 999px;
+
+  background: currentColor;
+}
+
+.feedback-modal[data-feedback-type="error"]
+  .feedback-modal__icon::before {
+  transform: rotate(45deg);
+}
+
+.feedback-modal[data-feedback-type="error"]
+  .feedback-modal__icon::after {
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   INFO
+   ========================================================================== */
+
+.feedback-modal[data-feedback-type="info"]
+  .feedback-modal__icon::before {
+  content: "i";
+
+  color: currentColor;
+
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   TÍTULO
+   ========================================================================== */
+
+.feedback-modal__title {
+  position: relative;
+
+  margin: 0 0 12px;
+
+  color: #111;
+
+  font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   MENSAJE
+   ========================================================================== */
+
+.feedback-modal__message {
+  position: relative;
+
+  width: min(100%, 390px);
+
+  margin: 0 auto 24px;
+
+  color: #fff;
+
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   BOTÓN
+   ========================================================================== */
+
+.feedback-modal__button {
+  position: relative;
+
+  min-width: 200px;
+
+  padding: 13px 34px;
+
+  border: 2px solid #fff;
+  border-radius: 999px;
+
+  background: #fff;
+  color: #111;
+
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.feedback-modal__button:hover {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+
+  transform: translateY(-2px);
+}
+
+.feedback-modal__button:active {
+  transform: translateY(0);
+}
+
+.feedback-modal__button:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   BLOQUEO DE SCROLL
+   ========================================================================== */
+
+body.feedback-modal-open {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .feedback-modal {
+    padding: 20px;
+  }
+
+  .feedback-modal__dialog {
+    width: min(100%, 480px);
+
+    padding:
+      36px
+      34px
+      32px;
+  }
+
+  .feedback-modal__icon {
+    width: 56px;
+    height: 56px;
+
+    margin-bottom: 18px;
+  }
+
+  .feedback-modal__title {
+    font-size: clamp(
+      1.55rem,
+      5vw,
+      1.95rem
+    );
+  }
+
+  .feedback-modal__message {
+    width: min(100%, 350px);
+
+    margin-bottom: 22px;
+
+    font-size: 0.98rem;
+  }
+}
+
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .feedback-modal {
+    padding: 16px;
+  }
+
+  .feedback-modal__dialog {
+    width: 100%;
+
+    padding:
+      34px
+      22px
+      26px;
+
+    border-radius: 8px;
+  }
+
+  .feedback-modal__dialog::before {
+    top: 12px;
+    right: 17px;
+
+    font-size: 1.55rem;
+  }
+
+  .feedback-modal__dialog::after {
+    top: 13px;
+    right: 35px;
+
+    font-size: 1.3rem;
+  }
+
+  .feedback-modal__icon {
+    width: 52px;
+    height: 52px;
+
+    margin-bottom: 17px;
+  }
+
+  .feedback-modal[data-feedback-type="success"]
+    .feedback-modal__icon::before {
+    width: 21px;
+    height: 11px;
+
+    border-left-width: 2.5px;
+    border-bottom-width: 2.5px;
+  }
+
+  .feedback-modal__title {
+    margin-bottom: 12px;
+
+    font-size: 1.55rem;
+    line-height: 1.05;
+  }
+
+  .feedback-modal__message {
+    margin-bottom: 22px;
+
+    font-size: 0.94rem;
+    line-height: 1.45;
+  }
+
+  .feedback-modal__button {
+    width: min(100%, 240px);
+    min-width: 0;
+
+    padding: 13px 24px;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-modal__button {
+    transition: none;
+  }
+}
