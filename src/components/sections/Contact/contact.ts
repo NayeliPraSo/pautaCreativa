@@ -34,8 +34,7 @@ let cleanupCurrentContact: (() => void) | null = null;
    ============================================================ */
 
 const CONTACT_ENDPOINT =
-  import.meta.env.PUBLIC_CONTACT_ENDPOINT ??
-  "http://localhost:8000/contact.php";
+  import.meta.env.PUBLIC_CONTACT_ENDPOINT || "/contact.php";
 
 /* ============================================================
    VISIBILIDAD REAL
