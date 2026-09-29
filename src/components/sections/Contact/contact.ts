@@ -1095,6 +1095,9 @@ function initContact() {
      INPUTS DE ARCHIVO
      ========================================================== */
 
+  const MAX_FILE_SIZE =
+  5 * 1024 * 1024;
+
   fileInputs.forEach(
     (input) => {
       const fileName =
@@ -1114,10 +1117,45 @@ function initContact() {
           const file =
             input.files?.[0];
 
+          if (!file) {
+            fileName.textContent =
+              "Ningún archivo seleccionado";
+
+            return;
+          }
+
+          /*
+          * Validación inmediata del tamaño.
+          * El backend vuelve a validarlo
+          * por seguridad.
+          */
+          if (
+            file.size >
+            MAX_FILE_SIZE
+          ) {
+            input.value = "";
+
+            fileName.textContent =
+              "Ningún archivo seleccionado";
+
+            if (feedbackModal) {
+              showFeedbackModal(
+                feedbackModal,
+                {
+                  type: "error",
+                  title:
+                    "ARCHIVO DEMASIADO GRANDE",
+                  message:
+                    "El archivo no puede superar los 5 MB. Selecciona un archivo más pequeño.",
+                },
+              );
+            }
+
+            return;
+          }
+
           fileName.textContent =
-            file
-              ? file.name
-              : "Ningún archivo seleccionado";
+            file.name;
         },
         {
           signal,
@@ -1219,6 +1257,10 @@ function initContact() {
             {
               success?: boolean;
               message?: string;
+               errors?: Record<
+                string,
+                string
+              >;
             } =
             await response.json();
 
@@ -1226,9 +1268,13 @@ function initContact() {
             !response.ok ||
             !result.success
           ) {
+            const errorMessage =
+              result.errors?.attachment ??
+              result.message ??
+              "El servidor rechazó el envío.";
+
             throw new Error(
-              result.message ||
-                "El servidor rechazó el envío.",
+              errorMessage,
             );
           }
 
@@ -1307,14 +1353,28 @@ function initContact() {
           );
 
           if (feedbackModal) {
+            const errorMessage =
+              error instanceof Error
+                ? error.message
+                : "Ocurrió un problema al enviar tu información. Inténtalo nuevamente.";
+
+            const isFileSizeError =
+              errorMessage.includes(
+                "5 MB",
+              );
+
             showFeedbackModal(
               feedbackModal,
               {
                 type: "error",
+
                 title:
-                  "NO PUDIMOS ENVIARLO",
+                  isFileSizeError
+                    ? "ARCHIVO DEMASIADO GRANDE"
+                    : "NO PUDIMOS ENVIARLO",
+
                 message:
-                  "Ocurrió un problema al enviar tu información. Inténtalo nuevamente.",
+                  errorMessage,
               },
             );
           }
