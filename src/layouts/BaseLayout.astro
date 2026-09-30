@@ -17,8 +17,6 @@ const {
   title = "Pauta Creativa",
   description = "Agencia creativa — Pauta Creativa.",
 } = Astro.props;
-
-const buildId = Date.now().toString(36);
 ---
 
 <!doctype html>
@@ -30,75 +28,15 @@ const buildId = Date.now().toString(36);
 
     <meta name="description" content={description} />
 
-    <link rel="icon" type="image/png" href="PAUTA_ICON.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      href={`${import.meta.env.BASE_URL}PAUTA_ICON.png`}
+    />
 
     <meta name="generator" content={Astro.generator} />
 
-    <meta name="build-id" content={buildId} />
-
     <title>{title}</title>
-
-    <script is:inline define:vars={{ buildId }}>
-      (function () {
-        var url = new URL(window.location.href);
-
-        var hasCacheBust = url.searchParams.has("_cachebust");
-
-        /*
-         * Si acabamos de entrar mediante una URL
-         * de cache-busting, limpiamos el parámetro
-         * sin recargar la página.
-         */
-        if (hasCacheBust) {
-          url.searchParams.delete("_cachebust");
-
-          var cleanUrl =
-            url.pathname + (url.search ? url.search : "") + url.hash;
-
-          history.replaceState(null, "", cleanUrl);
-
-          return;
-        }
-
-        /*
-         * Pedimos una copia fresca del HTML.
-         */
-        fetch(window.location.pathname, {
-          cache: "no-store",
-        })
-          .then(function (response) {
-            if (!response.ok) {
-              throw new Error("No se pudo comprobar la versión");
-            }
-
-            return response.text();
-          })
-          .then(function (html) {
-            var match = html.match(/name="build-id"\s+content="([^"]+)"/);
-
-            var freshBuildId = match ? match[1] : null;
-
-            /*
-             * Si el HTML del servidor tiene
-             * un build distinto al que estamos
-             * viendo, forzamos una URL nueva.
-             */
-            if (freshBuildId && freshBuildId !== buildId) {
-              var reloadUrl = new URL(window.location.href);
-
-              reloadUrl.searchParams.set("_cachebust", Date.now().toString());
-
-              window.location.replace(reloadUrl.toString());
-            }
-          })
-          .catch(function () {
-            /*
-             * Si falla la comprobación,
-             * no bloqueamos el sitio.
-             */
-          });
-      })();
-    </script>
   </head>
 
   <body>
