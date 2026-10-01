@@ -29,6 +29,8 @@
   /* Tipografía */
   --font-primary: "Fira Sans", "Helvetica Neue", Arial, sans-serif;
   --font-heading: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --font-semi: "Barlow Semi Condensed", "Arial Narrow", Arial, sans-serif;
+  --font-condensed: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
 
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;

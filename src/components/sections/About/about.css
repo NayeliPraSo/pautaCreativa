@@ -185,7 +185,7 @@
 }
 
 .circle-content h3 {
-  font-family: var(--font-heading);
+  font-family: var(--font-condensed);
   font-size: clamp(0.9rem, 4cqi, 3rem);
   font-style: italic;
   font-weight: 800;

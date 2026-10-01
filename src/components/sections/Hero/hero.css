@@ -62,12 +62,12 @@
 }
 
 .hero-subtitle {
-  max-width: 950px;
   max-width: 100%;
   color: #fff;
+  font-family: var(--font-semi);
   font-size: var(--fs-1xl);
-  font-weight: 300;
-  letter-spacing: 0.03em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   white-space: nowrap;
 }
