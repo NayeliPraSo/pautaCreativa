@@ -1450,10 +1450,17 @@ function initOrangeMindset(): void {
         });
 
         if (bgLayer) {
+          const PEEL_START_X = 95;
+          const PEEL_END_X = -25;
+
+          const peelX = gsap.utils.interpolate(
+            PEEL_START_X,
+            PEEL_END_X,
+            sliderProgress
+          );
+
           gsap.set(bgLayer, {
-            "--peel-x": `${
-              -25 * sliderProgress
-            }%`,
+            "--peel-x": `${peelX}%`,
           });
         }
 

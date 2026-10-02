@@ -23,17 +23,13 @@
 
 .solutions-diagram-title {
   position: absolute;
-
   top: 42%;
   left: 42%;
+  width: 46%;
+  height: auto;
   transform: translate(-50%, -50%);
   z-index: 4;
-  color: var(--color-primary);
-  font-family: var(--font-primary);
-  font-size: 55px;
-  font-weight: 900;
-  line-height: 1;
-  white-space: nowrap;
+  display: block;
   pointer-events: none;
 }
 
@@ -43,17 +39,20 @@
 
 .solutions-diagram-orange {
   position: absolute;
-  width: 76%;
-  height: auto;
-  top: -2px;
-  left: 0%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
     opacity 0.35s ease,
     visibility 0.35s ease;
+}
 
+.solutions-diagram-orange-mobile {
+  display: none;
 }
 
 .solution-card {
@@ -398,10 +397,6 @@
     width: 620px;
   }
 
-  .solutions-diagram-title {
-    font-size: 50px;
-  }
-
   .solution-dot {
     width: 26px;
     height: 26px;
@@ -459,10 +454,6 @@
 @media (max-width: 1200px) {
   .solutions-diagram {
     width: 560px;
-  }
-
-  .solutions-diagram-title {
-    font-size: 44px;
   }
 
   .solution-dot {
@@ -566,10 +557,6 @@
 @media (max-width: 992px) {
   .solutions-diagram {
     width: 500px;
-  }
-
-  .solutions-diagram-title {
-    font-size: 38px;
   }
 
   .solution-dot {
@@ -738,10 +725,6 @@
     touch-action: pan-y;
   }
 
-  .solutions-diagram-title {
-    font-size: 32px;
-  }
-
   /* =========================================
      DOTS Y LABELS
      ========================================= */
@@ -886,12 +869,26 @@
     margin: 0 auto;
   }
 
-  .solutions.is-active .solutions-diagram-orange {
+   /* No usamos la naranja desktop */
+  .solutions-diagram-orange {
+    display: none;
+  }
+
+  /* Usamos la naranja mobile */
+  .solutions-diagram-orange-mobile {
+    display: none;
+  }
+
+  .solutions.is-active .solutions-diagram-orange-mobile {
+    display: block;
+    position: absolute;
     left: 50%;
     top: auto;
     bottom: 7%;
-    transform: translateX(-50%);
     width: min(92vw, 420px);
+    height: auto;
+    transform: translateX(-50%);
+    pointer-events: none;
   }
 
   .solutions.is-active .solution-card {
@@ -947,10 +944,6 @@
     width: min(84vw, 340px);
     max-width: 340px;
     margin: 0 auto 0.75rem;
-  }
-
-  .solutions-diagram-title {
-    font-size: 26px;
   }
 
 
@@ -1105,7 +1098,7 @@
     margin: 0 auto;
   }
 
-  .solutions.is-active .solutions-diagram-orange {
+  .solutions.is-active .solutions-diagram-orange-mobile {
     left: 50%;
     bottom: 6%;
     width: min(94vw, 350px);

@@ -127,18 +127,19 @@
 /* VIVIMOS EL */
 .om-visual-vivimos {
   position: absolute;
-  top: 33%;
-  left: 32%;
+  top: 30%;
+  left: 52%;
   width: 36%;
   height: auto;
+  transform: translateX(-50%);
   z-index: 3;
 }
 
 /* ORANGE */
 .om-visual-orange-title {
   position: absolute;
-  top: 42%;
-  left: 52%;
+  top: 39%;
+  left: 53%;
   width: 56%;
   height: auto;
   transform: translateX(-50%);
@@ -159,8 +160,8 @@
 /* MINDSET */
 .om-visual-mindset-title {
   position: absolute;
-  left: 50%;
-  bottom: 31%;
+  left: 52%;
+  bottom: 34%;
   width: 68%;
   height: auto;
   transform: translateX(-50%);
@@ -320,7 +321,7 @@
     background-image: url("../../../assets/images/cascara.avif");
     background-repeat: no-repeat;
     background-size: auto 70%;
-    --peel-x: 78%;
+    --peel-x: 95%;
     background-position: var(--peel-x) center;
     pointer-events: none;
   }
@@ -503,7 +504,7 @@
   background-image: url("../../../assets/images/cascara.avif");
   background-repeat: no-repeat;
   background-size: 420px auto;
-  background-position: calc(100% + 240px) 100%;
+  background-position: calc(100% + 0px) 80%;
 }
 
   .om-panel-1 .om-index {
@@ -592,7 +593,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.25rem;
   margin-bottom: -20px;
   padding-left: 12px;
@@ -785,8 +786,8 @@
     padding: 65px 18px 25px;
     background-size: 330px auto;
     background-position:
-      calc(100% + 150px)
-      100%;
+      calc(100% + 0px)
+      60%;
   }
 
   /* =====================================

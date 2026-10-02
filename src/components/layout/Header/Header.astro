@@ -1,7 +1,7 @@
 ---
 import "./header.css";
-import logo from "../../../assets/images/LOGO-PAUTACREATIVA.png";
-import PautaBadge from "../../ui/PautaBadge/PautaBadge.astro";
+import logo from "../../../assets/images/logo_pautacreativa.svg";
+import logoMobile from "../../../assets/images/logo_pauta_mobile.svg";
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -16,7 +16,11 @@ const base = import.meta.env.BASE_URL;
     <!-- Logo circular: solo móvil y estado cerrado -->
     <div class="header-mobile-brand" data-mobile-brand>
       <a href={base} aria-label="Pauta Creativa">
-        <PautaBadge />
+        <img
+          src={logoMobile.src}
+          alt="Pauta Creativa"
+          class="header-mobile-logo"
+        />
       </a>
     </div>
 

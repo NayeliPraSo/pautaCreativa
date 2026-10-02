@@ -256,7 +256,7 @@
   .clientes {
     min-height: 100vh;
     background-size: cover;
-    background-position: 72% 70%;
+    background-position: 98% 70%;
   }
 
   .clientes-counter {
@@ -322,7 +322,7 @@
   .clientes {
     min-height: 100vh;
     background-size: auto 100%;
-    background-position: 67% bottom;
+    background-position: 86% bottom;
   }
 
   .clientes-counter {

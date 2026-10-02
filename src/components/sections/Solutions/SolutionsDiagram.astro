@@ -2,8 +2,10 @@
 import "./solutions-diagram.css";
 
 /*import circle from "../../../assets/images/solutions/circulo.svg";*/
-import orange from "../../../assets/images/solutions/naranja_blanca.svg";
+import orange from "../../../assets/images/solutions/naranja_blanca2.svg";
+import orangeMobile from "../../../assets/images/solutions/naranja_blanca.svg";
 import circle from "../../../assets/images/solutions/circulo2-transparente.svg";
+import titulo from "../../../assets/images/solutions/titulo-soluciones.png";
 
 import { solutions } from "./solutions.data";
 ---
@@ -18,7 +20,7 @@ import { solutions } from "./solutions.data";
   />
 
   <!-- Título central -->
-  <div class="solutions-diagram-title">SOLUCIONES</div>
+  <img src={titulo.src} alt="Soluciones" class="solutions-diagram-title" />
 
   <div class="solution-card">
     <div class="solution-card-content">
@@ -36,10 +38,19 @@ import { solutions } from "./solutions.data";
   </div>
 
   <!-- Naranja decorativa -->
+  <!-- Naranja desktop / laptop -->
   <img
     src={orange.src}
     alt=""
     class="solutions-diagram-orange"
+    aria-hidden="true"
+  />
+
+  <!-- Naranja tablet / móvil -->
+  <img
+    src={orangeMobile.src}
+    alt=""
+    class="solutions-diagram-orange-mobile"
     aria-hidden="true"
   />
 

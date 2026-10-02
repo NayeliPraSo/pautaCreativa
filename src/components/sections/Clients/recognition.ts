@@ -19,28 +19,55 @@ function splitTextIntoLetters(
   const processNode = (node: Node): void => {
     if (node.nodeType === Node.TEXT_NODE) {
       const text = node.textContent ?? "";
-      const fragment =
-        document.createDocumentFragment();
+      const fragment = document.createDocumentFragment();
 
-      [...text].forEach((char) => {
-        if (/\s/.test(char)) {
+      /*
+       * Separamos palabras y espacios.
+       *
+       * Los espacios permanecen como nodos de texto.
+       * Cada palabra se agrupa en un wrapper inline-block
+       * para impedir que el navegador la corte.
+       */
+      const parts = text.split(/(\s+)/);
+
+      parts.forEach((part) => {
+        if (!part) {
+          return;
+        }
+
+        /* Espacios */
+        if (/^\s+$/.test(part)) {
           fragment.appendChild(
-            document.createTextNode(char),
+            document.createTextNode(part),
           );
 
           return;
         }
 
-        const span =
-          document.createElement("span");
+        /* Wrapper de palabra */
+        const word = document.createElement("span");
 
-        span.className = className;
-        span.textContent = char;
-        span.style.display = "inline-block";
+        word.className = "recognition-word";
+        word.style.display = "inline-block";
 
-        fragment.appendChild(span);
+        /* Letras individuales */
+        [...part].forEach((char) => {
+          const span = document.createElement("span");
 
-        letters.push(span);
+          span.className = className;
+          span.textContent = char;
+          span.style.display = "inline-block";
+
+          word.appendChild(span);
+
+          /*
+           * Seguimos guardando cada letra individual,
+           * por lo que GSAP funciona igual que antes.
+           */
+          letters.push(span);
+        });
+
+        fragment.appendChild(word);
       });
 
       node.parentNode?.replaceChild(
