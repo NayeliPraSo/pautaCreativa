@@ -17,6 +17,17 @@ const {
   title = "Pauta Creativa | Agencia creativa en México",
   description = "Pauta Creativa es una agencia creativa especializada en advertising, influencer marketing, shopper connections, promociones, experience marketing, innovation y diseño estratégico.",
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Pauta Creativa",
+  url: "https://pautacreativa.com.mx/",
+  description:
+    "Pauta Creativa es una agencia creativa especializada en advertising, influencer marketing, shopper connections, promociones, experience marketing, innovation y diseño estratégico.",
+};
 ---
 
 <!doctype html>
@@ -27,6 +38,28 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <meta name="description" content={description} />
+
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pauta Creativa" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+
+    <meta
+      property="og:image"
+      content="https://pautacreativa.com.mx/og/Logotipo-circular-PautaCreativa.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="650" />
+    <meta property="og:image:alt" content="Pauta Creativa" />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationSchema)}
+    />
 
     <link
       rel="icon"
