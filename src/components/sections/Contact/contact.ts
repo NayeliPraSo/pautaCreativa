@@ -4,8 +4,8 @@
  * - Entrada inicial por visibilidad real.
  * - Texto con efecto máquina de escribir.
  * - Botones aparecen uno por uno.
- * - Transición suave entre vista inicial y formulario.
- * - Al abandonar Contacto siempre se restaura la Vista 1.
+ * - Formulario de Clientes visible desde el inicio.
+ * - Cambio animado entre los tres formularios.
  * - El título NO usa Flip.
  * - El título NO conserva transforms inline.
  * - El CSS mantiene el control total de su posición/rotación responsive.
@@ -14,14 +14,12 @@
  */
 
 import gsap from "gsap";
-import { Flip } from "gsap/Flip";
 import { getTypewriterStagger } from "../../../utils/typewriter";
 import {
   initFeedbackModals,
   showFeedbackModal,
 } from "../../ui/FeedbackModal/feedbackModal";
 
-gsap.registerPlugin(Flip);
 
 /* ============================================================
    ESTADO GLOBAL / CLEANUP
@@ -288,10 +286,6 @@ function initContact() {
      TÍTULOS
      ========================================================== */
 
-  const defaultTitle =
-    formWrapper?.dataset
-      .defaultTitle ?? "";
-
   const titleImages: Record<
     string,
     string | undefined
@@ -347,28 +341,6 @@ function initContact() {
             activeButton,
         );
       },
-    );
-  }
-
-  function getFlipElements():
-    HTMLElement[] {
-    return [
-      descriptionRow,
-      selector,
-      decoration,
-    ].filter(
-      (
-        element,
-      ): element is HTMLElement =>
-        Boolean(
-          element &&
-            window
-              .getComputedStyle(
-                element,
-              )
-              .display !==
-              "none",
-        ),
     );
   }
 
@@ -450,605 +422,81 @@ function initContact() {
      CAMBIO ENTRE FORMULARIOS
      ========================================================== */
 
-  function switchForm(
-    formType: string,
-    activeButton:
-      HTMLButtonElement,
-  ) {
-    const newPanel =
-      getActivePanel(
-        formType,
-      );
+  // Transiciones independientes de la línea de tiempo de entrada.
+  // No usar gsap.killTweensOf(titleImage): también afectaría entryTimeline.
+  let titleTransition: gsap.core.Timeline | null = null;
+  let panelTransition: gsap.core.Tween | null = null;
 
+  function cancelFormTransitions(): void {
+    titleTransition?.kill();
+    titleTransition = null;
+    panelTransition?.kill();
+    panelTransition = null;
+  }
+
+  function switchForm(formType: string, activeButton: HTMLButtonElement): void {
+    const newPanel = getActivePanel(formType);
     if (!newPanel) return;
 
-    const currentPanel =
-      panels.find(
-        (panel) =>
-          !panel.hidden,
-      );
+    const currentPanel = panels.find((panel) => !panel.hidden);
+    const imageSrc = titleImages[formType];
 
-    activateButton(
-      activeButton,
-    );
+    cancelFormTransitions();
+    activateButton(activeButton);
 
-    const imageSrc =
-      titleImages[
-        formType
-      ];
-
-    if (
-      prefersReducedMotion
-    ) {
+    const showNewPanel = (): void => {
       hideAllPanels();
+      newPanel.hidden = false;
+      gsap.set(newPanel, { autoAlpha: 1, y: 0 });
+      if (!prefersReducedMotion) animateFormFields(newPanel);
+    };
 
-      newPanel.hidden =
-        false;
+    const changeTitle = (): void => {
+      if (!titleImage || !imageSrc) return;
 
-      if (
-        titleImage &&
-        imageSrc
-      ) {
-        titleImage.src =
-          imageSrc;
-
-        gsap.set(
-          titleImage,
-          {
-            clearProps:
-              "transform",
-          },
-        );
+      if (prefersReducedMotion) {
+        titleImage.src = imageSrc;
+        gsap.set(titleImage, { autoAlpha: 1, clearProps: "transform" });
+        return;
       }
 
-      return;
-    }
-
-    if (
-      !currentPanel ||
-      currentPanel ===
-        newPanel
-    ) {
-      hideAllPanels();
-
-      newPanel.hidden =
-        false;
-
-      if (
-        titleImage &&
-        imageSrc
-      ) {
-        titleImage.src =
-          imageSrc;
-
-        gsap.set(
-          titleImage,
-          {
-            clearProps:
-              "transform",
-          },
-        );
-      }
-
-      animateFormFields(
-        newPanel,
-      );
-
-      return;
-    }
-
-    gsap.killTweensOf(
-      currentPanel,
-    );
-
-    gsap.to(
-      currentPanel,
-      {
+      // Guardamos la transición para poder cancelarla al salir de Contacto.
+      titleTransition = gsap.timeline({
+        onComplete: () => { titleTransition = null; },
+      });
+      titleTransition.to(titleImage, {
         autoAlpha: 0,
-        y: 8,
+        duration: 0.22,
+        ease: "power2.in",
+      });
+      titleTransition.add(() => {
+        titleImage.src = imageSrc;
+      });
+      titleTransition.to(titleImage, {
+        autoAlpha: 1,
+        duration: 0.35,
+        ease: "power2.out",
+        clearProps: "opacity,visibility,transform",
+      });
+    };
 
-        duration: 0.25,
+    if (prefersReducedMotion || !currentPanel || currentPanel === newPanel) {
+      showNewPanel();
+      changeTitle();
+      return;
+    }
 
-        ease:
-          "power2.in",
-
-        onComplete: () => {
-          hideAllPanels();
-
-          newPanel.hidden =
-            false;
-
-          gsap.set(
-            newPanel,
-            {
-              autoAlpha: 1,
-              y: 0,
-            },
-          );
-
-          if (
-            titleImage &&
-            imageSrc
-          ) {
-            gsap.killTweensOf(
-              titleImage,
-            );
-
-            gsap.to(
-              titleImage,
-              {
-                autoAlpha: 0,
-
-                duration:
-                  0.22,
-
-                ease:
-                  "power2.in",
-
-                onComplete:
-                  () => {
-                    titleImage.src =
-                      imageSrc;
-
-                    gsap.set(
-                      titleImage,
-                      {
-                        clearProps:
-                          "transform",
-                      },
-                    );
-
-                    gsap.fromTo(
-                      titleImage,
-                      {
-                        autoAlpha:
-                          0,
-                      },
-                      {
-                        autoAlpha:
-                          1,
-
-                        duration:
-                          0.35,
-
-                        ease:
-                          "power2.out",
-
-                        clearProps:
-                          "opacity,visibility,transform",
-                      },
-                    );
-                  },
-              },
-            );
-          }
-
-          animateFormFields(
-            newPanel,
-          );
-        },
+    panelTransition = gsap.to(currentPanel, {
+      autoAlpha: 0,
+      y: 8,
+      duration: 0.25,
+      ease: "power2.in",
+      onComplete: () => {
+        panelTransition = null;
+        showNewPanel();
+        changeTitle();
       },
-    );
-  }
-
-  /* ==========================================================
-     ABRIR FORMULARIO
-     ========================================================== */
-
-  function openForm(
-    formType: string,
-    activeButton:
-      HTMLButtonElement,
-  ) {
-    if (
-      contact.classList.contains(
-        "is-form-open",
-      )
-    ) {
-      switchForm(
-        formType,
-        activeButton,
-      );
-
-      return;
-    }
-
-    const panel =
-      getActivePanel(
-        formType,
-      );
-
-    if (!panel) return;
-
-    const imageSrc =
-      titleImages[
-        formType
-      ];
-
-    const flipElements =
-      getFlipElements();
-
-    const state =
-      Flip.getState(
-        flipElements,
-        {
-          props:
-            "opacity,visibility",
-        },
-      );
-
-    if (
-      titleImage &&
-      !prefersReducedMotion
-    ) {
-      gsap.killTweensOf(
-        titleImage,
-      );
-
-      gsap.to(
-        titleImage,
-        {
-          autoAlpha: 0,
-
-          duration: 0.25,
-
-          ease:
-            "power2.in",
-        },
-      );
-    }
-
-    contact.classList.add(
-      "is-form-open",
-    );
-
-    activateButton(
-      activeButton,
-    );
-
-    hideAllPanels();
-
-    panel.hidden = false;
-
-    if (
-      titleImage &&
-      imageSrc
-    ) {
-      titleImage.src =
-        imageSrc;
-
-      gsap.set(
-        titleImage,
-        {
-          clearProps:
-            "transform",
-        },
-      );
-
-      if (
-        !prefersReducedMotion
-      ) {
-        gsap.set(
-          titleImage,
-          {
-            autoAlpha: 0,
-          },
-        );
-      }
-    }
-
-    if (
-      !prefersReducedMotion
-    ) {
-      const formElements =
-        panel.querySelectorAll<HTMLElement>(
-          [
-            ".contact-field",
-            ".contact-privacy",
-            ".contact-submit",
-          ].join(","),
-        );
-
-      gsap.set(
-        formElements,
-        {
-          autoAlpha: 0,
-          y: 14,
-        },
-      );
-    }
-
-    if (
-      prefersReducedMotion
-    ) {
-      return;
-    }
-
-    Flip.from(
-      state,
-      {
-        duration: 1.2,
-
-        ease:
-          "power3.inOut",
-
-        absolute: true,
-
-        nested: true,
-
-        prune: true,
-
-        onComplete: () => {
-          if (titleImage) {
-            gsap.set(
-              titleImage,
-              {
-                clearProps:
-                  "transform",
-              },
-            );
-
-            gsap.fromTo(
-              titleImage,
-              {
-                autoAlpha: 0,
-              },
-              {
-                autoAlpha: 1,
-
-                duration:
-                  0.45,
-
-                ease:
-                  "power2.out",
-
-                clearProps:
-                  "opacity,visibility,transform",
-              },
-            );
-          }
-
-          animateFormFields(
-            panel,
-          );
-        },
-      },
-    );
-  }
-
-  /* ==========================================================
-     CERRAR FORMULARIO
-     ========================================================== */
-
-  function closeForms(
-    animate = true,
-  ) {
-    const wasOpen =
-      contact.classList.contains(
-        "is-form-open",
-      );
-
-    if (
-      !wasOpen ||
-      !animate ||
-      prefersReducedMotion
-    ) {
-      contact.classList.remove(
-        "is-form-open",
-      );
-
-      activateButton(null);
-
-      hideAllPanels();
-
-      if (
-        titleImage &&
-        defaultTitle
-      ) {
-        titleImage.src =
-          defaultTitle;
-
-        titleImage.alt =
-          "Cuéntanos tu reto";
-
-        gsap.killTweensOf(
-          titleImage,
-        );
-
-        gsap.set(
-          titleImage,
-          {
-            clearProps:
-              "transform,opacity,visibility",
-          },
-        );
-      }
-
-      panels.forEach(
-        (panel) => {
-          gsap.killTweensOf(
-            panel,
-          );
-
-          gsap.set(
-            panel,
-            {
-              clearProps:
-                "opacity,visibility,transform",
-            },
-          );
-        },
-      );
-
-      return;
-    }
-
-    const currentPanel =
-      panels.find(
-        (panel) =>
-          !panel.hidden,
-      );
-
-    const flipElements =
-      getFlipElements();
-
-    const performFlipBack =
-      () => {
-        const state =
-          Flip.getState(
-            flipElements,
-            {
-              props:
-                "opacity,visibility",
-            },
-          );
-
-        contact.classList.remove(
-          "is-form-open",
-        );
-
-        activateButton(null);
-
-        hideAllPanels();
-
-        if (
-          titleImage &&
-          defaultTitle
-        ) {
-          titleImage.src =
-            defaultTitle;
-
-          titleImage.alt =
-            "Cuéntanos tu reto";
-
-          gsap.set(
-            titleImage,
-            {
-              clearProps:
-                "transform",
-            },
-          );
-
-          gsap.set(
-            titleImage,
-            {
-              autoAlpha: 0,
-            },
-          );
-        }
-
-        Flip.from(
-          state,
-          {
-            duration: 1.2,
-
-            ease:
-              "power3.inOut",
-
-            absolute: true,
-
-            nested: true,
-
-            prune: true,
-
-            onComplete:
-              () => {
-                if (
-                  titleImage
-                ) {
-                  gsap.set(
-                    titleImage,
-                    {
-                      clearProps:
-                        "transform",
-                    },
-                  );
-
-                  gsap.fromTo(
-                    titleImage,
-                    {
-                      autoAlpha:
-                        0,
-                    },
-                    {
-                      autoAlpha:
-                        1,
-
-                      duration:
-                        0.45,
-
-                      ease:
-                        "power2.out",
-
-                      clearProps:
-                        "opacity,visibility,transform",
-                    },
-                  );
-                }
-              },
-          },
-        );
-      };
-
-    const hidePanelThenContinue =
-      () => {
-        if (titleImage) {
-          gsap.killTweensOf(
-            titleImage,
-          );
-
-          gsap.to(
-            titleImage,
-            {
-              autoAlpha: 0,
-
-              duration: 0.25,
-
-              ease:
-                "power2.in",
-
-              onComplete:
-                performFlipBack,
-            },
-          );
-
-          return;
-        }
-
-        performFlipBack();
-      };
-
-    if (currentPanel) {
-      gsap.to(
-        currentPanel,
-        {
-          autoAlpha: 0,
-          y: 8,
-
-          duration: 0.25,
-
-          ease:
-            "power2.in",
-
-          onComplete:
-            () => {
-              gsap.set(
-                currentPanel,
-                {
-                  clearProps:
-                    "opacity,visibility,transform",
-                },
-              );
-
-              hidePanelThenContinue();
-            },
-        },
-      );
-
-      return;
-    }
-
-    hidePanelThenContinue();
+    });
   }
 
   /* ==========================================================
@@ -1067,21 +515,11 @@ function initContact() {
             return;
           }
 
-          const isActive =
-            button.classList.contains(
-              "is-active",
-            );
-
-          if (isActive) {
-            closeForms(true);
-
+          if (button.classList.contains("is-active")) {
             return;
           }
 
-          openForm(
-            formType,
-            button,
-          );
+          switchForm(formType, button);
         },
         {
           signal,
@@ -1395,7 +833,52 @@ function initContact() {
      ESTADO INICIAL
      ========================================================== */
 
-  closeForms(false);
+  contact.classList.add("is-form-open");
+  hideAllPanels();
+
+  const clientesPanel = getActivePanel("clientes");
+  if (clientesPanel) clientesPanel.hidden = false;
+
+  const clientesButton = buttons.find(
+    (button) => button.dataset.form === "clientes",
+  );
+  activateButton(clientesButton ?? null);
+
+  if (titleImage && titleImages.clientes) {
+    titleImage.src = titleImages.clientes;
+    titleImage.alt = "Cuéntanos tu reto";
+  }
+
+  // Restablecer Clientes al iniciar una nueva visita a Contacto.
+  function restoreClientes(): void {
+    contact.classList.add("is-form-open");
+
+    // Detener transiciones pendientes sin cancelar los tweens de entryTimeline.
+    cancelFormTransitions();
+    panels.forEach((panel) => {
+      gsap.killTweensOf(panel);
+      gsap.set(panel, {
+        clearProps: "opacity,visibility,transform",
+      });
+    });
+    hideAllPanels();
+    if (clientesPanel) clientesPanel.hidden = false;
+    activateButton(clientesButton ?? null);
+
+    if (titleImage) {
+      if (titleImages.clientes) {
+        titleImage.src = titleImages.clientes;
+      }
+
+      titleImage.alt = "Cuéntanos tu reto";
+
+      gsap.set(titleImage, {
+        autoAlpha: 1,
+        y: 0,
+        clearProps: "opacity,visibility,transform",
+      });
+    }
+  }
 
   /* ==========================================================
      ANIMACIÓN DE ENTRADA — REPLAY
@@ -1411,6 +894,12 @@ function initContact() {
 
     return;
   }
+
+  const entryFormElements = clientesPanel
+    ? Array.from(clientesPanel.querySelectorAll<HTMLElement>(
+        ".contact-field, .contact-privacy, .contact-submit",
+      ))
+    : [];
 
   const letters =
     description
@@ -1483,6 +972,15 @@ function initContact() {
               "center center",
           },
         );
+      }
+
+      // Preparar los campos del formulario visible para cada entrada.
+      const activePanel = panels.find((panel) => !panel.hidden);
+      if (activePanel) {
+        const activeFields = activePanel.querySelectorAll<HTMLElement>(
+          ".contact-field, .contact-privacy, .contact-submit",
+        );
+        gsap.set(activeFields, { autoAlpha: 0, y: 14 });
       }
     };
 
@@ -1602,6 +1100,21 @@ function initContact() {
     );
   }
 
+  // Los campos iniciales aparecen una vez junto con la entrada.
+  if (entryFormElements.length) {
+    entryTimeline.to(
+      entryFormElements,
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.09,
+        ease: "power2.out",
+      },
+      "-=0.25",
+    );
+  }
+
   /* ==========================================================
      CONTROL DE REPLAY
      ========================================================== */
@@ -1610,12 +1123,6 @@ function initContact() {
     true;
 
   let checkFrame = 0;
-
-  const isFormOpen =
-    (): boolean =>
-      contact.classList.contains(
-        "is-form-open",
-      );
 
   /* ----------------------------------------------------------
      ENTRADA
@@ -1641,15 +1148,6 @@ function initContact() {
       isArmedForReplay =
         false;
 
-      /*
-       * Protección adicional:
-       * Contacto siempre entra
-       * mostrando Vista 1.
-       */
-      if (isFormOpen()) {
-        closeForms(false);
-      }
-
       setEntryInitialState();
 
       entryTimeline.restart();
@@ -1661,22 +1159,13 @@ function initContact() {
 
   const resetEntry =
     (): void => {
-      /*
-       * Si había un formulario abierto,
-       * restauramos inmediatamente Vista 1.
-       */
-      if (isFormOpen()) {
-        closeForms(false);
-      }
+      // Evitar reinicios repetidos mientras la sección está fuera de pantalla.
+      if (isArmedForReplay) return;
 
-      /*
-       * Rearmamos la animación.
-       */
-      isArmedForReplay =
-        true;
-
+      isArmedForReplay = true;
+      cancelFormTransitions();
       entryTimeline.pause(0);
-
+      restoreClientes();
       setEntryInitialState();
     };
 
@@ -1841,11 +1330,9 @@ function initContact() {
         checkFrame = 0;
       }
 
+      cancelFormTransitions();
       entryTimeline.kill();
 
-      Flip.killFlipsOf(
-        getFlipElements(),
-      );
 
       if (label) {
         gsap.killTweensOf(
